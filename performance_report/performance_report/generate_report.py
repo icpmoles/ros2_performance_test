@@ -50,7 +50,7 @@ def generateReports(report_cfg_file, log_dir):
                     # output should match input file extension to support .md and .html reports
                     template_file_extension = template_file.split('.')[-1]
                     report_title = report_cfg['report_title']
-                    output = template.render(html_figures, title=report_title)
+                    output = template.render(html_figures, title=report_title, env=os.environ)
                     output_file = \
                         os.path.join(log_dir, report_name + '.' + template_file_extension)
                     with open(output_file, 'w') as result:

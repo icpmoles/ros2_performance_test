@@ -2,6 +2,10 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Added
+- The `reporter` templates can access os environment variables:
+   - `{{ env['SOME_ENVIRONMENT_VARIABLE'] }}`
+
 ## 1.3.6 (2023/01/03)
 
 ## 1.3.5 (2022/12/05)
