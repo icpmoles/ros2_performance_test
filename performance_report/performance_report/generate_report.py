@@ -51,6 +51,22 @@ def generateReports(report_cfg_file, log_dir):
                     template_file_extension = template_file.split('.')[-1]
                     report_title = report_cfg['report_title']
                     output = template.render(html_figures, title=report_title, env=os.environ)
+
+                    # This is a workaround for a bug in bokeh:
+                    # https://github.com/bokeh/bokeh/issues/12414
+                    # The indentation must be correct if you wish to render a
+                    # plot in a markdown file, and then convert that markdown
+                    # file to html using python-markdown.
+                    output = output.replace(
+                        '    <script type="text/javascript">',
+                        '<script type="text/javascript">')
+                    output = output.replace(
+                        '        (function() {',
+                        '(function() {')
+                    output = output.replace(
+                        '    </script>',
+                        '</script>')
+
                     output_file = \
                         os.path.join(log_dir, report_name + '.' + template_file_extension)
                     with open(output_file, 'w') as result:

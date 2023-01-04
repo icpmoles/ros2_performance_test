@@ -5,6 +5,8 @@
 ### Added
 - The `reporter` templates can access os environment variables:
    - `{{ env['SOME_ENVIRONMENT_VARIABLE'] }}`
+### Fixed
+- Add a workaround for [bug in bokeh](https://github.com/bokeh/bokeh/issues/12414)
 
 ## 1.3.6 (2023/01/03)
 
