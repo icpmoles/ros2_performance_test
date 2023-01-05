@@ -32,6 +32,7 @@ def generateFigure(figConfig, datasets: "list[DatasetConfig]"):
     # time series, normal range
     fig = None
     is_categorical = False
+    missing_dataset_num = 0
     if figConfig['x_range'] == 'T_experiment':
         fig = figure(
                 title=figConfig['title'],
@@ -59,6 +60,7 @@ def generateFigure(figConfig, datasets: "list[DatasetConfig]"):
     for dataset_name in figConfig['datasets']:
         if dataset_name not in datasets:
             print(f"dataset {dataset_name} missing, skipping for {figConfig['name']}")
+            missing_dataset_num += 1
             continue
         dataset = datasets[dataset_name]
         df = dataset.dataframe
@@ -129,7 +131,7 @@ def generateFigure(figConfig, datasets: "list[DatasetConfig]"):
             (figConfig['y_axis_label'], '@{' + figConfig['y_range'] + '}{0.0000}'),
         ]
         fig.add_tools(hover)
-    return fig
+    return fig, missing_dataset_num
 
 
 def _generate_box_and_whiskers(figConfig, datasets: "list[DatasetConfig]"):
@@ -143,15 +145,18 @@ def _generate_box_and_whiskers(figConfig, datasets: "list[DatasetConfig]"):
         'box_top': [],
         'box_bottom': []
     }
+    missing_dataset_num = 0
 
     for dataset_name in figConfig['datasets']:
         if dataset_name not in datasets:
             print(f"dataset {dataset_name} missing, skipping for {figConfig['name']}")
+            missing_dataset_num += 1
             continue
         dataset = datasets[dataset_name]
         df = dataset.dataframe
         if df.empty:
             print(f"dataset {dataset_name} is empty, skipping for {figConfig['name']}")
+            missing_dataset_num += 1
             continue
         df_dict['name'].append(dataset.name)
         df_dict['fill_color'].append(dataset.theme.color)
@@ -220,7 +225,7 @@ def _generate_box_and_whiskers(figConfig, datasets: "list[DatasetConfig]"):
     fig.x_range.range_padding = 0.1
     fig.xaxis.major_label_orientation = math.pi / 8
 
-    return fig
+    return fig, missing_dataset_num
 
 
 def _combined_variance(df):

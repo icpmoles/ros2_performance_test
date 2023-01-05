@@ -5,6 +5,8 @@
 ### Added
 - The `reporter` templates can access os environment variables:
    - `{{ env['SOME_ENVIRONMENT_VARIABLE'] }}`
+-  For error detection, the exit code for performance_report `reporter` is the number of missing datasets
+
 ### Fixed
 - Add a workaround for [bug in bokeh](https://github.com/bokeh/bokeh/issues/12414)
 

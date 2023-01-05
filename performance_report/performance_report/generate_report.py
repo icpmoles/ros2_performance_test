@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+import sys
 import yaml
 
 from bokeh.embed import components
@@ -27,13 +28,15 @@ from .utils import PerfArgParser
 def generateReports(report_cfg_file, log_dir):
     cfg_dir, _ = os.path.split(report_cfg_file)
     html_figures = {}
+    missing_dataset = 0
     with open(report_cfg_file, "r") as f:
         reports_cfg = yaml.load(f, Loader=yaml.FullLoader)
         datasets = getDatasets(reports_cfg["datasets"], log_dir)
         try:
             for report_name, report_cfg in reports_cfg['reports'].items():
                 for fig in report_cfg['figures']:
-                    plot = generateFigure(fig, datasets)
+                    plot, missing_dataset_num = generateFigure(fig, datasets)
+                    missing_dataset += missing_dataset_num
                     script, div = components(plot)
                     html_figures[fig['name']] = script + div
                 # add current bokeh CDN version to template variables
@@ -74,6 +77,7 @@ def generateReports(report_cfg_file, log_dir):
         except KeyError:
             print("Oops, something is wrong with the provided"
                   "report configuration file....exiting")
+    return missing_dataset
 
 
 def main():
@@ -82,9 +86,11 @@ def main():
     args = parser.parse_args()
     log_dir = getattr(args, "log_dir")
     report_cfg_files = getattr(args, "configs")
+    missing_dataset_num = 0
 
     for report_cfg_file in report_cfg_files:
-        generateReports(report_cfg_file, log_dir)
+        missing_dataset_num += generateReports(report_cfg_file, log_dir)
+    sys.exit(missing_dataset_num)
 
 
 if __name__ == "__main__":
