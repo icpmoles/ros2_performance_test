@@ -2,12 +2,17 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Added
+- New message type `BoundedSequenceFlat`
+   - This is a `BoundedSequence` with the `@flat` annotation
+   - Sizes range from 1kB to 8MB, like `Array` and `BoundedSequence`
 ### Changed
 - Messages of different types can be optionally included via CMake args:
    - `-DENABLE_MSGS_ARRAY` (default ON)
    - `-DENABLE_MSGS_STRUCT` (default ON)
    - `-DENABLE_MSGS_POINT_CLOUD` (default ON)
    - `-DENABLE_MSGS_BOUNDED_SEQUENCE` (default OFF)
+   - `-DENABLE_MSGS_BOUNDED_SEQUENCE_FLAT` (default OFF)
    - `-DENABLE_MSGS_UNBOUNDED_SEQUENCE` (default OFF)
    - `-DENABLE_MSGS_ALL` (default OFF)
       - when ON, overrides the other defaults to ON
