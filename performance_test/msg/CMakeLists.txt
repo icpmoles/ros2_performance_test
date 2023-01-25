@@ -16,11 +16,6 @@ set(SUPPLEMENTAL_IDL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/FixedHeader.idl
     ${CMAKE_CURRENT_SOURCE_DIR}/FixedPointField.idl
     ${CMAKE_CURRENT_SOURCE_DIR}/FixedTime.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/NavSatStatus.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/Point.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/Point32.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/Polygon.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/Vector3.idl
 )
 
 set(SUPPORTED_IDL_FILES
@@ -57,11 +52,6 @@ set(SUPPORTED_IDL_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PointCloud4m.idl
     ${CMAKE_CURRENT_SOURCE_DIR}/PointCloud8m.idl
     ${CMAKE_CURRENT_SOURCE_DIR}/PointCloud512k.idl
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/NavSatFix.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/RadarDetection.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/RadarTrack.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/Range.idl
 )
 
 # TODO(erik.snider) remove this when we reduce the template expansion in the communicator factory
