@@ -442,5 +442,6 @@ options which can reduce the system load during compilation:
 [native plugin](#native-plugins) is needed, then the ROS 2 plugins can be disabled by adding
 `-DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF` to the `--cmake-args`.
 1. This tool includes many different message types, each with many different sizes. Reduce the number of
-messages, and thus the compilation load, by adding `-DPERFORMANCE_TEST_MINIMAL_MESSAGES` to the
-`--cmake-args`. The reduced message set can be found [here](performance_test/msg/CMakeLists.txt#L73-86).
+messages, and thus the compilation load, by disabling one or more message types. For example, to build
+without `PointCloud` messages, add `-DENABLE_MSGS_POINDCLOUD=OFF` to the `--cmake-args`. The message types,
+and their options for enabling/disabling, can be found [here](performance_test/msg/CMakeLists.txt).

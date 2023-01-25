@@ -224,11 +224,17 @@ build_fastrtps_library:
     paths:
       - opt-fastdds-v1.2.1.tar.gz
 
+.build_with_only_array_msgs:
+  variables:
+    CMAKE_ARGS_ENABLE_MSGS: '-DDENABLE_MSGS_STRUCT=OFF -DDENABLE_MSGS_POINT_CLOUD=OFF'
+
 build_cross_image:
   stage: build
   image: docker
   services:
     - docker:dind
+  extends:
+    - .build_with_only_array_msgs
   script:
     - '
       docker build
@@ -244,12 +250,14 @@ build_cross_image:
           sh -c "colcon build --merge-install --cmake-args
               -DCMAKE_TOOLCHAIN_FILE=`pwd`/tools/toolchain.cmake
               -DBUILD_TESTING=OFF
-              -DPERFORMANCE_TEST_MINIMAL_MESSAGES=ON"
+              ${CMAKE_ARGS_ENABLE_MSGS}"
       '
 
 .build_rclcpp:
   stage: build
   image: osrf/ros:rolling-desktop
+  extends:
+    - .build_with_only_array_msgs
   script:
     - '
       colcon build
@@ -257,7 +265,7 @@ build_cross_image:
           --merge-install
           --cmake-args
             -DCMAKE_BUILD_TYPE=Release
-            -DPERFORMANCE_TEST_MINIMAL_MESSAGES=ON
+            ${CMAKE_ARGS_ENABLE_MSGS}
       '
     - cp LICENSE /opt/performance_test
     - tar cfz opt.tar.gz /opt/performance_test
@@ -302,6 +310,8 @@ build_rclcpp_dashing:
 build_cyclonedds:
   stage: build
   image: osrf/ros:rolling-desktop
+  extends:
+    - .build_with_only_array_msgs
   script:
     - source /opt/ros/rolling/setup.bash
     - apt-get update
@@ -331,6 +341,7 @@ build_cyclonedds:
             -DCMAKE_BUILD_TYPE=Release
             -DPERFORMANCE_TEST_CYCLONEDDS_ENABLED=ON
             -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
     
@@ -347,6 +358,8 @@ build_cyclonedds:
 build_cyclonedds_cxx:
   stage: build
   image: osrf/ros:rolling-desktop
+  extends:
+    - .build_with_only_array_msgs
   script:
     - source /opt/ros/rolling/setup.bash
     - apt-get update
@@ -382,6 +395,7 @@ build_cyclonedds_cxx:
             -DCMAKE_BUILD_TYPE=Release
             -DPERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED=ON
             -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
     
@@ -398,6 +412,8 @@ build_cyclonedds_cxx:
 build_iceoryx:
   stage: build
   image: osrf/ros:rolling-desktop
+  extends:
+    - .build_with_only_array_msgs
   script:
     - source /opt/ros/rolling/setup.bash
     - apt-get update
@@ -417,7 +433,7 @@ build_iceoryx:
           --cmake-args
             -DCMAKE_BUILD_TYPE=Release
             -DPERFORMANCE_TEST_ICEORYX_ENABLED=ON
-            -DPERFORMANCE_TEST_MINIMAL_MESSAGES=ON
+            ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
     - cp LICENSE /opt/performance_test
@@ -433,6 +449,8 @@ build_iceoryx:
 build_opendds:
   stage: build
   image: osrf/ros:rolling-desktop
+  extends:
+    - .build_with_only_array_msgs
   script:
     - source /opt/ros/rolling/setup.bash
     - apt-get update
@@ -455,6 +473,7 @@ build_opendds:
             -DCMAKE_CXX_FLAGS="-w"
             -DPERFORMANCE_TEST_OPENDDS_ENABLED=ON
             -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
     - cp LICENSE /opt/performance_test
@@ -470,6 +489,8 @@ build_opendds:
 build_fastrtps:
   stage: build
   image: osrf/ros:rolling-desktop
+  extends:
+    - .build_with_only_array_msgs
   script:
     - source /opt/ros/rolling/setup.bash
     - apt-get update
@@ -492,6 +513,7 @@ build_fastrtps:
             -DCMAKE_PREFIX_PATH=/opt/Fast-DDS
             -DPERFORMANCE_TEST_FASTRTPS_ENABLED=ON
             -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            ${CMAKE_ARGS_ENABLE_MSGS}
       '
     - cp LICENSE /opt/performance_test
     - tar cfz opt.tar.gz /opt/performance_test

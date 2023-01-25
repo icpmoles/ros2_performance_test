@@ -2,6 +2,23 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Changed
+- Messages of different types can be optionally included via CMake args:
+   - `-DENABLE_MSGS_ARRAY` (default ON)
+   - `-DENABLE_MSGS_STRUCT` (default ON)
+   - `-DENABLE_MSGS_POINT_CLOUD` (default ON)
+   - `-DENABLE_MSGS_BOUNDED_SEQUENCE` (default OFF)
+   - `-DENABLE_MSGS_UNBOUNDED_SEQUENCE` (default OFF)
+   - `-DENABLE_MSGS_ALL` (default OFF)
+      - when ON, overrides the other defaults to ON
+      - you can still optionally exclude some messages by explicitly setting them to OFF
+### Removed
+- Removed a few messages:
+   - Range
+   - RadarTrack
+   - RadarDetection
+   - NavSatFix
+
 ## 1.3.7 (2023/01/04)
 
 ## 1.3.6 (2023/01/03)
