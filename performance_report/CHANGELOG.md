@@ -4,6 +4,9 @@
 
 ### Added
 - Figures have a new `x_range` option: `ru_maxrss_mb`
+### Changed
+- `BoundedSequenceFlatXYZ` will be mapped to `BoundedSequenceXYZ` for categorical plots,
+  so that both message types can be compared directly on a single plot
 
 ## 1.3.7 (2023/01/04)
 
