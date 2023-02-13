@@ -53,20 +53,24 @@ public:
 #endif
   }
 
-  void publish_copy(std::int64_t time, std::uint64_t sample_id) override
+  void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
-    init_msg(m_data, time, sample_id);
+    init_msg(m_data, timestamp_provider, sample_id);
     m_publisher->publish(m_data);
   }
 
-  void publish_loaned(std::int64_t time, std::uint64_t sample_id) override
+  void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     #ifdef PERFORMANCE_TEST_RCLCPP_ZERO_COPY_ENABLED
     if (!m_publisher->can_loan_messages()) {
       throw std::runtime_error("RMW implementation does not support zero copy!");
     }
     auto borrowed_message{m_publisher->borrow_loaned_message()};
-    init_msg(borrowed_message.get(), time, sample_id);
+    init_msg(borrowed_message.get(), timestamp_provider, sample_id);
     m_publisher->publish(std::move(borrowed_message));
     #else
     throw std::runtime_error("ROS2 distribution does not support zero copy!");
@@ -81,13 +85,16 @@ private:
   DataType m_data;
 
   inline
-  void init_msg(DataType & msg, std::int64_t time, std::uint64_t sample_id)
+  void init_msg(
+    DataType & msg,
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id)
   {
-    msg.time = time;
-    msg.id = sample_id;
     init_bounded_sequence(msg);
     init_unbounded_sequence(msg);
     init_unbounded_string(msg);
+    msg.id = sample_id;
+    msg.time = timestamp_provider.get();
   }
 
   template<typename T>

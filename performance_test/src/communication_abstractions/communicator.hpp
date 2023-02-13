@@ -21,6 +21,7 @@
 
 #include "../experiment_metrics/subscriber_stats.hpp"
 #include "../utilities/msg_traits.hpp"
+#include "../utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {
@@ -28,17 +29,24 @@ namespace performance_test
 class Publisher
 {
 public:
-  virtual void publish_copy(std::int64_t time, std::uint64_t sample_id) = 0;
+  virtual void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) = 0;
 
-  virtual void publish_loaned(std::int64_t time, std::uint64_t sample_id) = 0;
+  virtual void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) = 0;
 
 protected:
   template<typename T>
-  inline void init_msg(T & msg, std::int64_t time, std::uint64_t sample_id)
+  inline void init_msg(
+    T & msg,
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id)
   {
-    msg.time = time;
-    msg.id = sample_id;
     MsgTraits::ensure_fixed_size(msg);
+    msg.id = sample_id;
+    msg.time = timestamp_provider.get();
   }
 };
 

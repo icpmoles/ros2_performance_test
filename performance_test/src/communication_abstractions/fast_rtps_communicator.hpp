@@ -141,15 +141,19 @@ public:
   {
   }
 
-  void publish_copy(std::int64_t time, std::uint64_t sample_id) override
+  void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
-    init_msg(m_data, time, sample_id);
+    init_msg(m_data, timestamp_provider, sample_id);
     if (!m_datawriter->write(static_cast<void *>(&m_data))) {
       throw std::runtime_error("Failed to write sample");
     }
   }
 
-  void publish_loaned(std::int64_t time, std::uint64_t sample_id) override
+  void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     void * loaned_sample = nullptr;
     eprosima::fastrtps::types::ReturnCode_t ret = m_datawriter->loan_sample(loaned_sample);
@@ -158,7 +162,7 @@ public:
         "Failed to obtain a loaned sample, ERRORCODE is " + std::to_string(ret()));
     }
     DataType * sample = static_cast<DataType *>(loaned_sample);
-    init_msg(*sample, time, sample_id);
+    init_msg(*sample, timestamp_provider, sample_id);
     if (!m_datawriter->write(static_cast<void *>(sample))) {
       throw std::runtime_error("Failed to write sample");
     }
@@ -189,11 +193,14 @@ private:
     return writer;
   }
 
-  void init_msg(DataType & msg, std::int64_t time, std::uint64_t sample_id)
+  void init_msg(
+    DataType & msg,
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id)
   {
-    msg.time(time);
-    msg.id(sample_id);
     MsgTraits::ensure_fixed_size(msg);
+    msg.id(sample_id);
+    msg.time(timestamp_provider.get());
   }
 };
 

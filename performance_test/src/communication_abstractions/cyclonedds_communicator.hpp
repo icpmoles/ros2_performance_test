@@ -119,15 +119,19 @@ public:
   : m_participant(ResourceManager::get().cyclonedds_participant()),
     m_datawriter(create_datawriter(ec, m_participant)) {}
 
-  void publish_copy(std::int64_t time, std::uint64_t sample_id) override
+  void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
-    init_msg(m_data, time, sample_id);
+    init_msg(m_data, timestamp_provider, sample_id);
     if (dds_write(m_datawriter, static_cast<void *>(&m_data)) < 0) {
       throw std::runtime_error("Failed to write to sample");
     }
   }
 
-  void publish_loaned(std::int64_t time, std::uint64_t sample_id) override
+  void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     void * loaned_sample;
     dds_return_t status = dds_loan_sample(m_datawriter, &loaned_sample);
@@ -135,7 +139,7 @@ public:
       throw std::runtime_error("Failed to obtain a loaned sample " + std::to_string(status));
     }
     DataType * sample = static_cast<DataType *>(loaned_sample);
-    init_msg(*sample, time, sample_id);
+    init_msg(*sample, timestamp_provider, sample_id);
     status = dds_write(m_datawriter, sample);
     if (status == DDS_RETCODE_UNSUPPORTED) {
       throw std::runtime_error("DDS write unsupported");

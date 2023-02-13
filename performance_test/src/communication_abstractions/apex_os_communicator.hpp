@@ -59,24 +59,26 @@ private:
             "RMW implementation does not support zero copy!");
       }
       auto borrowed_message{m_publisher->borrow_loaned_message()};
-      init_msg(borrowed_message.get(), now_int64_t(), m_stats.next_sample_id());
+      init_msg(borrowed_message.get(), m_stats.next_sample_id());
       m_publisher->publish(std::move(borrowed_message));
       m_stats.update_publisher_stats();
     } else {
-      init_msg(m_data, now_int64_t(), m_stats.next_sample_id());
+      init_msg(m_data, m_stats.next_sample_id());
       m_publisher->publish(m_data);
       m_stats.update_publisher_stats();
     }
   }
 
   inline
-  void init_msg(MsgType & msg, std::int64_t time, std::uint64_t sample_id)
+  void init_msg(
+    MsgType & msg,
+    std::uint64_t sample_id)
   {
-    msg.time = time;
-    msg.id = sample_id;
     init_bounded_sequence(msg);
     init_unbounded_sequence(msg);
     init_unbounded_string(msg);
+    msg.id = sample_id;
+    msg.time = now_int64_t();
   }
 
   template<typename T>

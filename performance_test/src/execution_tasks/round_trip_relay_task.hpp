@@ -22,8 +22,7 @@
 #include "../experiment_metrics/publisher_stats.hpp"
 #include "../experiment_metrics/subscriber_stats.hpp"
 #include "../utilities/memory_checker.hpp"
-#include "../utilities/perf_clock.hpp"
-#include "../utilities/spin_lock.hpp"
+#include "../utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {
@@ -44,7 +43,8 @@ public:
   void run()
   {
     for (const auto & stats : m_sub->update_subscription()) {
-      m_pub->publish_copy(stats.time_msg_sent_ns, stats.sample_id);
+      RoundtripTimestampProvider ts(stats.time_msg_sent_ns);
+      m_pub->publish_copy(ts, stats.sample_id);
     }
     m_memory_checker.enable_memory_tools_checker();
   }

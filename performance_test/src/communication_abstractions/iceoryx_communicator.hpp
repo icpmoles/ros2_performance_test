@@ -50,18 +50,22 @@ public:
       },
       iox::popo::PublisherOptions{}) {}
 
-  void publish_copy(std::int64_t time, std::uint64_t sample_id) override
+  void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
-    publish_loaned(time, sample_id);
+    publish_loaned(timestamp_provider, sample_id);
   }
 
-  void publish_loaned(std::int64_t time, std::uint64_t sample_id) override
+  void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     m_publisher.loan(sizeof(DataType))
     .and_then(
       [&, this](auto & userPayload) {
         auto sample = static_cast<DataType *>(userPayload);
-        this->init_msg(*sample, time, sample_id);
+        this->init_msg(*sample, timestamp_provider, sample_id);
         m_publisher.publish(userPayload);
       })
     .or_else(

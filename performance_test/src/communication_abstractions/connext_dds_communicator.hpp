@@ -166,16 +166,20 @@ public:
     }
   }
 
-  void publish_copy(std::int64_t time, std::uint64_t sample_id) override
+  void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
-    init_msg(m_data, time, sample_id);
+    init_msg(m_data, timestamp_provider, sample_id);
     auto retcode = m_typed_datawriter->write(m_data, DDS_HANDLE_NIL);
     if (retcode != DDS_RETCODE_OK) {
       throw std::runtime_error("Failed to write to sample");
     }
   }
 
-  void publish_loaned(std::int64_t time, std::uint64_t sample_id) override
+  void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     throw std::runtime_error("This plugin does not support zero copy transfer");
   }

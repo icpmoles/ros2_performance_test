@@ -23,6 +23,8 @@
    - RadarTrack
    - RadarDetection
    - NavSatFix
+### Fixed
+- In all cases, including loaned messages, capture the timestamp as the last step of initializing the message
 
 ## 1.3.7 (2023/01/04)
 

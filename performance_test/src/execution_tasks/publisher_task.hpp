@@ -22,6 +22,7 @@
 #include "../experiment_metrics/publisher_stats.hpp"
 #include "../utilities/memory_checker.hpp"
 #include "../utilities/perf_clock.hpp"
+#include "../utilities/timestamp_provider.hpp"
 #include "../utilities/spin_lock.hpp"
 
 namespace performance_test
@@ -58,9 +59,9 @@ public:
     }
 
     if (m_ec.is_zero_copy_transfer()) {
-      m_pub->publish_loaned(now_int64_t(), m_stats.next_sample_id());
+      m_pub->publish_loaned(m_timestamp_provider, m_stats.next_sample_id());
     } else {
-      m_pub->publish_copy(now_int64_t(), m_stats.next_sample_id());
+      m_pub->publish_copy(m_timestamp_provider, m_stats.next_sample_id());
     }
     m_stats.update_publisher_stats();
 
@@ -80,6 +81,7 @@ public:
   perf_clock::time_point m_next_run;
   std::size_t m_loop_counter{1};
   MemoryChecker m_memory_checker;
+  PublisherTimestampProvider m_timestamp_provider;
 };
 
 }  // namespace performance_test

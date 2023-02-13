@@ -88,17 +88,21 @@ public:
     this->m_publisher = dds::core::null;
   }
 
-  void publish_copy(std::int64_t time, std::uint64_t sample_id) override
+  void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     DataType sample;
-    init_msg(sample, time, sample_id);
+    init_msg(sample, timestamp_provider, sample_id);
     m_datawriter->write(sample);
   }
 
-  void publish_loaned(std::int64_t time, std::uint64_t sample_id) override
+  void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     DataType & loaned_sample = m_datawriter.delegate()->loan_sample();
-    init_msg(loaned_sample, time, sample_id);
+    init_msg(loaned_sample, timestamp_provider, sample_id);
     m_datawriter->write(loaned_sample);
   }
 
@@ -123,11 +127,14 @@ private:
     return dds::pub::DataWriter<DataType>(publisher, topic, dw_qos);
   }
 
-  void init_msg(DataType & msg, std::int64_t time, std::uint64_t sample_id)
+  void init_msg(
+    DataType & msg,
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id)
   {
-    msg.time(time);
-    msg.id(sample_id);
     MsgTraits::ensure_fixed_size(msg);
+    msg.id(sample_id);
+    msg.time(timestamp_provider.get());
   }
 };
 

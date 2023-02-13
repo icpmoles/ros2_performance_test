@@ -169,17 +169,21 @@ public:
     }
   }
 
-  void publish_copy(std::int64_t time, std::uint64_t sample_id) override
+  void publish_copy(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     init_data(m_data);
-    init_msg(m_data, time, sample_id);
+    init_msg(m_data, timestamp_provider, sample_id);
     auto retcode = m_typed_datawriter->write(m_data, DDS_HANDLE_NIL);
     if (retcode != DDS_RETCODE_OK) {
       throw std::runtime_error("Failed to write to sample");
     }
   }
 
-  void publish_loaned(std::int64_t time, std::uint64_t sample_id) override
+  void publish_loaned(
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id) override
   {
     DataType * sample;
     DDS_ReturnCode_t dds_rc = m_typed_datawriter->get_loan(sample);
@@ -187,7 +191,7 @@ public:
       throw std::runtime_error("Failed to get a loan");
     }
     init_data(*sample);
-    init_msg(*sample, time, sample_id);
+    init_msg(*sample, timestamp_provider, sample_id);
     auto retcode = m_typed_datawriter->write(*sample, DDS_HANDLE_NIL);
     if (retcode != DDS_RETCODE_OK) {
       throw std::runtime_error("Failed to write to sample");
