@@ -6,7 +6,7 @@ ARG BASE_IMAGE=osrf/ros:rolling-desktop
 FROM $BASE_IMAGE
 
 ARG ROS_DISTRO=rolling
-ARG ICEORYX_VERSION=v2.0.0
+ARG ICEORYX_VERSION=5fe215eab267b0ad68bc5552aecd4b6e728e4c99
 
 SHELL ["/bin/bash", "-c"]
 
@@ -15,8 +15,10 @@ RUN apt-get update && \
 
 RUN mkdir -p iceoryx_ws/src && \
     cd $_ && \
-    git clone https://github.com/eclipse-iceoryx/iceoryx.git -b $ICEORYX_VERSION --depth 1 && \
-    cd .. && \
+    git clone https://github.com/eclipse-iceoryx/iceoryx.git && \
+    cd iceoryx && \
+    git checkout $ICEORYX_VERSION && \
+    cd ../.. && \
     colcon build \
       --install-base /opt/iceoryx \
       --cmake-args \

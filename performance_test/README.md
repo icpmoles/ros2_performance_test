@@ -230,7 +230,7 @@ their own thread.
 
 ### Eclipse iceoryx
 
-- [iceoryx 1.0](https://github.com/eclipse-iceoryx/iceoryx/tree/release_1.0)
+- [iceoryx (latest master as of Feb 13)](https://github.com/eclipse-iceoryx/iceoryx/tree/5fe215eab267b0ad68bc5552aecd4b6e728e4c99)
 - CMake build flag: `-DPERFORMANCE_TEST_ICEORYX_ENABLED=ON`
 - Communication plugin: `-c iceoryx`
 - Docker file: [Dockerfile.iceoryx](dockerfiles/Dockerfile.iceoryx)

@@ -21,6 +21,7 @@
 
 #include <iceoryx_posh/popo/untyped_publisher.hpp>
 #include <iceoryx_posh/popo/untyped_subscriber.hpp>
+#include <iceoryx_dust/cxx/std_string_support.hpp>
 
 #include "communicator.hpp"
 #include "resource_manager.hpp"
@@ -44,9 +45,9 @@ public:
   explicit IceoryxPublisher(const ExperimentConfiguration & ec)
   : m_publisher(
       iox::capro::ServiceDescription{
-        iox::capro::IdString_t{iox::cxx::TruncateToCapacity, Msg::msg_name()},
-        iox::capro::IdString_t{iox::cxx::TruncateToCapacity, ec.topic_name()},
-        iox::capro::IdString_t{"Object"}
+        iox::into<iox::lossy<iox::capro::IdString_t>>(Msg::msg_name()),
+        iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name()),
+        "Object"
       },
       iox::popo::PublisherOptions{}) {}
 
@@ -88,9 +89,9 @@ public:
   explicit IceoryxSubscriber(const ExperimentConfiguration & ec)
   : m_subscriber(
       iox::capro::ServiceDescription{
-        iox::capro::IdString_t{iox::cxx::TruncateToCapacity, Msg::msg_name()},
-        iox::capro::IdString_t{iox::cxx::TruncateToCapacity, ec.topic_name()},
-        iox::capro::IdString_t{"Object"}
+        iox::into<iox::lossy<iox::capro::IdString_t>>(Msg::msg_name()),
+        iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name()),
+        "Object"
       },
       subscriber_options(ec))
   {
