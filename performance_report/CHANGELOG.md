@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 1.4.0 (2023/02/20)
+
 ### Added
 - Figures have a new `x_range` option: `ru_maxrss_mb`
 ### Changed

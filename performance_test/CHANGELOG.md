@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 1.4.0 (2023/02/20)
+
 ### Added
 - New message type `BoundedSequenceFlat`
    - This is a `BoundedSequence` with the `@flat` annotation
