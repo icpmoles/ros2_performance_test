@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 1.4.1 (2023/02/23)
+
 ### Changed
 - Updated the iceoryx plugin to the [latest master as of Feb 13](https://github.com/eclipse-iceoryx/iceoryx/tree/5fe215eab267b0ad68bc5552aecd4b6e728e4c99)
 
