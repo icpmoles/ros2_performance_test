@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Added
+- Added `perfplot` support for JSON log files
+
 ## 1.4.1 (2023/02/23)
 
 ### Changed

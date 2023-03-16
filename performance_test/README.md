@@ -335,9 +335,10 @@ through the ROS2 `rclcpp::publisher` and `rclcpp::subscriber` API.
 
 ## Analyze the results
 
-After an experiment is run with the `-l` flag, a CSV file is recorded. It is possible to add custom
-data to the CSV file by setting the`APEX_PERFORMANCE_TEST` environment variable before running an
-experiment, e.g.
+After an experiment is run with the `-l` flag, a log file is recorded. Both CSV
+and JSON formats are supported. It is possible to add custom data to the log
+file by setting the`APEX_PERFORMANCE_TEST` environment variable before running
+an experiment, e.g.
 
 ```json
 # JSON format
@@ -368,6 +369,7 @@ Start a Python virtual environment and install the required Python packages:
 
 ```bash
 cd performance_test/helper_scripts/apex_performance_plotter
+pip3 install wheel
 pip3 install .
 ```
 
