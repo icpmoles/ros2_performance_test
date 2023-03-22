@@ -2,6 +2,10 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Changed
+- Update the README to better explain the purpose and usage of
+  `runner`, `commander`, `plotter`, and `reporter`
+
 ## 1.4.2 (2023/03/15)
 
 ## 1.4.1 (2023/02/23)

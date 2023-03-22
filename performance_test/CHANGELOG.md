@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Changed
+- Update the README to better explain how to use this tool with Apex.OS
+
 ## 1.4.2 (2023/03/15)
 
 ### Added

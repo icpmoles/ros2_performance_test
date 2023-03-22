@@ -1,7 +1,7 @@
 ---
 datasets:
   # default for each dataset:
-  #   name: ''
+  #    name: ''
   #    theme:
   #      color: '#0000ff'
   #      marker:

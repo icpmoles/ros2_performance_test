@@ -1,5 +1,7 @@
 # performance_test
 
+[TOC]
+
 The performance_test tool tests latency and other performance metrics of [various middleware
 implementations](#middleware-plugins) that support a pub/sub pattern. It is used to simulate
 non-functional performance of your application.
@@ -16,7 +18,7 @@ are automatically recorded when the application is running:
   work) (logged separately for each instance of `perf_test`)
 - **sample statistics**: number of samples received, sent, and lost per experiment run.
 
-This `master` branch is compatible with the following ROS2 versions
+This `master` branch is compatible with the following ROS 2 versions
 - rolling
 - humble
 - galactic
@@ -47,8 +49,8 @@ This example shows how to test the non-functional performance of the following c
 | Publishing rate            | 100Hz       |
 | Topic name                 | test_topic  |
 | Duration of the experiment | 30s         |
-| Number of publisher(s)        | 1 (default) |
-| Number of subscriber(s)     | 1 (default) |
+| Number of publisher(s)     | 1 (default) |
+| Number of subscriber(s)    | 1 (default) |
 
 1. Install [ROS 2](https://docs.ros.org/en/rolling/index.html)
 
@@ -56,7 +58,7 @@ This example shows how to test the non-functional performance of the following c
 
 3. Build performance_test with the [CMake build flag](#eclipse-cyclone-dds) for Cyclone DDS:
 
-    ```bash
+    ```shell
     source /opt/ros/rolling/setup.bash
     cd ~/perf_test_ws
     colcon build --cmake-args -DPERFORMANCE_TEST_CYCLONEDDS_ENABLED=ON
@@ -65,7 +67,7 @@ This example shows how to test the non-functional performance of the following c
 
 4. Run with the [communication plugin option](#eclipse-cyclone-dds) for Cyclone DDS:
 
-```bash
+```shell
 mkdir experiment
 ./install/performance_test/lib/performance_test/perf_test --communication CycloneDDS
                                                           --msg Array1k
@@ -85,14 +87,14 @@ For a simple example, see [Dockerfile.rclcpp](dockerfiles/Dockerfile.rclcpp).
 The performance_test tool is structured as a ROS 2 package, so `colcon` is used to build it.
 Therefore, you must source a ROS 2 installation:
 
-```bash
+```shell
 source /opt/ros/rolling/setup.bash
 ```
 
 Select a middleware plugin from [this list](#middleware-plugins).
 Then build the performance_test tool with the selected middleware:
 
-```bash
+```shell
 mkdir -p ~/perf_test_ws/src
 cd ~/perf_test_ws/src
 git clone https://gitlab.com/ApexAI/performance_test.git
@@ -109,7 +111,7 @@ source install/setup.bash
 The performance_test experiments are run through the `perf_test` executable.
 To find the available settings, run with `--help` (note the required and default arguments):
 
-```bash
+```shell
 ~/perf_test_ws$ ./install/performance_test/lib/performance_test/perf_test --help
 ```
 
@@ -127,14 +129,14 @@ For running tests on a single machine, you can choose between the following opti
 
 1. Intraprocess means that the publisher and subscriber threads are in the same process.
 
-    ```bash
+    ```shell
     perf_test <options> --num-sub-threads 1 --num-pub-threads 1
     ```
 
 1. Interprocess means that the publisher and subscriber are in different processes. To test
    interprocess communication, two instances of the performance_test must be run, e.g.
 
-    ```bash
+    ```shell
     # Start the subscriber first
     perf_test <options> --num-sub-threads 1 --num-pub-threads 0 &
     sleep 1  # give the subscriber time to finish initializing
@@ -145,7 +147,7 @@ On a distributed system, testing latency is difficult, because the clocks are pr
 perfectly synchronized between the two devices. To work around this, the performance_test tool
 supports relay mode, which allows for a round-trip style of communication:
 
-```bash
+```shell
 # On the main machine
 perf_test <options> --roundtrip-mode Main
 
@@ -158,13 +160,13 @@ messages back. The Main machine receives the relayed message, and reports the ro
 Therefore, the reported latency will be roughly double the latency compared to the latency reported
 in non-relay mode.
 
-#### Single machine, single thread
+### Single machine, single thread
 
 An intra-thread configuration is experimentally supported, in which a publisher and subscriber
 both operate in the same thread. The publisher writes a messages, and the subscriber immediately
 takes it.
 
-```bash
+```shell
 perf_test <options> -e INTRA_THREAD
 ```
 
@@ -305,7 +307,7 @@ layer](http://docs.ros2.org/beta2/developer_overview.html#internal-api-architect
 ### ROS 2
 
 The performance test tool can also measure the performance of a variety of RMW implementations,
-through the ROS2 `rclcpp::publisher` and `rclcpp::subscriber` API.
+through the ROS 2 `rclcpp::publisher` and `rclcpp::subscriber` API.
 
 - [ROS 2 `rclcpp::publisher` and `rclcpp::subscriber`](https://docs.ros.org/en/rolling/Tutorials/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html)
 - CMake build flag: `-DPERFORMANCE_TEST_RCLCPP_ENABLED=ON` (on by default)
@@ -325,6 +327,7 @@ through the ROS2 `rclcpp::publisher` and `rclcpp::subscriber` API.
 
 - Apex.OS
 - CMake build flag: `-DPERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED=ON`
+   - It is also required to `source /opt/ApexOS/setup.bash` instead of a ROS 2 distribution
 - Communication plugin: `-c ApexOSPollingSubscription`
 - Docker file: Not available
 - Available underlying RMW implementations: `rmw_apex_middleware`
@@ -360,14 +363,25 @@ The performance_test tool provides several tools to plot the generated results:
 1. Results rendered in a Jupyter notebook: used to compare multiple experiments
     <img src="performance_test/helper_scripts/apex_performance_plotter/example_plot_two_experiments.png"  width="1000">
 
+#### Installation
+
 The plot tool requires python3 and texlive. On an Ubuntu system you will need to
 install the following packages:
 
-`sudo apt-get install python3 python3-pip texlive texlive-pictures texlive-luatex texlive-latex-extra`
+```shell
+sudo apt-get install python3 python3-pip texlive texlive-pictures texlive-luatex texlive-latex-extra
+```
 
-Start a Python virtual environment and install the required Python packages:
+Start a Python virtual environment:
 
-```bash
+```shell
+python3 -m venv venv
+source venv/bin/activate
+```
+
+ Install the required Python packages in that virtual environment:
+
+```shell
 cd performance_test/helper_scripts/apex_performance_plotter
 pip3 install wheel
 pip3 install .
@@ -388,7 +402,7 @@ All of the latency metrics are collected and calculated by the subscriber proces
 For interprocess communication, it is recommended to provide different prefixes for
 the log files:
 
-```bash
+```shell
 perf_test -c rclcpp-single-threaded-executor --msg Array1k -p 0 -s 1 -l log_sub.csv
 perf_test -c rclcpp-single-threaded-executor --msg Array1k -p 1 -s 0 -l log_pub.csv
 ```
@@ -400,7 +414,7 @@ metrics will be plotted, but the latency plot will be empty.
 
 To analyze the results in a Jupyter notebook run the following commands:
 
-```bash
+```shell
 pipenv shell
 jupyter notebook plot_logs.ipynb
 
