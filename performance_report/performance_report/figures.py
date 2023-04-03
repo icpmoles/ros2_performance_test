@@ -42,7 +42,7 @@ def generateFigure(figConfig, datasets: "list[DatasetConfig]"):
                 plot_height=figConfig['size']['height'],
                 margin=(10, 10, 10, 10)
         )
-    elif figConfig['x_range'] == 'Experiment' and figConfig['y_range'] == 'latency_mean':
+    elif figConfig['x_range'] == 'Experiment' and 'latency_mean' in figConfig['y_range']:
         return _generate_box_and_whiskers(figConfig, datasets)
     else:
         # assume categorical if not a time series
@@ -135,7 +135,18 @@ def generateFigure(figConfig, datasets: "list[DatasetConfig]"):
     return fig, missing_dataset_num
 
 
+def _remove_prefix(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text  # or whatever
+
+
 def _generate_box_and_whiskers(figConfig, datasets: "list[DatasetConfig]"):
+    lat_mean_key = figConfig['y_range']
+    suffix = _remove_prefix(lat_mean_key, 'latency_mean')
+    lat_min_key = 'latency_min' + suffix
+    lat_max_key = 'latency_max' + suffix
+    lat_var_key = 'latency_variance' + suffix
     df_dict = {
         'name': [],
         'fill_color': [],
@@ -161,11 +172,11 @@ def _generate_box_and_whiskers(figConfig, datasets: "list[DatasetConfig]"):
             continue
         df_dict['name'].append(dataset.name)
         df_dict['fill_color'].append(dataset.theme.color)
-        df_dict['whisker_bottom'].append(df['latency_min'].min())
-        m = df['latency_mean'].mean()
+        df_dict['whisker_bottom'].append(df[lat_min_key].min())
+        m = df[lat_mean_key].mean()
         df_dict['mean'].append(m)
-        df_dict['whisker_top'].append(df['latency_max'].max())
-        std_dev = math.sqrt(_combined_variance(df))
+        df_dict['whisker_top'].append(df[lat_max_key].max())
+        std_dev = math.sqrt(_combined_variance(df, lat_mean_key, lat_var_key))
         df_dict['std_dev'].append(std_dev)
         df_dict['box_top'].append(m + std_dev)
         df_dict['box_bottom'].append(m - std_dev)
@@ -229,10 +240,10 @@ def _generate_box_and_whiskers(figConfig, datasets: "list[DatasetConfig]"):
     return fig, missing_dataset_num
 
 
-def _combined_variance(df):
+def _combined_variance(df, mean_key, variance_key):
     n = df['rate']
-    m = df['latency_mean']
-    q = (n - 1) * df['latency_variance'] + n * m * m
+    m = df[mean_key]
+    q = (n - 1) * df[variance_key] + n * m * m
     nc = n.sum()
     mc = m.mean()
     qc = q.sum()

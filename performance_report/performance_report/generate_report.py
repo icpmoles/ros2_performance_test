@@ -74,7 +74,8 @@ def generateReports(report_cfg_file, log_dir):
                         os.path.join(log_dir, report_name + '.' + template_file_extension)
                     with open(output_file, 'w') as result:
                         result.write(output)
-        except KeyError:
+        except KeyError as e:
+            print(e)
             print("Oops, something is wrong with the provided"
                   "report configuration file....exiting")
     return missing_dataset
