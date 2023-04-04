@@ -15,10 +15,11 @@
 #ifndef OUTPUTS__JSON_OUTPUT_HPP_
 #define OUTPUTS__JSON_OUTPUT_HPP_
 
+#include <rapidjson/stringbuffer.h>
+#include <rapidjson/writer.h>
+
 #include <iostream>
 #include <string>
-#include <vector>
-#include <memory>
 
 #include "output.hpp"
 #include "../experiment_configuration/experiment_configuration.hpp"
@@ -34,14 +35,29 @@ public:
   virtual ~JsonOutput();
 
   void open() override;
-  void update(std::shared_ptr<const AnalysisResult> result) override;
+  void update(const AnalysisResult & result) override;
   void close() override;
 
 private:
   const ExperimentConfiguration & m_ec;
   mutable std::ofstream m_os;
-  bool m_is_open = false;
-  std::vector<std::shared_ptr<const AnalysisResult>> m_results;
+  rapidjson::StringBuffer m_sb;
+  rapidjson::Writer<rapidjson::StringBuffer> m_writer;
+
+  void write(const ExperimentConfiguration & ec);
+  void write(const AnalysisResult & ar);
+  void write(const char * key, const std::string & val);
+  void write(const char * key, uint32_t val);
+  void write(const char * key, uint64_t val);
+  void write(const char * key, int32_t val);
+  void write(const char * key, int64_t val);
+  void write(const char * key, float val);
+  void write(const char * key, double val);
+  void write(const char * key, bool val);
+  void write(const char * key, timeval val);
+  void write(const char * key, const std::chrono::nanoseconds val);
+
+  std::string tableau_final_logfile_name(const std::string & id, const std::string & topic);
 };
 
 }  // namespace performance_test

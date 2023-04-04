@@ -268,7 +268,6 @@ set(sources
     src/outputs/stdout_output.cpp
     src/outputs/stdout_output.hpp
     src/utilities/cpu_usage_tracker.hpp
-    src/utilities/json_logger.hpp
     src/utilities/memory_checker.cpp
     src/utilities/memory_checker.hpp
     src/utilities/msg_traits.hpp

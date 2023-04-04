@@ -48,9 +48,9 @@ void CsvOutput::open()
     m_os << AnalysisResult::csv_header(true) << std::endl;
   }
 }
-void CsvOutput::update(std::shared_ptr<const AnalysisResult> result)
+void CsvOutput::update(const AnalysisResult & result)
 {
-  m_os << result->to_csv_string(true) << std::endl;
+  m_os << result.to_csv_string(true) << std::endl;
 }
 
 void CsvOutput::close()

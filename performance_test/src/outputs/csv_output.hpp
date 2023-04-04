@@ -32,7 +32,7 @@ public:
   virtual ~CsvOutput();
 
   void open() override;
-  void update(std::shared_ptr<const AnalysisResult> result) override;
+  void update(const AnalysisResult & result) override;
   void close() override;
 
 private:

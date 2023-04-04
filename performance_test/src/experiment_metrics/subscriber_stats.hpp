@@ -111,14 +111,14 @@ struct SubscriberStats
     unlock();
   }
 
-  void populate_stats(std::shared_ptr<AnalysisResult> & results)
+  void populate_stats(AnalysisResult & results)
   {
     lock();
-    results->m_num_samples_received += m_received_samples_per_iteration;
-    results->m_num_samples_lost += m_lost_samples_per_iteration;
-    results->m_total_data_received += m_received_data_per_iteration;
+    results.m_num_samples_received += m_received_samples_per_iteration;
+    results.m_num_samples_lost += m_lost_samples_per_iteration;
+    results.m_total_data_received += m_received_data_per_iteration;
     for (auto latency : m_latencies) {
-      results->m_latency.add_sample(latency);
+      results.m_latency.add_sample(latency);
     }
     unlock();
   }

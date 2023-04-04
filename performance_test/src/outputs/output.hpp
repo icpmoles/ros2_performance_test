@@ -35,7 +35,7 @@ public:
   virtual void open() = 0;
 
   /// @brief update output with given result
-  virtual void update(std::shared_ptr<const performance_test::AnalysisResult> result) = 0;
+  virtual void update(const AnalysisResult & result) = 0;
 
   /// @brief close output cleanly
   virtual void close() = 0;

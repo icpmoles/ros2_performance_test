@@ -50,10 +50,10 @@ struct PublisherStats
     unlock();
   }
 
-  void populate_stats(std::shared_ptr<AnalysisResult> & results)
+  void populate_stats(AnalysisResult & results)
   {
     lock();
-    results->m_num_samples_sent += m_sent_samples_per_iteration;
+    results.m_num_samples_sent += m_sent_samples_per_iteration;
     unlock();
   }
 
