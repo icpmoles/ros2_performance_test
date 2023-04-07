@@ -43,6 +43,7 @@ class ExperimentConfig:
         history_depth: int = 16,
         rt_prio: int = 0,
         rt_cpus: int = 0,
+        prevent_cpu_idle: bool = False,
         max_runtime: int = 30,
         ignore_seconds: int = 5,
     ) -> None:
@@ -60,6 +61,7 @@ class ExperimentConfig:
         self.history_depth = int(history_depth)
         self.rt_prio = rt_prio
         self.rt_cpus = rt_cpus
+        self.prevent_cpu_idle = prevent_cpu_idle
         self.max_runtime = max_runtime
         self.ignore_seconds = ignore_seconds
 
@@ -79,6 +81,7 @@ class ExperimentConfig:
         same = same and self.history_depth == o.history_depth
         same = same and self.rt_prio == o.rt_prio
         same = same and self.rt_cpus == o.rt_cpus
+        same = same and self.prevent_cpu_idle == o.prevent_cpu_idle
         same = same and self.max_runtime == o.max_runtime
         same = same and self.ignore_seconds == o.ignore_seconds
         return same
@@ -105,6 +108,7 @@ class ExperimentConfig:
             self.history_depth,
             self.rt_prio,
             self.rt_cpus,
+            self.prevent_cpu_idle,
         ]
         str_params = map(str, params)
         return "_".join(str_params) + ".json"
@@ -134,6 +138,7 @@ class ExperimentConfig:
             'history_depth': self.history_depth,
             'rt_prio': self.rt_prio,
             'rt_cpus': self.rt_cpus,
+            'prevent_cpu_idle': self.prevent_cpu_idle,
             'max_runtime': self.max_runtime,
             'ignore_seconds': self.ignore_seconds,
         }, index=[0])
@@ -206,6 +211,8 @@ class ExperimentConfig:
         args += f" --history-depth {self.history_depth}"
         args += f" --use-rt-prio {self.rt_prio}"
         args += f" --use-rt-cpus {self.rt_cpus}"
+        if self.prevent_cpu_idle:
+            args += " --prevent-cpu-idle"
         args += f" --max-runtime {self.max_runtime}"
         args += f" --ignore {self.ignore_seconds}"
         if self.process_configuration == "INTRA_PROCESS":

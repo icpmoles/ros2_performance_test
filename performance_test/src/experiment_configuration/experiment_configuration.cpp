@@ -117,6 +117,7 @@ ExperimentConfiguration::ExperimentConfiguration()
   m_check_memory(false),
   m_is_rt_init_required(false),
   m_is_zero_copy_transfer(false),
+  m_prevent_cpu_idle(false),
   m_exit_requested(false),
   m_roundtrip_mode(RoundTripMode::NONE)
 {
@@ -303,6 +304,9 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
       "Ignored for other messages. Default is 0.",
       false, 0, "N", cmd);
 
+    TCLAP::SwitchArg preventCpuIdleArg("", "prevent-cpu-idle",
+      "Prevent CPU from entering idle states.", cmd, false);
+
     cmd.parse(argc, argv);
 
     m_rate = rateArg.getValue();
@@ -334,6 +338,7 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     m_wait_for_matched_timeout = waitForMatchedTimeoutArg.getValue();
     m_is_zero_copy_transfer = zeroCopyArg.getValue();
     m_unbounded_msg_size = unboundedMsgSizeArg.getValue();
+    m_prevent_cpu_idle = preventCpuIdleArg.getValue();
 
     // Configure outputs
     if (printToConsoleArg.getValue()) {
@@ -737,6 +742,11 @@ void ExperimentConfiguration::check_setup() const
   if (!m_is_setup) {
     throw std::runtime_error("Experiment is not yet setup!");
   }
+}
+
+bool ExperimentConfiguration::prevent_cpu_idle() const
+{
+  return m_prevent_cpu_idle;
 }
 
 bool ExperimentConfiguration::exit_requested() const

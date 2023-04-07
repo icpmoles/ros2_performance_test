@@ -273,6 +273,8 @@ set(sources
     src/utilities/msg_traits.hpp
     src/utilities/perf_clock.hpp
     src/utilities/qnx_res_usage.hpp
+    src/utilities/prevent_cpu_idle.cpp
+    src/utilities/prevent_cpu_idle.hpp
     src/utilities/rt_enabler.hpp
     src/utilities/spin_lock.hpp
     src/utilities/statistics_tracker.hpp

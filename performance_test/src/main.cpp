@@ -19,12 +19,17 @@
 #include "experiment_configuration/experiment_configuration.hpp"
 #include "experiment_execution/runner.hpp"
 #include "experiment_execution/runner_factory.hpp"
+#include "utilities/prevent_cpu_idle.hpp"
 
 int main(int argc, char ** argv)
 {
   // parse arguments and set up experiment configuration
   auto & ec = performance_test::ExperimentConfiguration::get();
   ec.setup(argc, argv);
+
+  if (ec.prevent_cpu_idle()) {
+    performance_test::prevent_cpu_idle();
+  }
 
 #if defined(PERFORMANCE_TEST_RCLCPP_ENABLED)
   // initialize ros

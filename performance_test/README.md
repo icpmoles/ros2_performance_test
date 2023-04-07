@@ -429,6 +429,13 @@ Apex.AI's _Performance Testing in ROS 2_ white paper
 describes how to design a fair and unbiased performance test, and is the basis for this project.
 <center><img src="architecture.png"></center>
 
+## Performance optimizations
+
+- On linux-based platforms, `perf_test` writes `0` to `/dev/cpu_dma_latency`
+  and holds open the file handle, which will prevent the CPU from entering any
+  idle states for the duration of the experiment. This should result in lower
+  message latency and lower variance in that latency.
+
 ## Future extensions and limitations
 
 - Communication frameworks like DDS have a huge amount of settings. This tool only allows the most
