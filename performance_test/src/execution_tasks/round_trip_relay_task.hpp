@@ -16,17 +16,15 @@
 #define EXECUTION_TASKS__ROUND_TRIP_RELAY_TASK_HPP_
 
 #include <memory>
-#include <thread>
-#include <functional>
 
-#include "../experiment_metrics/publisher_stats.hpp"
-#include "../experiment_metrics/subscriber_stats.hpp"
+#include "../communication_abstractions/communicator.hpp"
+#include "../experiment_metrics/message_received_listener.hpp"
 #include "../utilities/memory_checker.hpp"
 #include "../utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {
-class RoundTripRelayTask
+class RoundTripRelayTask : public MessageReceivedListener
 {
 public:
   RoundTripRelayTask(
@@ -42,11 +40,19 @@ public:
 
   void run()
   {
-    for (const auto & stats : m_sub->update_subscription()) {
-      RoundtripTimestampProvider ts(stats.time_msg_sent_ns);
-      m_pub->publish_copy(ts, stats.sample_id);
-    }
+    m_sub->update_subscription(*this);
     m_memory_checker.enable_memory_tools_checker();
+  }
+
+  void on_message_received(
+    const std::int64_t time_msg_sent_ns,
+    const std::int64_t,
+    const std::uint64_t sample_id,
+    const std::size_t
+  ) override
+  {
+    RoundtripTimestampProvider ts(time_msg_sent_ns);
+    m_pub->publish_copy(ts, sample_id);
   }
 
 private:

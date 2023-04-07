@@ -9,6 +9,8 @@
 ### Changed
 - Update the README to better explain how to use this tool with Apex.OS
 - In the `Runner`, allocate the `AnalysisResult`s on the stack instead of using `shared_ptr`
+- `Subscriber` methods accept a callback parameter, instead of returning a
+  `vector` of results, to reduce heap usage
 
 ## 1.4.2 (2023/03/15)
 

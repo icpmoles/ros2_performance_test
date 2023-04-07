@@ -161,26 +161,24 @@ public:
     this->m_subscriber = dds::core::null;
   }
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
     // Wait for the data to become available. This is the only condition, so no need to inspect the
     // returned list of triggered conditions.
     try {
       m_waitset.wait(dds::core::Duration(15, 0));
-      return take();
+      this->take(listener);
     } catch (dds::core::TimeoutError &) {
-      return {};
     }
   }
 
-  std::vector<ReceivedMsgStats> take() override
+  void take(MessageReceivedListener & listener) override
   {
-    std::vector<ReceivedMsgStats> stats;
     dds::sub::LoanedSamples<DataType> samples = m_datareader->take();
     const auto received_time = now_int64_t();
     for (auto & sample : samples) {
       if (sample->info().valid()) {
-        stats.emplace_back(
+        listener.on_message_received(
           sample->data().time(),
           received_time,
           sample->data().id(),
@@ -188,7 +186,6 @@ public:
         );
       }
     }
-    return stats;
   }
 
 private:

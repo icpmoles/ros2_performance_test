@@ -236,16 +236,15 @@ public:
     m_waitset.attach_condition(m_condition);
   }
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
     DDS::Duration_t wait_timeout = {15, 0};
     m_waitset.wait(m_condition_seq, wait_timeout);
-    return take();
+    take(listener);
   }
 
-  std::vector<ReceivedMsgStats> take() override
+  void take(MessageReceivedListener & listener) override
   {
-    std::vector<ReceivedMsgStats> stats;
     auto ret = m_datareader->take(
       m_data_seq, m_sample_info_seq, DDS::LENGTH_UNLIMITED,
       DDS::ANY_SAMPLE_STATE, DDS::ANY_VIEW_STATE,
@@ -255,7 +254,7 @@ public:
       for (decltype(m_data_seq.length()) j = 0; j < m_data_seq.length(); ++j) {
         const auto & data = m_data_seq[j];
         if (m_sample_info_seq[j].valid_data) {
-          stats.emplace_back(
+          listener.on_message_received(
             data.time,
             received_time,
             data.id,
@@ -267,7 +266,6 @@ public:
         m_data_seq,
         m_sample_info_seq);
     }
-    return stats;
   }
 
 private:

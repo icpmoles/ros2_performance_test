@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 
+#include "message_received_listener.hpp"
 #include "../experiment_configuration/experiment_configuration.hpp"
 #include "../utilities/spin_lock.hpp"
 #include "../utilities/statistics_tracker.hpp"
@@ -33,28 +34,9 @@
 
 namespace performance_test
 {
-struct ReceivedMsgStats
+class SubscriberStats : public MessageReceivedListener
 {
-  std::int64_t time_msg_sent_ns;
-  std::int64_t time_msg_received_ns;
-  std::uint64_t sample_id;
-  std::size_t data_type_size;
-
-  ReceivedMsgStats(
-    std::int64_t time_msg_sent_ns,
-    std::int64_t time_msg_received_ns,
-    std::uint64_t sample_id,
-    std::size_t data_type_size
-  )
-  : time_msg_sent_ns(time_msg_sent_ns),
-    time_msg_received_ns(time_msg_received_ns),
-    sample_id(sample_id),
-    data_type_size(data_type_size)
-  {}
-};
-
-struct SubscriberStats
-{
+public:
   SubscriberStats()
   {
 #if defined(QNX)
@@ -67,21 +49,12 @@ struct SubscriberStats
     m_latencies.clear();
   }
 
-  void update_subscriber_stats(const ReceivedMsgStats & stats)
-  {
-    update_subscriber_stats(
-      stats.time_msg_sent_ns,
-      stats.time_msg_received_ns,
-      stats.sample_id,
-      stats.data_type_size
-    );
-  }
-
-  void update_subscriber_stats(
+  void on_message_received(
     const std::int64_t time_msg_sent_ns,
     const std::int64_t time_msg_received_ns,
     const std::uint64_t sample_id,
-    const std::size_t data_type_size)
+    const std::size_t data_type_size
+  ) override
   {
     lock();
     update_lost_samples_counter(sample_id);

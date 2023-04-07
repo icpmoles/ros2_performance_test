@@ -15,11 +15,10 @@
 #ifndef COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
 #define COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
 
-#include <limits>
+#include <cstdint>
 #include <stdexcept>
-#include <vector>
 
-#include "../experiment_metrics/subscriber_stats.hpp"
+#include "../experiment_metrics/message_received_listener.hpp"
 #include "../utilities/msg_traits.hpp"
 #include "../utilities/timestamp_provider.hpp"
 
@@ -53,9 +52,9 @@ protected:
 class Subscriber
 {
 public:
-  virtual std::vector<ReceivedMsgStats> update_subscription() = 0;
+  virtual void update_subscription(MessageReceivedListener & listener) = 0;
 
-  virtual std::vector<ReceivedMsgStats> take()
+  virtual void take(MessageReceivedListener &)
   {
     throw std::runtime_error("This communicator does not support take!");
   }

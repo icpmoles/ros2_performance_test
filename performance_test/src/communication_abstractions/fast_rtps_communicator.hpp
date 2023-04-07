@@ -218,17 +218,15 @@ public:
   {
   }
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
     const eprosima::fastrtps::Duration_t secs_15{15, 0};
     m_datareader->wait_for_unread_message(secs_15);
-    return take();
+    take(listener);
   }
 
-  std::vector<ReceivedMsgStats> take() override
+  void take(MessageReceivedListener & listener) override
   {
-    std::vector<ReceivedMsgStats> stats;
-
     FASTDDS_SEQUENCE(DataSeq, DataType);
     DataSeq data_seq;
     eprosima::fastdds::dds::SampleInfoSeq info_seq;
@@ -237,7 +235,7 @@ public:
     while (ok_ret_code == m_datareader->take(data_seq, info_seq, 1)) {
       const auto received_time = now_int64_t();
       if (info_seq[0].valid_data) {
-        stats.emplace_back(
+        listener.on_message_received(
           data_seq[0].time(),
           received_time,
           data_seq[0].id(),
@@ -246,7 +244,6 @@ public:
       }
       m_datareader->return_loan(data_seq, info_seq);
     }
-    return stats;
   }
 
 private:

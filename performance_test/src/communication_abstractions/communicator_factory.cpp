@@ -112,7 +112,7 @@ std::shared_ptr<Publisher> CommunicatorFactory::get_publisher(
 #endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
         if (ec.com_mean() == CommunicationMean::CONNEXTDDS) {
-          ptr = std::make_shared<RTIDDSPublisher<T>>(stats);
+          ptr = std::make_shared<RTIDDSPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
@@ -190,7 +190,7 @@ std::shared_ptr<Subscriber> CommunicatorFactory::get_subscriber(
 #endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
         if (ec.com_mean() == CommunicationMean::CONNEXTDDS) {
-          ptr = std::make_shared<RTIDDSSubscriber<T>>(stats);
+          ptr = std::make_shared<RTIDDSSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED

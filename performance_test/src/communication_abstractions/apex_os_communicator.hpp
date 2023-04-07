@@ -184,8 +184,8 @@ private:
         ExperimentConfiguration::RoundTripMode::RELAY) {
       m_publisher.value()->publish(data);
     } else {
-      m_stats.update_subscriber_stats(data.time, received_time, data.id,
-                                      sizeof(MsgType));
+      m_stats.on_message_received(
+        data.time, received_time, data.id, sizeof(MsgType));
     }
   }
 

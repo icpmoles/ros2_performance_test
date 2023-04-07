@@ -57,26 +57,28 @@ public:
     }
   }
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
     const auto wait_ret = m_waitset->wait(std::chrono::milliseconds(100), false);
     if (wait_ret.any()) {
-      return take();
-    } else {
-      return {};
+      take(listener);
     }
   }
 
-  std::vector<ReceivedMsgStats> take() override
+  void take(MessageReceivedListener & listener) override
   {
-    m_subscriber_stats.clear();
     const auto loaned_msg = m_polling_subscription->take(RCLCPP_LENGTH_UNLIMITED);
+    const auto received_time = now_int64_t();
     for (const auto msg : loaned_msg) {
       if (msg.info().valid()) {
-        callback(msg.data());
+        listener.on_message_received(
+          msg.data().time,
+          received_time,
+          msg.data().id,
+          sizeof(DataType)
+        );
       }
     }
-    return m_subscriber_stats;
   }
 
 private:
@@ -85,24 +87,6 @@ private:
   using PollingSubscriptionType = ::rclcpp::PollingSubscription<DataType>;
   std::shared_ptr<PollingSubscriptionType> m_polling_subscription;
   std::unique_ptr<rclcpp::Waitset<>> m_waitset;
-  std::vector<ReceivedMsgStats> m_subscriber_stats;
-
-  template<class T>
-  void callback(const T & data)
-  {
-    const auto received_time = now_int64_t();
-    static_assert(
-      std::is_same<DataType,
-      typename std::remove_cv<
-        typename std::remove_reference<T>::type>::type>::value,
-      "Parameter type passed to callback() does not match");
-    m_subscriber_stats.emplace_back(
-      data.time,
-      received_time,
-      data.id,
-      sizeof(DataType)
-    );
-  }
 };
 
 }  // namespace performance_test

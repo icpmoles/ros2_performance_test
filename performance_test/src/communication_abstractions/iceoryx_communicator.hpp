@@ -104,35 +104,30 @@ public:
       });
   }
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
-    std::vector<ReceivedMsgStats> stats;
     if (m_subscriber.getSubscriptionState() == iox::SubscribeState::SUBSCRIBED) {
       auto eventVector = m_waitset.timedWait(iox::units::Duration::fromSeconds(15));
       for (auto & event : eventVector) {
         if (event->doesOriginateFrom(&m_subscriber)) {
           while (m_subscriber.hasData()) {
-            for (const auto & s : take()) {
-              stats.push_back(s);
-            }
+            this->take(listener);
           }
         }
       }
     } else {
       std::cout << "Not subscribed!" << std::endl;
     }
-    return stats;
   }
 
-  std::vector<ReceivedMsgStats> take() override
+  void take(MessageReceivedListener & listener) override
   {
-    std::vector<ReceivedMsgStats> stats;
     m_subscriber.take()
     .and_then(
-      [this, &stats](const void * data) {
+      [&, this](const void * data) {
         const auto received_time = now_int64_t();
         auto receivedSample = static_cast<const DataType *>(data);
-        stats.emplace_back(
+        listener.on_message_received(
           receivedSample->time,
           received_time,
           receivedSample->id,
@@ -150,7 +145,6 @@ public:
             "Error: received Chunk not available");
         }
       });
-    return stats;
   }
 
 private:

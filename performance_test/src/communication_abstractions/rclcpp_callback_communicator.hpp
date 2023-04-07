@@ -51,11 +51,10 @@ public:
 #endif
   }
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
-    m_subscriber_stats.clear();
+    m_listener = &listener;
     m_executor.spin_once(std::chrono::milliseconds(100));
-    return m_subscriber_stats;
   }
 
 private:
@@ -63,7 +62,7 @@ private:
   rclcpp::QoS m_ROS2QOSAdapter;
   Executor m_executor;
   std::shared_ptr<::rclcpp::Subscription<DataType>> m_subscription;
-  std::vector<ReceivedMsgStats> m_subscriber_stats;
+  MessageReceivedListener * m_listener;
 
   void callback(const typename DataType::SharedPtr data)
   {
@@ -79,7 +78,7 @@ private:
       typename std::remove_cv<
         typename std::remove_reference<T>::type>::type>::value,
       "Parameter type passed to callback() does not match");
-    m_subscriber_stats.emplace_back(
+    m_listener->on_message_received(
       data.time,
       received_time,
       data.id,

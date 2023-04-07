@@ -197,15 +197,14 @@ public:
     m_datareader(create_datareader(ec, m_participant)),
     m_waitset(create_waitset(m_participant, m_datareader)) {}
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
     dds_waitset_wait(m_waitset, nullptr, 0, DDS_SECS(15));
-    return take();
+    take(listener);
   }
 
-  std::vector<ReceivedMsgStats> take() override
+  void take(MessageReceivedListener & listener) override
   {
-    std::vector<ReceivedMsgStats> stats;
     void * untyped = nullptr;
     dds_sample_info_t si;
     int32_t n;
@@ -213,7 +212,7 @@ public:
       const auto received_time = now_int64_t();
       const DataType * data = static_cast<DataType *>(untyped);
       if (si.valid_data) {
-        stats.emplace_back(
+        listener.on_message_received(
           data->time,
           received_time,
           data->id,
@@ -222,7 +221,6 @@ public:
       }
       dds_return_loan(m_datareader, &untyped, n);
     }
-    return stats;
   }
 
 private:

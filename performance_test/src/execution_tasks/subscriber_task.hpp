@@ -15,13 +15,11 @@
 #ifndef EXECUTION_TASKS__SUBSCRIBER_TASK_HPP_
 #define EXECUTION_TASKS__SUBSCRIBER_TASK_HPP_
 
-#include <functional>
 #include <memory>
-#include <thread>
 
+#include "../communication_abstractions/communicator.hpp"
 #include "../experiment_metrics/subscriber_stats.hpp"
 #include "../utilities/memory_checker.hpp"
-#include "../utilities/spin_lock.hpp"
 
 namespace performance_test
 {
@@ -41,17 +39,13 @@ public:
 
   void run()
   {
-    for (const auto & stats : m_sub->update_subscription()) {
-      m_stats.update_subscriber_stats(stats);
-    }
+    m_sub->update_subscription(m_stats);
     m_memory_checker.enable_memory_tools_checker();
   }
 
   void take()
   {
-    for (const auto & stats : m_sub->take()) {
-      m_stats.update_subscriber_stats(stats);
-    }
+    m_sub->take(m_stats);
     m_memory_checker.enable_memory_tools_checker();
   }
 

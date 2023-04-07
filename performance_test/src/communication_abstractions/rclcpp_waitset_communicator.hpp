@@ -57,33 +57,29 @@ public:
 #endif
   }
 
-  std::vector<ReceivedMsgStats> update_subscription() override
+  void update_subscription(MessageReceivedListener & listener) override
   {
     // This timeout ensures the wait will unblock when the program receives an INT signal
     const auto wait_ret = m_waitset.wait(m_timeout);
     if (wait_ret.kind() == rclcpp::Ready) {
-      return take();
-    } else {
-      return {};
+      take(listener);
     }
   }
 
-  std::vector<ReceivedMsgStats> take() override
+  void take(MessageReceivedListener & listener) override
   {
-    std::vector<ReceivedMsgStats> stats;
     DataType msg;
     rclcpp::MessageInfo msg_info;
     bool success = m_subscription->take(msg, msg_info);
     const auto received_time = now_int64_t();
     if (success) {
-      stats.emplace_back(
+      listener.on_message_received(
         msg.time,
         received_time,
         msg.id,
         sizeof(DataType)
       );
     }
-    return stats;
   }
 
 private:
