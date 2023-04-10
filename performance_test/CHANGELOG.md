@@ -16,6 +16,7 @@
 - Added `perfplot` support for JSON log files
 ### Changed
 - Migrate the Apex.OS target to use `rosidl_get_typesupport_target`
+- Preallocate the JSON logger's string buffer to prevent reallocations after the experiment begins
 
 ## 1.4.1 (2023/02/23)
 

@@ -22,7 +22,9 @@
 namespace performance_test
 {
 JsonOutput::JsonOutput()
-: m_ec(ExperimentConfiguration::get()), m_sb(), m_writer(m_sb) {}
+: m_ec(ExperimentConfiguration::get()), m_sb(), m_writer(m_sb)
+{
+}
 
 JsonOutput::~JsonOutput()
 {
@@ -31,6 +33,11 @@ JsonOutput::~JsonOutput()
 
 void JsonOutput::open()
 {
+  // Each second, around 750 bytes are written to the buffer,
+  // so 1024 should be more than enough to prevent reallocations
+  // after the experiment has started
+  m_sb.Reserve(1024 * static_cast<size_t>(m_ec.max_runtime()));
+
   if (m_ec.is_setup() && !m_ec.logfile_name().empty()) {
     m_os.open(m_ec.logfile_name(), std::ofstream::out);
 
