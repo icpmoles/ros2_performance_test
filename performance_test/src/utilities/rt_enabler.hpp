@@ -22,10 +22,12 @@
 #include <sys/types.h>
 #if defined(PERFORMANCE_TEST_LINUX)
 #include <sys/syscall.h>
-#elif defined(QNX)
+#endif  // defined(PERFORMANCE_TEST_LINUX)
+
+#if defined(QNX)
 #include <sys/neutrino.h>
 #include <sys/syspage.h>
-#endif  // defined(PERFORMANCE_TEST_LINUX)
+#endif  // defined(QNX)
 
 #include <iostream>
 #include <cerrno>

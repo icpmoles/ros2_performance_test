@@ -15,12 +15,6 @@
 #ifndef EXPERIMENT_METRICS__SUBSCRIBER_STATS_HPP_
 #define EXPERIMENT_METRICS__SUBSCRIBER_STATS_HPP_
 
-#if defined(QNX)
-#include <inttypes.h>
-#include <sys/neutrino.h>
-#include <sys/syspage.h>
-#endif
-
 #include <chrono>
 #include <memory>
 #include <string>
@@ -29,7 +23,7 @@
 #include "message_received_listener.hpp"
 #include "../experiment_configuration/experiment_configuration.hpp"
 #include "../utilities/spin_lock.hpp"
-#include "../utilities/statistics_tracker.hpp"
+#include "../utilities/sample_statistics.hpp"
 #include "../utilities/perf_clock.hpp"
 
 namespace performance_test
@@ -39,14 +33,6 @@ class SubscriberStats : public MessageReceivedListener
 public:
   SubscriberStats()
   {
-#if defined(QNX)
-    m_cps = SYSPAGE_ENTRY(qtime)->cycles_per_sec;
-#endif
-  }
-
-  void reset()
-  {
-    m_latencies.clear();
   }
 
   void on_message_received(
@@ -57,6 +43,7 @@ public:
   ) override
   {
     lock();
+    verify_sample_chronological_order(time_msg_received_ns);
     update_lost_samples_counter(sample_id);
     add_latency_to_statistics(time_msg_sent_ns, time_msg_received_ns);
     increment_received();
@@ -67,18 +54,22 @@ public:
   void update_stats(std::chrono::duration<double> iteration_duration)
   {
     lock();
+    m_latency_stats_per_iteration = m_latency_stats;
     m_received_samples_per_iteration =
       static_cast<decltype(m_received_samples_per_iteration)>(
       static_cast<double>(m_received_sample_counter) /
       iteration_duration.count());
-    m_received_data_per_iteration =
-      static_cast<decltype(m_received_data_per_iteration)>(
-      static_cast<double>(m_data_received_bytes) /
+    m_received_data_bytes_per_iteration =
+      static_cast<decltype(m_received_data_bytes_per_iteration)>(
+      static_cast<double>(m_received_data_bytes) /
       iteration_duration.count());
     m_lost_samples_per_iteration =
       static_cast<decltype(m_lost_samples_per_iteration)>(
       static_cast<double>(m_num_lost_samples) /
       iteration_duration.count());
+
+    m_latency_stats.clear();
+    m_received_data_bytes = 0;
     m_received_sample_counter = 0;
     m_num_lost_samples = 0;
     unlock();
@@ -89,10 +80,8 @@ public:
     lock();
     results.m_num_samples_received += m_received_samples_per_iteration;
     results.m_num_samples_lost += m_lost_samples_per_iteration;
-    results.m_total_data_received += m_received_data_per_iteration;
-    for (auto latency : m_latencies) {
-      results.m_latency.add_sample(latency);
-    }
+    results.m_total_data_received += m_received_data_bytes_per_iteration;
+    results.m_latency_stats.combine(m_latency_stats_per_iteration);
     unlock();
   }
 
@@ -109,7 +98,7 @@ private:
 
   void verify_sample_chronological_order(std::int64_t time_ns_since_epoch)
   {
-    if (m_prev_timestamp_ns_since_epoch >= time_ns_since_epoch) {
+    if (m_prev_timestamp_ns_since_epoch > time_ns_since_epoch) {
       throw std::runtime_error(
               "Data not consistent: received sample with not strictly older "
               "timestamp. Time diff: " +
@@ -138,24 +127,7 @@ private:
     const std::int64_t time_msg_sent_ns,
     const std::int64_t time_msg_received_ns)
   {
-#if defined(QNX)
-    // Since clock resolution on QNX is 1ms or above, it is better to use
-    // clock cycles to calculate latencies instead of CLOCK_REALTIME or
-    // CLOCK_MONOTONIC.
-    const double ncycles =
-      static_cast<double>(time_msg_received_ns) - static_cast<double>(time_msg_sent_ns);
-    const double latency_s =
-      static_cast<double>(ncycles) / static_cast<double>(m_cps);
-#else
-    std::chrono::nanoseconds time_msg_sent(time_msg_sent_ns);
-    std::chrono::nanoseconds time_msg_received(time_msg_received_ns);
-    const auto latency = time_msg_received - time_msg_sent;
-    const auto latency_s =
-      std::chrono::duration_cast<std::chrono::duration<double>>(latency).count();
-#endif
-    // Converting to double for easier calculations. Because the two
-    // timestamps are very close double precision is enough.
-    m_latencies.push_back(latency_s);
+    m_latency_stats.add_sample(time_msg_received_ns - time_msg_sent_ns);
   }
 
   void increment_received()
@@ -165,23 +137,23 @@ private:
 
   void update_data_received(const std::size_t data_type_size)
   {
-    m_data_received_bytes = m_received_sample_counter * data_type_size;
+    m_received_data_bytes = m_received_sample_counter * data_type_size;
   }
 
-  std::vector<double> m_latencies;
+  std::int64_t m_prev_timestamp_ns_since_epoch{};
+  std::uint64_t m_prev_sample_id{};
+
+  SampleStatistics<std::int64_t> m_latency_stats;
   std::uint64_t m_received_sample_counter{};
+  std::size_t m_received_data_bytes{};
   std::uint64_t m_num_lost_samples{};
-  std::size_t m_received_data_per_iteration{};
+
+  SampleStatistics<std::int64_t> m_latency_stats_per_iteration;
+  std::size_t m_received_data_bytes_per_iteration{};
   std::uint64_t m_received_samples_per_iteration{};
   std::uint64_t m_lost_samples_per_iteration{};
-  std::uint64_t m_prev_sample_id{};
-  std::size_t m_data_received_bytes{};
-  SpinLock m_lock;
-  std::int64_t m_prev_timestamp_ns_since_epoch{};
 
-#if defined(QNX)
-  std::uint64_t m_cps;
-#endif
+  SpinLock m_lock;
 };
 }  // namespace performance_test
 

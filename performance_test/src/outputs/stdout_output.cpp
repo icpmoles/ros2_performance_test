@@ -63,12 +63,12 @@ void StdoutOutput::update(const AnalysisResult & result)
 
   tabulate::Table latency_table;
   latency_table.add_row({"min", "max", "mean", "variance"});
-  if (result.m_latency.n() > 0) {
+  if (result.latency_seconds_n() > 0) {
     latency_table.add_row(
-      {std::to_string(result.m_latency.min()),
-        std::to_string(result.m_latency.max()),
-        std::to_string(result.m_latency.mean()),
-        std::to_string(result.m_latency.variance())});
+      {std::to_string(result.latency_seconds_min()),
+        std::to_string(result.latency_seconds_max()),
+        std::to_string(result.latency_seconds_mean()),
+        std::to_string(result.latency_seconds_variance())});
   } else {
     latency_table.add_row({"-", "-", "-", "-"});
   }

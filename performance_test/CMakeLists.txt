@@ -277,8 +277,8 @@ set(sources
     src/utilities/prevent_cpu_idle.cpp
     src/utilities/prevent_cpu_idle.hpp
     src/utilities/rt_enabler.hpp
+    src/utilities/sample_statistics.hpp
     src/utilities/spin_lock.hpp
-    src/utilities/statistics_tracker.hpp
 )
 
 if(PERFORMANCE_TEST_RT_ENABLED)
@@ -486,10 +486,8 @@ if(BUILD_TESTING)
 
     find_package(ament_cmake_gtest REQUIRED)
     ament_add_gtest(${APEX_PERFORMANCE_TEST_GTEST}
-        test/src/test_performance_test.cpp
-        test/src/test_statistics_tracker.hpp)
+        test/src/test_sample_statistics.cpp)
 
-    target_include_directories(${APEX_PERFORMANCE_TEST_GTEST} PRIVATE "test/include")
     target_link_libraries(${APEX_PERFORMANCE_TEST_GTEST})
 
     set_compile_options(${APEX_PERFORMANCE_TEST_GTEST})

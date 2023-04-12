@@ -63,7 +63,7 @@ public:
     } else {
       m_pub->publish_copy(m_timestamp_provider, m_stats.next_sample_id());
     }
-    m_stats.update_publisher_stats();
+    m_stats.on_message_sent();
 
     m_next_run =
       m_first_run +

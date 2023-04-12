@@ -11,6 +11,8 @@
 - In the `Runner`, allocate the `AnalysisResult`s on the stack instead of using `shared_ptr`
 - `Subscriber` methods accept a callback parameter, instead of returning a
   `vector` of results, to reduce heap usage
+- Refactored the interaction between `SubscriberStats` and `AnalysisResult` to
+  remove the need for a `std::vector` of latency samples, to reduce heap usage
 
 ## 1.4.2 (2023/03/15)
 

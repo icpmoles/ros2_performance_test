@@ -16,6 +16,7 @@
 
 #include <string>
 #include <iomanip>
+#include <cmath>
 
 #include "../experiment_metrics/analysis_result.hpp"
 
@@ -107,12 +108,12 @@ void JsonOutput::write(const AnalysisResult & ar)
   write("num_samples_sent", ar.m_num_samples_sent);
   write("num_samples_lost", ar.m_num_samples_lost);
   write("total_data_received", ar.m_total_data_received);
-  write("latency_min", ar.m_latency.min());
-  write("latency_max", ar.m_latency.max());
-  write("latency_n", ar.m_latency.n());
-  write("latency_mean", ar.m_latency.mean());
-  write("latency_M2", ar.m_latency.m2());
-  write("latency_variance", ar.m_latency.variance());
+  write("latency_min", ar.latency_seconds_min());
+  write("latency_max", ar.latency_seconds_max());
+  write("latency_n", ar.latency_seconds_n());
+  write("latency_mean", ar.latency_seconds_mean());
+  write("latency_M2", ar.latency_seconds_m2());
+  write("latency_variance", ar.latency_seconds_variance());
 #if !defined(WIN32)
   write("sys_tracker_ru_utime", ar.m_sys_usage.ru_utime);
   write("sys_tracker_ru_stime", ar.m_sys_usage.ru_stime);

@@ -61,11 +61,11 @@ private:
       auto borrowed_message{m_publisher->borrow_loaned_message()};
       init_msg(borrowed_message.get(), m_stats.next_sample_id());
       m_publisher->publish(std::move(borrowed_message));
-      m_stats.update_publisher_stats();
+      m_stats.on_message_sent();
     } else {
       init_msg(m_data, m_stats.next_sample_id());
       m_publisher->publish(m_data);
-      m_stats.update_publisher_stats();
+      m_stats.on_message_sent();
     }
   }
 

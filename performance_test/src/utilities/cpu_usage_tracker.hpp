@@ -19,14 +19,16 @@
 #include <sys/times.h>
 #include <unistd.h>
 #endif  // !defined(WIN32)
-#include <thread>
 
 #if defined(QNX)
 #include <sys/neutrino.h>
 #include <sys/syspage.h>
 #include <sys/types.h>
-#include <chrono>
 #endif  // defined(QNX)
+
+#include <thread>
+#include <chrono>
+#include <cmath>
 
 #include "../utilities/perf_clock.hpp"
 

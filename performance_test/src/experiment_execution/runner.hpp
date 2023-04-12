@@ -124,15 +124,7 @@ private:
     auto time_elapsed_s =
       std::chrono::duration_cast<std::chrono::seconds>(time_elapsed).count();
 
-    if (time_elapsed_s > m_ec.rows_to_ignore()) {
-      return true;
-    } else {
-      for (auto & sub : m_sub_stats) {
-        sub.reset();
-      }
-
-      return false;
-    }
+    return time_elapsed_s > m_ec.rows_to_ignore();
   }
 
   bool check_exit(perf_clock::time_point experiment_start)

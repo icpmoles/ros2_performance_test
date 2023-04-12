@@ -21,7 +21,7 @@
 #include <inttypes.h>
 #include <sys/neutrino.h>
 #include <sys/syspage.h>
-#endif
+#endif  // defined(QNX)
 
 namespace performance_test
 {
@@ -33,7 +33,7 @@ inline std::int64_t now_int64_t()
   return static_cast<std::int64_t>(ClockCycles());
 #else
   return perf_clock::now().time_since_epoch().count();
-#endif
+#endif  // defined(QNX)
 }
 }  // namespace performance_test
 #endif  // UTILITIES__PERF_CLOCK_HPP_

@@ -21,6 +21,7 @@
 #include <iomanip>
 #include <string>
 
+#include "../utilities/perf_clock.hpp"
 #include "../utilities/qnx_res_usage.hpp"
 
 namespace performance_test
@@ -51,14 +52,12 @@ AnalysisResult::AnalysisResult()
     throw std::runtime_error("Could not get system resource usage.");
   }
 #endif  // !defined(WIN32)
-  if (m_num_samples_received != static_cast<uint64_t>(m_latency.n())) {
-    // TODO(andreas.pasternak): Commented out flaky assertion. Need to check
-    // if it actually a bug.
-    /*throw std::runtime_error("Statistics result sample size does not
-       match: "
-                             + std::to_string(m_num_samples_received) + " /
-       "
-                             + std::to_string(m_latency.n()));*/
+  if (m_num_samples_received != static_cast<uint64_t>(latency_seconds_n())) {
+    throw std::runtime_error(
+            "Statistics result sample size does not match: " +
+            std::to_string(m_num_samples_received) +
+            " / " +
+            std::to_string(latency_seconds_n()));
   }
 }
 
@@ -133,10 +132,10 @@ std::string AnalysisResult::to_csv_string(const bool pretty_print, std::string s
   ss << std::setprecision(4);
   ss << std::defaultfloat;
 
-  ss << m_latency.min() * 1000.0 << st;
-  ss << m_latency.max() * 1000.0 << st;
-  ss << m_latency.mean() * 1000.0 << st;
-  ss << m_latency.variance() * 1000.0 << st;
+  ss << latency_seconds_min() * 1000.0 << st;
+  ss << latency_seconds_max() * 1000.0 << st;
+  ss << latency_seconds_mean() * 1000.0 << st;
+  ss << latency_seconds_variance() * 1000.0 << st;
 
   /* See http://www.gnu.org/software/libc/manual/html_node/Resource-Usage.html
    * for a detailed explanation of the output below
@@ -164,6 +163,58 @@ std::string AnalysisResult::to_csv_string(const bool pretty_print, std::string s
   ss << m_cpu_info.cpu_usage();
 
   return ss.str();
+}
+
+template<typename TNum>
+inline double ns_to_s(TNum ns)
+{
+#if defined(QNX)
+  double cps = static_cast<double>(SYSPAGE_ENTRY(qtime)->cycles_per_sec);
+  return static_cast<double>(ns) / cps;
+#else
+  return static_cast<double>(ns) / 1000000000;
+#endif
+}
+
+template<typename TNum>
+inline double ns_sq_to_s(TNum ns)
+{
+#if defined(QNX)
+  double cps = static_cast<double>(SYSPAGE_ENTRY(qtime)->cycles_per_sec);
+  return static_cast<double>(ns) / cps / cps;
+#else
+  return static_cast<double>(ns) / 1000000000 / 1000000000;
+#endif
+}
+
+size_t AnalysisResult::latency_seconds_n() const
+{
+  return m_latency_stats.n();
+}
+
+double AnalysisResult::latency_seconds_min() const
+{
+  return ns_to_s(m_latency_stats.min());
+}
+
+double AnalysisResult::latency_seconds_max() const
+{
+  return ns_to_s(m_latency_stats.max());
+}
+
+double AnalysisResult::latency_seconds_mean() const
+{
+  return ns_to_s(m_latency_stats.mean());
+}
+
+double AnalysisResult::latency_seconds_m2() const
+{
+  return ns_sq_to_s(m_latency_stats.m2());
+}
+
+double AnalysisResult::latency_seconds_variance() const
+{
+  return ns_sq_to_s(m_latency_stats.variance());
 }
 
 }  // namespace performance_test

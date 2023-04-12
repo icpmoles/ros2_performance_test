@@ -32,7 +32,7 @@ struct PublisherStats
     return ++m_prev_sample_id;
   }
 
-  void update_publisher_stats()
+  void on_message_sent()
   {
     lock();
     increment_sent();
