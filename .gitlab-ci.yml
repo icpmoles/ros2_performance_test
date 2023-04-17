@@ -232,7 +232,7 @@ build_fastrtps_library:
 
 .build_with_only_array_msgs:
   variables:
-    CMAKE_ARGS_ENABLE_MSGS: '-DDENABLE_MSGS_STRUCT=OFF -DDENABLE_MSGS_POINT_CLOUD=OFF'
+    CMAKE_ARGS_ENABLE_MSGS: '-DENABLE_MSGS_STRUCT=OFF -DENABLE_MSGS_POINT_CLOUD=OFF'
 
 build_cross_image:
   stage: build
