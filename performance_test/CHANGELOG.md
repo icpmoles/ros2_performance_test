@@ -14,6 +14,7 @@
   `vector` of results, to reduce heap usage
 - Refactored the interaction between `SubscriberStats` and `AnalysisResult` to
   remove the need for a `std::vector` of latency samples, to reduce heap usage
+- Adjusted the `Array` message sizes to make the name match the contents
 
 ## 1.4.2 (2023/03/15)
 

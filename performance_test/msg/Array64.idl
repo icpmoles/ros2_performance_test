@@ -1,7 +1,10 @@
 module performance_test {
   module msg {
     module __plugin__ {
-      typedef octet octet__64[64];
+      // 8 bytes for time
+      // 8 bytes for id
+      // 64 - 16 = 48
+      typedef octet octet__64[48];
       struct Array64 {
         octet__64 array;
 

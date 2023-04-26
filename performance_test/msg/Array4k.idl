@@ -1,7 +1,10 @@
 module performance_test {
   module msg {
     module __plugin__ {
-      typedef octet octet__4096[4096];
+      // 8 bytes for time
+      // 8 bytes for id
+      // 4096 - 16 = 4080
+      typedef octet octet__4096[4080];
       struct Array4k {
         octet__4096 array;
 
