@@ -6,6 +6,7 @@
 - New CLI switch `--prevent-cpu-idle` (linux only). When specified,
   perf_test will use `/dev/cpu_dma_latency` to request that the CPU not enter
   any sleep states, to potentially give more consistent results
+- Some smaller `Array` messages, down to 32 bits
 ### Changed
 - Update the README to better explain how to use this tool with Apex.OS
 - In the `Runner`, allocate the `AnalysisResult`s on the stack instead of using `shared_ptr`

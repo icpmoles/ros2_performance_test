@@ -1,0 +1,14 @@
+module performance_test {
+  module msg {
+    module __plugin__ {
+      typedef octet octet__128[128];
+      struct Array128 {
+        octet__128 array;
+
+        long long time;
+
+        unsigned long long id;
+      };
+    }; // __plugin__
+  }; // msg
+}; // performance_test
