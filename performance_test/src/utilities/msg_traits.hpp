@@ -32,11 +32,27 @@ struct MsgTraits
     : std::true_type {};
 
   template<typename T, typename = void>
+  struct has_bounded_sequence_func : std::false_type {};
+
+  template<typename T>
+  struct has_bounded_sequence_func<
+    T, void_t<decltype(std::declval<T>().bounded_sequence())>>
+    : std::true_type {};
+
+  template<typename T, typename = void>
   struct has_unbounded_sequence : std::false_type {};
 
   template<typename T>
   struct has_unbounded_sequence<
     T, void_t<decltype(std::declval<T>().unbounded_sequence)>>
+    : std::true_type {};
+
+  template<typename T, typename = void>
+  struct has_unbounded_sequence_func : std::false_type {};
+
+  template<typename T>
+  struct has_unbounded_sequence_func<
+    T, void_t<decltype(std::declval<T>().unbounded_sequence())>>
     : std::true_type {};
 
   template<typename T, typename = void>
@@ -47,10 +63,21 @@ struct MsgTraits
     T, void_t<decltype(std::declval<T>().unbounded_string)>>
     : std::true_type {};
 
+  template<typename T, typename = void>
+  struct has_unbounded_string_func : std::false_type {};
+
+  template<typename T>
+  struct has_unbounded_string_func<
+    T, void_t<decltype(std::declval<T>().unbounded_string())>>
+    : std::true_type {};
+
   template<typename T>
   static inline std::enable_if_t<has_bounded_sequence<T>::value ||
+    has_bounded_sequence_func<T>::value ||
     has_unbounded_sequence<T>::value ||
-    has_unbounded_string<T>::value,
+    has_unbounded_sequence_func<T>::value ||
+    has_unbounded_string<T>::value ||
+    has_unbounded_string_func<T>::value,
     void>
   ensure_fixed_size(T &)
   {
@@ -60,8 +87,11 @@ struct MsgTraits
 
   template<typename T>
   static inline std::enable_if_t<!has_bounded_sequence<T>::value &&
+    !has_bounded_sequence_func<T>::value &&
     !has_unbounded_sequence<T>::value &&
-    !has_unbounded_string<T>::value,
+    !has_unbounded_sequence_func<T>::value &&
+    !has_unbounded_string<T>::value &&
+    !has_unbounded_string_func<T>::value,
     void>
   ensure_fixed_size(T &) {}
 };

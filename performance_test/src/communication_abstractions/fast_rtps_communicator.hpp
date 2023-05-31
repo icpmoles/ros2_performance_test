@@ -135,7 +135,8 @@ public:
   using DataType = typename Topic::EprosimaType;
 
   explicit FastRTPSPublisher(const ExperimentConfiguration & ec)
-  : m_resources(ResourceManager::get().fastdds_resources(
+  : m_ec(ec),
+    m_resources(ResourceManager::get().fastdds_resources(
       eprosima::fastdds::dds::TypeSupport(new TopicType()))),
     m_datawriter(create_datawriter(m_resources, ec))
   {
@@ -169,6 +170,7 @@ public:
   }
 
 private:
+  const ExperimentConfiguration & m_ec;
   ResourceManager::FastDDSGlobalResources m_resources;
   eprosima::fastdds::dds::DataWriter * m_datawriter;
   DataType m_data;
@@ -198,10 +200,51 @@ private:
     const TimestampProvider & timestamp_provider,
     std::uint64_t sample_id)
   {
-    MsgTraits::ensure_fixed_size(msg);
+    init_bounded_sequence(msg);
+    init_unbounded_sequence(msg);
+    init_unbounded_string(msg);
     msg.id(sample_id);
     msg.time(timestamp_provider.get());
   }
+
+  template<typename T>
+  inline
+  std::enable_if_t<MsgTraits::has_bounded_sequence_func<T>::value, void>
+  init_bounded_sequence(T & msg)
+  {
+    msg.bounded_sequence().resize(msg.bounded_sequence().capacity());
+  }
+
+  template<typename T>
+  inline
+  std::enable_if_t<!MsgTraits::has_bounded_sequence_func<T>::value, void>
+  init_bounded_sequence(T &) {}
+
+  template<typename T>
+  inline
+  std::enable_if_t<MsgTraits::has_unbounded_sequence_func<T>::value, void>
+  init_unbounded_sequence(T & msg)
+  {
+    msg.unbounded_sequence().resize(m_ec.unbounded_msg_size());
+  }
+
+  template<typename T>
+  inline
+  std::enable_if_t<!MsgTraits::has_unbounded_sequence_func<T>::value, void>
+  init_unbounded_sequence(T &) {}
+
+  template<typename T>
+  inline
+  std::enable_if_t<MsgTraits::has_unbounded_string_func<T>::value, void>
+  init_unbounded_string(T & msg)
+  {
+    msg.unbounded_string().resize(m_ec.unbounded_msg_size());
+  }
+
+  template<typename T>
+  inline
+  std::enable_if_t<!MsgTraits::has_unbounded_string_func<T>::value, void>
+  init_unbounded_string(T &) {}
 };
 
 template<class Topic>
