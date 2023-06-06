@@ -16,6 +16,7 @@
 - Refactored the interaction between `SubscriberStats` and `AnalysisResult` to
   remove the need for a `std::vector` of latency samples, to reduce heap usage
 - Adjusted the `Array` message sizes to make the name match the contents
+- Updated `apex_os_communicator` to use the new zero-copy API
 
 ## 1.4.2 (2023/03/15)
 

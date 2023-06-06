@@ -84,6 +84,33 @@ private:
   std::shared_ptr<::rclcpp::Publisher<DataType>> m_publisher;
   DataType m_data;
 
+#ifdef PERFORMANCE_TEST_RCLCPP_LOANED_API_2_ENABLED
+  inline
+  void init_msg(
+    typename DataType::NonFlatType & msg,
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id)
+  {
+    init_bounded_sequence(msg);
+    init_unbounded_sequence(msg);
+    init_unbounded_string(msg);
+    msg.id = sample_id;
+    msg.time = timestamp_provider.get();
+  }
+
+  inline
+  void init_msg(
+    typename DataType::FlatType & msg,
+    const TimestampProvider & timestamp_provider,
+    std::uint64_t sample_id)
+  {
+    init_bounded_sequence(msg);
+    init_unbounded_sequence(msg);
+    init_unbounded_string(msg);
+    msg.id = sample_id;
+    msg.time = timestamp_provider.get();
+  }
+#else
   inline
   void init_msg(
     DataType & msg,
@@ -96,6 +123,7 @@ private:
     msg.id = sample_id;
     msg.time = timestamp_provider.get();
   }
+#endif
 
   template<typename T>
   inline

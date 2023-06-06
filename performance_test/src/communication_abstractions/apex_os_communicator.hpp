@@ -59,7 +59,7 @@ private:
             "RMW implementation does not support zero copy!");
       }
       auto borrowed_message{m_publisher->borrow_loaned_message()};
-      init_msg(borrowed_message.get(), m_stats.next_sample_id());
+      init_msg(*borrowed_message, m_stats.next_sample_id());
       m_publisher->publish(std::move(borrowed_message));
       m_stats.on_message_sent();
     } else {
@@ -71,7 +71,19 @@ private:
 
   inline
   void init_msg(
-    MsgType & msg,
+    typename MsgType::NonFlatType & msg,
+    std::uint64_t sample_id)
+  {
+    init_bounded_sequence(msg);
+    init_unbounded_sequence(msg);
+    init_unbounded_string(msg);
+    msg.id = sample_id;
+    msg.time = now_int64_t();
+  }
+
+  inline
+  void init_msg(
+    typename MsgType::FlatType & msg,
     std::uint64_t sample_id)
   {
     init_bounded_sequence(msg);
@@ -176,7 +188,7 @@ private:
   template <class T>
   void callback(const T &data, const std::int64_t received_time) {
     static_assert(
-        std::is_same<MsgType,
+        std::is_same<typename MsgType::BorrowedType,
                      typename std::remove_cv<
                          typename std::remove_reference<T>::type>::type>::value,
         "Parameter type passed to callback() does not match");
