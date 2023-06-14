@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 1.5.0 (2023/06/14)
+
 ### Added
 - The `reporter` box-and-whisker latency plots now support `latency_mean_ms`
   for the y-axis, in addition to the previously-supported `latency_mean`

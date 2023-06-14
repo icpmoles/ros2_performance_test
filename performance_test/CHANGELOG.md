@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 1.5.0 (2023/06/14)
+
 ### Added
 - New CLI switch `--prevent-cpu-idle` (linux only). When specified,
   perf_test will use `/dev/cpu_dma_latency` to request that the CPU not enter
