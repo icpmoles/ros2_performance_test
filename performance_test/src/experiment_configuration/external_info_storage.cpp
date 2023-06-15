@@ -28,26 +28,7 @@ ExternalInfoStorage::ExternalInfoStorage()
 
     for (auto & m : document.GetObject()) {
       m_to_log = m_to_log + m.name.GetString() + ": " + m.value.GetString() + "\n";
-    }
-
-    if (document["Githash"].IsString()) {
-      m_githash = document["Githash"].GetString();
-    }
-
-    if (document["Platform"].IsString()) {
-      m_platform = document["Platform"].GetString();
-    }
-
-    if (document["Branch"].IsString()) {
-      m_branch = document["Branch"].GetString();
-    }
-
-    if (document["Architecture"].IsString()) {
-      m_architecture = document["Architecture"].GetString();
-    }
-
-    if (document["CI"].IsString()) {
-      m_ci = document["CI"].GetString();
+      m_external_info[m.name.GetString()] = m.value.GetString();
     }
   }
 }

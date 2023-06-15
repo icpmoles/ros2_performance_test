@@ -71,7 +71,6 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
 {
   write("id", ec.id());
   write("perf_test_version", ec.perf_test_version());
-  write("final_logfile_name", tableau_final_logfile_name(ec.id(), ec.topic_name()));
   write("com_mean_str", to_string(ec.com_mean()));
   write("rmw_implementation", ec.rmw_implementation());
   write("dds_domain_id", ec.dds_domain_id());
@@ -79,6 +78,7 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
   write("qos_durability", to_string(ec.qos().durability));
   write("qos_history_kind", to_string(ec.qos().history_kind));
   write("qos_history_depth", ec.qos().history_depth);
+  write("execution_strategy", to_string(ec.execution_strategy()));
   write("rate", ec.rate());
   write("topic_name", ec.topic_name());
   write("msg_name", ec.msg_name());
@@ -86,17 +86,14 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
   write("number_of_publishers", ec.number_of_publishers());
   write("number_of_subscribers", ec.number_of_subscribers());
   write("check_memory", ec.check_memory());
-  // TODO(erik.snider) delete when gc parse_upload is fixed
-  write("use_single_participant", false);
   write("with_security", ec.is_with_security());
   write("is_zero_copy_transfer", ec.is_zero_copy_transfer());
+  write("is_shared_memory_transfer", ec.is_shared_memory_transfer());
   write("roundtrip_mode", to_string(ec.roundtrip_mode()));
   write("is_rt_init_required", ec.is_rt_init_required());
-  write("external_info_githash", ec.get_external_info().m_githash);
-  write("external_info_platform", ec.get_external_info().m_platform);
-  write("external_info_branch", ec.get_external_info().m_branch);
-  write("external_info_architecture", ec.get_external_info().m_architecture);
-  write("external_info_ci", ec.get_external_info().m_ci);
+  for (const auto & kvp : ec.get_external_info().m_external_info) {
+    write(("external_info_" + kvp.first).c_str(), kvp.second);
+  }
 }
 
 void JsonOutput::write(const AnalysisResult & ar)
@@ -135,19 +132,6 @@ void JsonOutput::write(const AnalysisResult & ar)
   write("cpu_info_cpu_cores", ar.m_cpu_info.cpu_cores());
   write("cpu_info_cpu_usage", ar.m_cpu_info.cpu_usage());
   m_writer.EndObject();
-}
-
-// Tableau parses the date and time out of the final_logfile_name column.
-// This workaround feel bad.
-// It would be much better if there were a dedicated datetime column.
-std::string JsonOutput::tableau_final_logfile_name(
-  const std::string & id, const std::string & topic)
-{
-  auto t = std::time(nullptr);
-  auto tm = *std::gmtime(&t);
-  std::ostringstream oss;
-  oss << id << "_" << topic << std::put_time(&tm, "_%d-%m-%Y_%H-%M-%S");
-  return oss.str();
 }
 
 void JsonOutput::write(const char * key, const std::string & val)

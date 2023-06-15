@@ -209,9 +209,11 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     TCLAP::ValueArg<std::string> topicArg("t", "topic", "The topic name. Default is test_topic.",
       false, "test_topic", "topic", cmd);
 
+    std::vector<std::string> allowedMsgs = messages::supported_msg_names();
+    TCLAP::ValuesConstraint<std::string> allowedMsgVals(allowedMsgs);
     TCLAP::ValueArg<std::string> msgArg("m", "msg",
       "The message type. Use --msg-list to list the options. "
-      "Default is Array1k.", false, "Array1k", "type", cmd);
+      "Default is " + allowedMsgs[0] + ".", false, allowedMsgs[0], &allowedMsgVals, cmd);
 
     TCLAP::SwitchArg msgListArg("", "msg-list",
       "Print the list of available msg types and exit.", cmd, false);

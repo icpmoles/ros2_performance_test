@@ -82,12 +82,6 @@ def load_logfile_json(filename):
         dataframe['cpu_usage (%)'] = dataframe['cpu_info_cpu_usage']
 
         del header['analysis_results']
-        del header['external_info_architecture']
-        del header['external_info_branch']
-        del header['external_info_ci']
-        del header['external_info_githash']
-        del header['external_info_platform']
-        del header['final_logfile_name']
         print(header)
         print(dataframe)
         return header, dataframe

@@ -56,8 +56,6 @@ private:
   void write(const char * key, bool val);
   void write(const char * key, timeval val);
   void write(const char * key, const std::chrono::nanoseconds val);
-
-  std::string tableau_final_logfile_name(const std::string & id, const std::string & topic);
 };
 
 }  // namespace performance_test

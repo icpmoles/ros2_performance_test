@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <string>
+#include <map>
 
 namespace performance_test
 {
@@ -27,11 +28,7 @@ public:
   ExternalInfoStorage();
 
   std::string m_to_log;
-  std::string m_githash;
-  std::string m_platform;
-  std::string m_branch;
-  std::string m_architecture;
-  std::string m_ci;
+  std::map<std::string, std::string> m_external_info;
 };
 }  // namespace performance_test
 #endif  // EXPERIMENT_CONFIGURATION__EXTERNAL_INFO_STORAGE_HPP_
