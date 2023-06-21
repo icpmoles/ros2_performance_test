@@ -5,6 +5,8 @@
 ### Changed
 - JSON log files will contain all values in the `APEX_PERFORMANCE_TEST` dictionary, instead of the
   five specific values used previously
+### Fixed
+- Zero copy transfer is again enabled for the rclcpp publisher
 
 ## 1.5.0 (2023/06/14)
 
