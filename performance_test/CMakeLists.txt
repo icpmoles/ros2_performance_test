@@ -22,8 +22,8 @@ include(compile_options)
 set(OPTIONAL_AMENT_DEPENDENCES)
 set(OPTIONAL_LIBRARIES)
 
-# Default to C++14
-set(CMAKE_CXX_STANDARD 14)
+# Default to C++17
+set(CMAKE_CXX_STANDARD 17)
 find_package(ament_cmake REQUIRED)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")

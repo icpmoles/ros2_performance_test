@@ -5,6 +5,7 @@
 ### Changed
 - JSON log files will contain all values in the `APEX_PERFORMANCE_TEST` dictionary, instead of the
   five specific values used previously
+- Switch to build as C++17 by default
 ### Fixed
 - Zero copy transfer is again enabled for the rclcpp publisher
 
