@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Added
+- `--prevent-cpu-idle` is available on QNX
 ### Changed
 - JSON log files will contain all values in the `APEX_PERFORMANCE_TEST` dictionary, instead of the
   five specific values used previously

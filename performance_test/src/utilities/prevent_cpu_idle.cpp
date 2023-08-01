@@ -18,11 +18,17 @@
 #include <stdexcept>
 #include <iostream>
 
+#if defined(QNX)
+#include <sys/syspage.h>
+#include <sys/procmgr.h>
+#include <sys/sysmgr.h>
+#endif
+
 namespace performance_test
 {
 void prevent_cpu_idle()
 {
-#ifdef PERFORMANCE_TEST_LINUX
+#if defined(PERFORMANCE_TEST_LINUX)
   static std::unique_ptr<FILE, int (*)(FILE *)> cpu_dma_latency
   {
     ::fopen("/dev/cpu_dma_latency", "wb"),
@@ -41,6 +47,24 @@ void prevent_cpu_idle()
   std::int32_t latency_i32 = 0;
   if (::fwrite(&latency_i32, sizeof(latency_i32), 1, cpu_dma_latency.get()) != 1) {
     throw std::runtime_error("Failed to write latency specification to /dev/cpu_dma_latency");
+  }
+#elif defined(QNX)
+  int e1 = procmgr_ability(
+    0,
+    PROCMGR_ADN_ROOT | PROCMGR_ADN_NONROOT | PROCMGR_AID_RUNSTATE_BURST | PROCMGR_AOP_ALLOW,
+    PROCMGR_AID_EOL);
+  if (e1 != EOK) {
+    throw std::runtime_error("Failed to enable PROCMGR_AID_RUNSTATE_BURST");
+  }
+  for (std::uint32_t i = 0; i < _syspage_ptr->num_cpu; i++) {
+    int e2 = sysmgr_runstate(i, 1);
+    if (e2 != EOK) {
+      throw std::runtime_error("Failed to set the runstate");
+    }
+    int e3 = sysmgr_runstate_dynamic(i, 0);
+    if (e3 != EOK) {
+      throw std::runtime_error("Failed to set the dynamic runstate");
+    }
   }
 #else
   throw std::runtime_error("prevent_cpu_idle is not supported on this platform");
