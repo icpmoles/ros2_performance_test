@@ -34,7 +34,7 @@ build_cyclonedds_library:
   script:
     - source /opt/ros/rolling/setup.bash
     - apt-get update
-   
+
     - '
       curl "https://gitlab.com/api/v4/projects/14953417/packages/generic/performance_test/1.0.0/opt-iceoryx-${ICEORYX_VERSION}.tar.gz" > opt-iceoryx-${ICEORYX_VERSION}.tar.gz
       '
@@ -48,10 +48,10 @@ build_cyclonedds_library:
     - cmake -DCMAKE_INSTALL_PREFIX=/opt/cyclonedds -DENABLE_SECURITY=ON -DENABLE_SHM=ON ..
     - cmake --build .
     - cmake --build . --target install
-    
+
     - tar cfz opt-cyclonedds-v0.9.0b1.tar.gz /opt/cyclonedds
     - '
-      curl 
+      curl
           --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
           --upload-file opt-cyclonedds-v0.9.0b1.tar.gz
 "https://gitlab.com/api/v4/projects/14953417/packages/generic/performance_test/1.0.0/opt-cyclonedds-v0.9.0b1.tar.gz"
@@ -82,7 +82,7 @@ build_cyclonedds_cxx_libary:
     - 'curl "https://gitlab.com/api/v4/projects/14953417/packages/generic/performance_test/1.0.0/opt-cyclonedds-v0.9.0b1.tar.gz" > opt-cyclonedds-v0.9.0b1.tar.gz
       '
     - tar -xzf opt-cyclonedds-v0.9.0b1.tar.gz -C /
-    
+
     - git clone https://github.com/eclipse-cyclonedds/cyclonedds-cxx.git -b 0.9.0b1 --depth 1
     - cd cyclonedds-cxx
     - mkdir -p build
@@ -97,7 +97,7 @@ build_cyclonedds_cxx_libary:
     - cmake --build . --target install
     - tar cfz opt-cyclonedds-cxx-v0.9.0b1.tar.gz /opt/cyclonedds-cxx
     - '
-      curl 
+      curl
           --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
           --upload-file opt-cyclonedds-cxx-v0.9.0b1.tar.gz
 "https://gitlab.com/api/v4/projects/14953417/packages/generic/performance_test/1.0.0/opt-cyclonedds-cxx-v0.9.0b1.tar.gz"
@@ -139,7 +139,7 @@ build_iceoryx_library:
     - source /opt/iceoryx/setup.bash
     - tar cfz opt-iceoryx-${ICEORYX_VERSION}.tar.gz /opt/iceoryx
     - '
-      curl 
+      curl
           --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
           --upload-file opt-iceoryx-${ICEORYX_VERSION}.tar.gz
 "https://gitlab.com/api/v4/projects/14953417/packages/generic/performance_test/1.0.0/opt-iceoryx-${ICEORYX_VERSION}.tar.gz"
@@ -171,7 +171,7 @@ build_opendds_library:
 
     - tar cfz opt-opendds-3.13.2.tar.gz /opt/opendds
     - '
-      curl 
+      curl
           --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
           --upload-file opt-opendds-3.13.2.tar.gz
 "https://gitlab.com/api/v4/projects/14953417/packages/generic/performance_test/1.0.0/opt-opendds-3.13.2.tar.gz"
@@ -219,7 +219,7 @@ build_fastrtps_library:
     - cmake --build . --target install
     - tar cfz opt-fastdds-v1.2.1.tar.gz /opt/Fast-DDS
     - '
-      curl 
+      curl
           --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
           --upload-file opt-fastdds-v1.2.1.tar.gz
 "https://gitlab.com/api/v4/projects/14953417/packages/generic/performance_test/1.0.0/opt-fastdds-v1.2.1.tar.gz"
@@ -292,7 +292,7 @@ build_rclcpp_humble:
 build_rclcpp_rolling:
   extends:
     - .build_rclcpp
-    
+
 build_rclcpp_galactic:
   extends:
     - .build_rclcpp
@@ -350,7 +350,7 @@ build_cyclonedds:
             ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
-    
+
     - cp LICENSE /opt/performance_test
     - tar cfz opt.tar.gz /opt/performance_test
   artifacts:
@@ -404,7 +404,7 @@ build_cyclonedds_cxx:
             ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
-    
+
     - cp LICENSE /opt/performance_test
     - tar cfz opt.tar.gz /opt/performance_test
   artifacts:
@@ -573,7 +573,7 @@ test_performance_report:
     - build_rclcpp_rolling
   script:
     - apt-get update
-    - sudo apt-get install -y python3-pip 
+    - sudo apt-get install -y python3-pip
     - python3 -m pip install bokeh==2.4.3 selenium pandas
     - rosdep update --include-eol-distros
     - rosdep install --from-paths performance_test --ignore-src -y
@@ -595,7 +595,7 @@ test_performance_report:
     - find ./perf_logs/time_vs_latency.html
     # Using commander to test performance_report
     - '
-      ros2 run performance_report commander --log-dir perf_logs_commander   --test-name experiments   
+      ros2 run performance_report commander --log-dir perf_logs_commander   --test-name experiments
       --configs performance_report/cfg/runner/run_one_experiment.yaml > commands.sh
       '
     - chmod +x commands.sh
@@ -866,7 +866,7 @@ test_security_fast_dds:
     # Unexpected node names:
     - '! ros2 run performance_test perf_test -c rclcpp-single-threaded-executor --msg Array1k -t Array1k --max-runtime 10 --rate 2 --history KEEP_LAST --history-depth 10'
     # Unexpected msg types
-    - '! ros2 run performance_test perf_test -c rclcpp-single-threaded-executor --msg Struct16 -t test_topic --max-runtime 10 --rate 2 --history KEEP_LAST --history-depth 10 --with-security -- --ros-args -e /performance_test'
+    - '! ros2 run performance_test perf_test -c rclcpp-single-threaded-executor --msg Array1k -t test_topic --max-runtime 10 --rate 2 --history KEEP_LAST --history-depth 10 --with-security -- --ros-args -e /performance_test'
     # This should pass (time-out)
     - 'timeout 30 ros2 run performance_test perf_test -c rclcpp-single-threaded-executor --msg Array16k -t Array16k --rate 2 --history KEEP_LAST --history-depth 10 --with-security -- --ros-args -e /performance_test ||
        if [ $? -eq 124 ]; then echo "OK";
