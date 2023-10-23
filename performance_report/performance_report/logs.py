@@ -33,7 +33,8 @@ def parseLog(log_dir: str, test_name: str, experiment: ExperimentConfig):
                 header = json.load(source)
             except json.decoder.JSONDecodeError:
                 print('Unable to decode JSON file ' + filename)
-            dataframe = pd.json_normalize(header, 'analysis_results')
+            if header:
+                dataframe = pd.json_normalize(header, 'analysis_results')
             if not dataframe.empty:
                 del header['analysis_results']
 

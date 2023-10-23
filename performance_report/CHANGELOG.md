@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Fixed
+- Elegantly handle a failure to parse JSON log files
+
 ## 1.5.0 (2023/06/14)
 
 ### Added
