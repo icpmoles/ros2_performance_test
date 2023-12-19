@@ -14,12 +14,13 @@
 
 import os
 import sys
-import yaml
 
 from bokeh.embed import components
 import bokeh.util.version
-
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+import yaml
+
 from .figures import generateFigure
 from .logs import coerce_to_list, getDatasets
 from .utils import PerfArgParser
@@ -29,9 +30,9 @@ def generateReports(report_cfg_file, log_dir):
     cfg_dir, _ = os.path.split(report_cfg_file)
     html_figures = {}
     missing_dataset = 0
-    with open(report_cfg_file, "r") as f:
+    with open(report_cfg_file, 'r') as f:
         reports_cfg = yaml.load(f, Loader=yaml.FullLoader)
-        datasets = getDatasets(reports_cfg["datasets"], log_dir)
+        datasets = getDatasets(reports_cfg['datasets'], log_dir)
         try:
             for report_name, report_cfg in reports_cfg['reports'].items():
                 for fig in report_cfg['figures']:
@@ -76,8 +77,8 @@ def generateReports(report_cfg_file, log_dir):
                         result.write(output)
         except KeyError as e:
             print(e)
-            print("Oops, something is wrong with the provided"
-                  "report configuration file....exiting")
+            print('Oops, something is wrong with the provided'
+                  'report configuration file....exiting')
     return missing_dataset
 
 
@@ -85,8 +86,8 @@ def main():
     parser = PerfArgParser()
     parser.init_args()
     args = parser.parse_args()
-    log_dir = getattr(args, "log_dir")
-    report_cfg_files = getattr(args, "configs")
+    log_dir = getattr(args, 'log_dir')
+    report_cfg_files = getattr(args, 'configs')
     missing_dataset_num = 0
 
     for report_cfg_file in report_cfg_files:
@@ -94,5 +95,5 @@ def main():
     sys.exit(missing_dataset_num)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

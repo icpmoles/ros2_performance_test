@@ -13,11 +13,12 @@
 # limitations under the License.
 
 import math
-import pandas as pd
 
 from bokeh.models import ColumnDataSource, FactorRange
 from bokeh.models.tools import HoverTool
 from bokeh.plotting import figure
+
+import pandas as pd
 
 from .utils import DatasetConfig
 
@@ -28,7 +29,7 @@ result = {
 }
 
 
-def generateFigure(figConfig, datasets: "list[DatasetConfig]"):
+def generateFigure(figConfig, datasets: 'list[DatasetConfig]'):
     # time series, normal range
     fig = None
     is_categorical = False
@@ -141,7 +142,7 @@ def _remove_prefix(text, prefix):
     return text  # or whatever
 
 
-def _generate_box_and_whiskers(figConfig, datasets: "list[DatasetConfig]"):
+def _generate_box_and_whiskers(figConfig, datasets: 'list[DatasetConfig]'):
     lat_mean_key = figConfig['y_range']
     suffix = _remove_prefix(lat_mean_key, 'latency_mean')
     lat_min_key = 'latency_min' + suffix

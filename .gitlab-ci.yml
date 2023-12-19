@@ -551,7 +551,7 @@ test:
     - build_rclcpp_rolling
   script:
     - apt-get update
-    - sudo apt-get install -y python3-pip
+    - apt-get install -y python3-pip
     - rosdep update --include-eol-distros
     - rosdep install --from-paths performance_test performance_report --ignore-src -y
     - tar xf opt.tar.gz -C /

@@ -14,9 +14,10 @@
 
 import itertools
 import json
-import pandas as pd
+
 import os
 
+import pandas as pd
 
 from .utils import DatasetConfig, DEFAULT_TEST_NAME, ExperimentConfig, ThemeConfig
 
@@ -31,7 +32,7 @@ def parseLog(log_dir: str, test_name: str, experiment: ExperimentConfig):
             try:
                 header = json.load(source)
             except json.decoder.JSONDecodeError:
-                print("Unable to decode JSON file " + filename)
+                print('Unable to decode JSON file ' + filename)
             dataframe = pd.json_normalize(header, 'analysis_results')
             if not dataframe.empty:
                 del header['analysis_results']
@@ -59,7 +60,7 @@ def parseLog(log_dir: str, test_name: str, experiment: ExperimentConfig):
                 exp_df = exp_df.loc[exp_df.index.repeat(len(dataframe.index))].reset_index()
                 dataframe = pd.concat([exp_df, dataframe], axis=1)
     except FileNotFoundError:
-        print("Results for experiment " + filename + " do not exist")
+        print('Results for experiment ' + filename + ' do not exist')
         raise FileNotFoundError()
     return header, dataframe
 
@@ -113,7 +114,7 @@ def getDatasets(yaml_datasets: dict, log_dir) -> dict:
                 pass
         # concate all dfs to one single one
         if not headers:
-            print(f"Skipping dataset {dataset_id} due to no available experiments")
+            print(f'Skipping dataset {dataset_id} due to no available experiments')
             continue
         results_df = pd.concat(dataframes, ignore_index=True)
         config_matrix = coerce_dict_vals_to_lists(dataset_details)
