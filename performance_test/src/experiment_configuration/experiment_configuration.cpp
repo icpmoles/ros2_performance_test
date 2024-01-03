@@ -44,7 +44,7 @@
 #include "performance_test/outputs/csv_output.hpp"
 #include "performance_test/outputs/stdout_output.hpp"
 #include "performance_test/outputs/json_output.hpp"
-#include "performance_test/version.h"
+#include "performance_test/utilities/version.hpp"
 
 static void handle_sigint(int sig)
 {

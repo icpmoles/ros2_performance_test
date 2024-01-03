@@ -19,7 +19,7 @@
 #include <string>
 
 #include "performance_test/communication_abstractions/apex_os_communicator.hpp"
-#include "performance_test/for_each.hpp"
+#include "performance_test/utilities/for_each.hpp"
 #include "performance_test/generated_messages/messages.hpp"
 
 namespace performance_test {

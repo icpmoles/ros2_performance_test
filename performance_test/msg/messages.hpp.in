@@ -15,7 +15,7 @@
 #ifndef EXPERIMENT_CONFIGURATION__MESSAGES_HPP_
 #define EXPERIMENT_CONFIGURATION__MESSAGES_HPP_
 
-#include <performance_test/for_each.hpp>
+#include <performance_test/utilities/for_each.hpp>
 
 @CMAKE_MESSAGE_INCLUDE_STATEMENTS@
 

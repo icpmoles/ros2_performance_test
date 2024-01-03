@@ -263,6 +263,7 @@ set(sources
     include/performance_test/outputs/output.hpp
     include/performance_test/outputs/stdout_output.hpp
     include/performance_test/utilities/cpu_usage_tracker.hpp
+    include/performance_test/utilities/for_each.hpp
     include/performance_test/utilities/memory_checker.hpp
     include/performance_test/utilities/msg_traits.hpp
     include/performance_test/utilities/perf_clock.hpp
@@ -270,6 +271,7 @@ set(sources
     include/performance_test/utilities/prevent_cpu_idle.hpp
     include/performance_test/utilities/sample_statistics.hpp
     include/performance_test/utilities/spin_lock.hpp
+    include/performance_test/utilities/version.hpp
     src/communication_abstractions/communicator_factory.cpp
     src/communication_abstractions/resource_manager.cpp
     src/experiment_configuration/communication_mean.cpp
