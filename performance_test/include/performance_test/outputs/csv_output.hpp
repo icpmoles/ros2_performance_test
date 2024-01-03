@@ -15,9 +15,9 @@
 #ifndef PERFORMANCE_TEST__OUTPUTS__CSV_OUTPUT_HPP_
 #define PERFORMANCE_TEST__OUTPUTS__CSV_OUTPUT_HPP_
 
-#include <iostream>
-#include <string>
+#include <fstream>
 #include <memory>
+#include <string>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/outputs/output.hpp"

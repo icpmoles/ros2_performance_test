@@ -18,7 +18,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 
-#include <iostream>
+#include <fstream>
 #include <string>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
