@@ -379,13 +379,8 @@ externalproject_add(
   GIT_SHALLOW TRUE
   PREFIX ${EXTERNAL_INSTALL_LOCATION}
   SOURCE_DIR ${EXTERNAL_INSTALL_LOCATION}/tabulate
-  PATCH_COMMAND sed -i "39d" "${EXTERNAL_INSTALL_LOCATION}/tabulate/include/tabulate/column.hpp"
-        COMMAND sed -i "88 a #endif" "${EXTERNAL_INSTALL_LOCATION}/tabulate/include/tabulate/utf8.hpp"
-        COMMAND sed -i "77 a #if !defined(QNX)" "${EXTERNAL_INSTALL_LOCATION}/tabulate/include/tabulate/utf8.hpp"
-        COMMAND sed -i "75 a #endif" "${EXTERNAL_INSTALL_LOCATION}/tabulate/include/tabulate/utf8.hpp"
-        COMMAND sed -i "74 a #if !defined(QNX)" "${EXTERNAL_INSTALL_LOCATION}/tabulate/include/tabulate/utf8.hpp"
-        COMMAND sed -i "71 a #endif" "${EXTERNAL_INSTALL_LOCATION}/tabulate/include/tabulate/utf8.hpp"
-        COMMAND sed -i "47 a #if !defined(QNX)" "${EXTERNAL_INSTALL_LOCATION}/tabulate/include/tabulate/utf8.hpp"
+  PATCH_COMMAND git apply
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/tabulate/diff.patch
   CMAKE_COMMAND ""
   CONFIGURE_COMMAND ""
   UPDATE_COMMAND ""
@@ -401,9 +396,8 @@ externalproject_add(
   GIT_SHALLOW TRUE
   PREFIX ${EXTERNAL_INSTALL_LOCATION}
   SOURCE_DIR ${EXTERNAL_INSTALL_LOCATION}/sole
-  PATCH_COMMAND patch
-        ${EXTERNAL_INSTALL_LOCATION}/sole/sole.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/external_patches/sole.hpp.patch
+  PATCH_COMMAND git apply
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/sole/diff.patch
   CMAKE_COMMAND ""
   CONFIGURE_COMMAND ""
   UPDATE_COMMAND ""
