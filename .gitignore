@@ -16,3 +16,6 @@ performance_test/helper_scripts/.ipynb_checkpoints
 performance_test/helper_scripts/performance_test_plotter_env
 
 __pycache__
+
+# bazel artifacts
+bazel-*

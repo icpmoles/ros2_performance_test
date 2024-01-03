@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Added
+- Add experimental bazel support
+   - `bazel build //performance_test --//:plugin_implementation=//path/to/a/plugin`
 ### Changed
 - Instead of enabling/disabling each plugin, you select exactly one
   with a CMake string option, for example:
