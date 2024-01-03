@@ -24,8 +24,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "ros2_qos_adapter.hpp"
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
+#include "performance_test/communication_abstractions/ros2_qos_adapter.hpp"
 
 namespace performance_test
 {

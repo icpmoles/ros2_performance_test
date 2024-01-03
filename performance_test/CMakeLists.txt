@@ -240,98 +240,97 @@ endif()
 
 
 set(sources
-    src/main.cpp
-    src/communication_abstractions/communicator.hpp
+    include/performance_test/communication_abstractions/communicator.hpp
+    include/performance_test/communication_abstractions/communicator_factory.hpp
+    include/performance_test/communication_abstractions/resource_manager.hpp
+    include/performance_test/execution_tasks/publisher_task.hpp
+    include/performance_test/execution_tasks/round_trip_relay_task.hpp
+    include/performance_test/execution_tasks/subscriber_task.hpp
+    include/performance_test/experiment_configuration/communication_mean.hpp
+    include/performance_test/experiment_configuration/execution_strategy.hpp
+    include/performance_test/experiment_configuration/experiment_configuration.hpp
+    include/performance_test/experiment_configuration/external_info_storage.hpp
+    include/performance_test/experiment_configuration/qos_abstraction.hpp
+    include/performance_test/experiment_execution/runner_factory.hpp
+    include/performance_test/experiment_execution/runner.hpp
+    include/performance_test/experiment_execution/threaded_runner.hpp
+    include/performance_test/experiment_metrics/analysis_result.hpp
+    include/performance_test/experiment_metrics/message_received_listener.hpp
+    include/performance_test/experiment_metrics/publisher_stats.hpp
+    include/performance_test/experiment_metrics/subscriber_stats.hpp
+    include/performance_test/outputs/csv_output.hpp
+    include/performance_test/outputs/json_output.hpp
+    include/performance_test/outputs/output.hpp
+    include/performance_test/outputs/stdout_output.hpp
+    include/performance_test/utilities/cpu_usage_tracker.hpp
+    include/performance_test/utilities/memory_checker.hpp
+    include/performance_test/utilities/msg_traits.hpp
+    include/performance_test/utilities/perf_clock.hpp
+    include/performance_test/utilities/qnx_res_usage.hpp
+    include/performance_test/utilities/prevent_cpu_idle.hpp
+    include/performance_test/utilities/sample_statistics.hpp
+    include/performance_test/utilities/spin_lock.hpp
     src/communication_abstractions/communicator_factory.cpp
-    src/communication_abstractions/communicator_factory.hpp
     src/communication_abstractions/resource_manager.cpp
-    src/communication_abstractions/resource_manager.hpp
-    src/execution_tasks/publisher_task.hpp
-    src/execution_tasks/round_trip_relay_task.hpp
-    src/execution_tasks/subscriber_task.hpp
     src/experiment_configuration/communication_mean.cpp
-    src/experiment_configuration/communication_mean.hpp
     src/experiment_configuration/execution_strategy.cpp
-    src/experiment_configuration/execution_strategy.hpp
     src/experiment_configuration/experiment_configuration.cpp
-    src/experiment_configuration/experiment_configuration.hpp
     src/experiment_configuration/external_info_storage.cpp
-    src/experiment_configuration/external_info_storage.hpp
     src/experiment_configuration/qos_abstraction.cpp
-    src/experiment_configuration/qos_abstraction.hpp
     src/experiment_execution/runner_factory.cpp
-    src/experiment_execution/runner_factory.hpp
-    src/experiment_execution/runner.hpp
-    src/experiment_execution/threaded_runner.hpp
     src/experiment_metrics/analysis_result.cpp
-    src/experiment_metrics/analysis_result.hpp
-    src/experiment_metrics/message_received_listener.hpp
-    src/experiment_metrics/publisher_stats.hpp
-    src/experiment_metrics/subscriber_stats.hpp
+    src/main.cpp
     src/outputs/csv_output.cpp
-    src/outputs/csv_output.hpp
     src/outputs/json_output.cpp
-    src/outputs/json_output.hpp
-    src/outputs/output.hpp
     src/outputs/stdout_output.cpp
-    src/outputs/stdout_output.hpp
-    src/utilities/cpu_usage_tracker.hpp
     src/utilities/memory_checker.cpp
-    src/utilities/memory_checker.hpp
-    src/utilities/msg_traits.hpp
-    src/utilities/perf_clock.hpp
-    src/utilities/qnx_res_usage.hpp
     src/utilities/prevent_cpu_idle.cpp
-    src/utilities/prevent_cpu_idle.hpp
-    src/utilities/rt_enabler.hpp
-    src/utilities/sample_statistics.hpp
-    src/utilities/spin_lock.hpp
 )
 
 if(PERFORMANCE_TEST_RT_ENABLED)
   add_definitions(-DPERFORMANCE_TEST_RT_ENABLED)
-  list(APPEND sources src/utilities/rt_enabler.hpp)
+  list(APPEND sources include/performance_test/utilities/rt_enabler.hpp)
 endif()
 
 if(PERFORMANCE_TEST_RCLCPP_ENABLED)
-  list(APPEND sources src/communication_abstractions/rclcpp_publisher.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/rclcpp_publisher.hpp)
 endif()
 
 if(PERFORMANCE_TEST_RCLCPP_STE_ENABLED OR PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED)
-  list(APPEND sources src/communication_abstractions/rclcpp_callback_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/rclcpp_callback_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED)
-  list(APPEND sources src/communication_abstractions/rclcpp_waitset_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/rclcpp_waitset_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED)
-  list(APPEND sources src/communication_abstractions/apex_os_communicator.hpp)
-  list(APPEND sources src/communication_abstractions/apex_os_polling_subscription_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/apex_os_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/apex_os_polling_subscription_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_FASTRTPS_ENABLED)
-  list(APPEND sources src/communication_abstractions/fast_rtps_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/fast_rtps_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
-  list(APPEND sources src/communication_abstractions/connext_dds_micro_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/connext_dds_micro_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_CYCLONEDDS_ENABLED)
-  list(APPEND sources src/communication_abstractions/cyclonedds_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/cyclonedds_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED)
-  list(APPEND sources src/communication_abstractions/cyclonedds_cxx_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/cyclonedds_cxx_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_ICEORYX_ENABLED)
-  list(APPEND sources src/communication_abstractions/iceoryx_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/iceoryx_communicator.hpp)
 endif()
 
 if(PERFORMANCE_TEST_OPENDDS_ENABLED)
-  list(APPEND sources src/communication_abstractions/opendds_communicator.hpp)
+  list(APPEND sources include/performance_test/communication_abstractions/opendds_communicator.hpp)
 endif()
 
 include(ExternalProject)

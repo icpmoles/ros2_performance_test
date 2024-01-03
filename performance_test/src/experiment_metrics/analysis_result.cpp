@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "analysis_result.hpp"
+#include "performance_test/experiment_metrics/analysis_result.hpp"
 
 #if !defined(WIN32)
 #include <sys/times.h>
@@ -21,8 +21,8 @@
 #include <iomanip>
 #include <string>
 
-#include "../utilities/perf_clock.hpp"
-#include "../utilities/qnx_res_usage.hpp"
+#include "performance_test/utilities/perf_clock.hpp"
+#include "performance_test/utilities/qnx_res_usage.hpp"
 
 namespace performance_test
 {

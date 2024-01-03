@@ -17,7 +17,7 @@
 
 #include <memory>
 
-#include "../experiment_metrics/analysis_result.hpp"
+#include "performance_test/experiment_metrics/analysis_result.hpp"
 
 namespace performance_test
 {

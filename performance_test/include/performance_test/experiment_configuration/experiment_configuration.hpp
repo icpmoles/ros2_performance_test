@@ -22,15 +22,15 @@
 #include <memory>
 #include <chrono>
 
-#include "qos_abstraction.hpp"
-#include "communication_mean.hpp"
-#include "execution_strategy.hpp"
-#include "../outputs/output.hpp"
+#include "performance_test/experiment_configuration/communication_mean.hpp"
+#include "performance_test/experiment_configuration/execution_strategy.hpp"
+#include "performance_test/experiment_configuration/external_info_storage.hpp"
+#include "performance_test/experiment_configuration/qos_abstraction.hpp"
+#include "performance_test/outputs/output.hpp"
 
 #if PERFORMANCE_TEST_RT_ENABLED
-#include "../utilities/rt_enabler.hpp"
+#include "performance_test/utilities/rt_enabler.hpp"
 #endif
-#include "external_info_storage.hpp"
 
 namespace performance_test
 {

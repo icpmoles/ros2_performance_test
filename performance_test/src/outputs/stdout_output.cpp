@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "performance_test/outputs/stdout_output.hpp"
+
 #include <string>
 #include <chrono>
 #include <iostream>
@@ -20,9 +22,8 @@
 
 #include <tabulate/table.hpp>
 
-#include "stdout_output.hpp"
-#include "../experiment_configuration/experiment_configuration.hpp"
-#include "../experiment_metrics/analysis_result.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_metrics/analysis_result.hpp"
 
 namespace performance_test
 {

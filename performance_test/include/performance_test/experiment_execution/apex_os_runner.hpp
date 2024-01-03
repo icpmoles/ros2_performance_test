@@ -21,9 +21,9 @@
 #include <vector>
 #include <utility>
 
-#include "runner.hpp"
-#include "../execution_tasks/apex_os_entity_factory.hpp"
-#include "../experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/execution_tasks/apex_os_entity_factory.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_execution/runner.hpp"
 
 #include <executor/executor_factory.hpp>
 #include <executor/executor_runner.hpp>

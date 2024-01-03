@@ -30,8 +30,8 @@
 #include <sys/types.h>
 #endif  // defined(QNX)
 
-#include "../utilities/sample_statistics.hpp"
-#include "../utilities/cpu_usage_tracker.hpp"
+#include "performance_test/utilities/cpu_usage_tracker.hpp"
+#include "performance_test/utilities/sample_statistics.hpp"
 
 namespace performance_test
 {

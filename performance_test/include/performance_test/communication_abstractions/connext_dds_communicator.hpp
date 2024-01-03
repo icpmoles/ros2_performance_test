@@ -19,8 +19,8 @@
 
 #include <ndds/ndds_cpp.h>
 
-#include "communicator.hpp"
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 namespace performance_test
 {

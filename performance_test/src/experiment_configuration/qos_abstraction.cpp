@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "qos_abstraction.hpp"
+#include "performance_test/experiment_configuration/qos_abstraction.hpp"
 
 #include <string>
 

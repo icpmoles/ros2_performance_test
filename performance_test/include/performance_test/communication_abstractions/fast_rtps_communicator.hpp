@@ -29,10 +29,10 @@
 
 #include <vector>
 
-#include "communicator.hpp"
-#include "resource_manager.hpp"
-#include "../experiment_configuration/qos_abstraction.hpp"
-#include "../utilities/msg_traits.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
+#include "performance_test/experiment_configuration/qos_abstraction.hpp"
+#include "performance_test/utilities/msg_traits.hpp"
 
 namespace performance_test
 {

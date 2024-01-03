@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "json_output.hpp"
+#include "performance_test/outputs/json_output.hpp"
 
 #include <string>
 #include <iomanip>
 #include <cmath>
 
-#include "../experiment_metrics/analysis_result.hpp"
+#include "performance_test/experiment_metrics/analysis_result.hpp"
 
 namespace performance_test
 {

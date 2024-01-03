@@ -18,7 +18,7 @@
 
 #include <gtest/gtest.h>
 
-#include "../../src/utilities/sample_statistics.hpp"
+#include "performance_test/utilities/sample_statistics.hpp"
 
 TEST(performance_test, SampleStatistics_init) {
   performance_test::SampleStatistics<std::int64_t> st;

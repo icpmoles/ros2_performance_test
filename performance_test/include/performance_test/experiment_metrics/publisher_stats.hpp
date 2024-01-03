@@ -18,8 +18,8 @@
 #include <chrono>
 #include <memory>
 
-#include "analysis_result.hpp"
-#include "../utilities/spin_lock.hpp"
+#include "performance_test/experiment_metrics/analysis_result.hpp"
+#include "performance_test/utilities/spin_lock.hpp"
 
 namespace performance_test
 {

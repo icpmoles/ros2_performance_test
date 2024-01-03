@@ -18,9 +18,9 @@
 #include <cstdint>
 #include <stdexcept>
 
-#include "../experiment_metrics/message_received_listener.hpp"
-#include "../utilities/msg_traits.hpp"
-#include "../utilities/timestamp_provider.hpp"
+#include "performance_test/experiment_metrics/message_received_listener.hpp"
+#include "performance_test/utilities/msg_traits.hpp"
+#include "performance_test/utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {

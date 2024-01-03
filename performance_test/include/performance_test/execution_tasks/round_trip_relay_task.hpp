@@ -17,10 +17,10 @@
 
 #include <memory>
 
-#include "../communication_abstractions/communicator.hpp"
-#include "../experiment_metrics/message_received_listener.hpp"
-#include "../utilities/memory_checker.hpp"
-#include "../utilities/timestamp_provider.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/experiment_metrics/message_received_listener.hpp"
+#include "performance_test/utilities/memory_checker.hpp"
+#include "performance_test/utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {

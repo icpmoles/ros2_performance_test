@@ -15,7 +15,7 @@
 #ifndef UTILITIES__TIMESTAMP_PROVIDER_HPP_
 #define UTILITIES__TIMESTAMP_PROVIDER_HPP_
 
-#include "perf_clock.hpp"
+#include "performance_test/utilities/perf_clock.hpp"
 
 namespace performance_test
 {

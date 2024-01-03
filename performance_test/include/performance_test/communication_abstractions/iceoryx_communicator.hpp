@@ -23,8 +23,8 @@
 #include <iceoryx_posh/popo/untyped_subscriber.hpp>
 #include <iceoryx_dust/cxx/std_string_support.hpp>
 
-#include "communicator.hpp"
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 namespace performance_test
 {

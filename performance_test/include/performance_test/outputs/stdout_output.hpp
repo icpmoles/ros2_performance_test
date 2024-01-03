@@ -18,8 +18,8 @@
 #include <iostream>
 #include <memory>
 
-#include "../experiment_configuration/experiment_configuration.hpp"
-#include "output.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/outputs/output.hpp"
 
 namespace performance_test
 {

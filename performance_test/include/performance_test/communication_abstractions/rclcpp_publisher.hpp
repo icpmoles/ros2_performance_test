@@ -21,12 +21,11 @@
 #include <memory>
 #include <utility>
 
-#include "../experiment_configuration/qos_abstraction.hpp"
-#include "../utilities/msg_traits.hpp"
-
-#include "communicator.hpp"
-#include "ros2_qos_adapter.hpp"
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
+#include "performance_test/communication_abstractions/ros2_qos_adapter.hpp"
+#include "performance_test/experiment_configuration/qos_abstraction.hpp"
+#include "performance_test/utilities/msg_traits.hpp"
 
 namespace performance_test
 {

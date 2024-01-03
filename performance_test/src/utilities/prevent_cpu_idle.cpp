@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "prevent_cpu_idle.hpp"
+#include "performance_test/utilities/prevent_cpu_idle.hpp"
 
 #include <memory>
 #include <stdexcept>

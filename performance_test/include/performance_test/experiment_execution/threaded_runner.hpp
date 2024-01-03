@@ -20,12 +20,12 @@
 #include <memory>
 #include <vector>
 
-#include "runner.hpp"
-#include "../communication_abstractions/communicator_factory.hpp"
-#include "../execution_tasks/publisher_task.hpp"
-#include "../execution_tasks/subscriber_task.hpp"
-#include "../execution_tasks/round_trip_relay_task.hpp"
-#include "../experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/communication_abstractions/communicator_factory.hpp"
+#include "performance_test/execution_tasks/publisher_task.hpp"
+#include "performance_test/execution_tasks/subscriber_task.hpp"
+#include "performance_test/execution_tasks/round_trip_relay_task.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_execution/runner.hpp"
 
 namespace performance_test
 {

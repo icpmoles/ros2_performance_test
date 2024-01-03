@@ -14,12 +14,12 @@
 
 #include <memory>
 
-#include "runner_factory.hpp"
+#include "performance_test/experiment_execution/runner_factory.hpp"
 
-#include "threaded_runner.hpp"
+#include "performance_test/experiment_execution/threaded_runner.hpp"
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-#include "apex_os_runner.hpp"
-#include "../experiment_configuration/communication_mean.hpp"
+#include "performance_test/experiment_configuration/communication_mean.hpp"
+#include "performance_test/experiment_execution/apex_os_runner.hpp"
 #endif
 
 namespace performance_test

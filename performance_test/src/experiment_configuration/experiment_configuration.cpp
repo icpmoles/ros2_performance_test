@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "experiment_configuration.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 
 #include <tclap/CmdLine.h>
 
@@ -40,12 +40,10 @@
 #include <rclcpp/rclcpp.hpp>
 #endif
 
-#include <performance_test/generated_messages/messages.hpp>
-
-#include "../outputs/csv_output.hpp"
-#include "../outputs/stdout_output.hpp"
-#include "../outputs/json_output.hpp"
-
+#include "performance_test/generated_messages/messages.hpp"
+#include "performance_test/outputs/csv_output.hpp"
+#include "performance_test/outputs/stdout_output.hpp"
+#include "performance_test/outputs/json_output.hpp"
 #include "performance_test/version.h"
 
 static void handle_sigint(int sig)

@@ -12,57 +12,57 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "performance_test/communication_abstractions/communicator_factory.hpp"
+
 #include <memory>
 #include <string>
 
-#include "communicator_factory.hpp"
-
-#include <performance_test/for_each.hpp>
-#include <performance_test/generated_messages/messages.hpp>
+#include "performance_test/for_each.hpp"
+#include "performance_test/generated_messages/messages.hpp"
 
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-#include "rclcpp_publisher.hpp"
+#include "performance_test/communication_abstractions/rclcpp_publisher.hpp"
 #endif
 
 #if defined(PERFORMANCE_TEST_RCLCPP_STE_ENABLED) || defined(PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED)
-#include "rclcpp_callback_communicator.hpp"
+#include "performance_test/communication_abstractions/rclcpp_callback_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-#include "apex_os_polling_subscription_communicator.hpp"
+#include "performance_test/communication_abstractions/apex_os_polling_subscription_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-#include "rclcpp_waitset_communicator.hpp"
+#include "performance_test/communication_abstractions/rclcpp_waitset_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-#include "fast_rtps_communicator.hpp"
+#include "performance_test/communication_abstractions/fast_rtps_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-#include "connext_dds_micro_communicator.hpp"
+#include "performance_test/communication_abstractions/connext_dds_micro_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-#include "connext_dds_communicator.hpp"
+#include "performance_test/communication_abstractions/connext_dds_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-#include "cyclonedds_communicator.hpp"
+#include "performance_test/communication_abstractions/cyclonedds_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-#include "cyclonedds_cxx_communicator.hpp"
+#include "performance_test/communication_abstractions/cyclonedds_cxx_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-#include "iceoryx_communicator.hpp"
+#include "performance_test/communication_abstractions/iceoryx_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-#include "opendds_communicator.hpp"
+#include "performance_test/communication_abstractions/opendds_communicator.hpp"
 #endif
 
 namespace performance_test

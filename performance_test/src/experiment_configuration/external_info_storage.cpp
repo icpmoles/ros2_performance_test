@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "performance_test/experiment_configuration/external_info_storage.hpp"
+
 #include <rapidjson/document.h>
 #include <string>
-#include "external_info_storage.hpp"
 
 namespace performance_test
 {

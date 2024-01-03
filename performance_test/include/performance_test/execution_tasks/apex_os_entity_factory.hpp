@@ -15,13 +15,12 @@
 #ifndef EXECUTION_TASKS__APEX_OS_ENTITY_FACTORY_HPP_
 #define EXECUTION_TASKS__APEX_OS_ENTITY_FACTORY_HPP_
 
-#include <performance_test/for_each.hpp>
-#include <performance_test/generated_messages/messages.hpp>
-
 #include <memory>
 #include <string>
 
-#include "../communication_abstractions/apex_os_communicator.hpp"
+#include "performance_test/communication_abstractions/apex_os_communicator.hpp"
+#include "performance_test/for_each.hpp"
+#include "performance_test/generated_messages/messages.hpp"
 
 namespace performance_test {
 

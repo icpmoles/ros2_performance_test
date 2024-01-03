@@ -30,7 +30,7 @@
 #include <chrono>
 #include <cmath>
 
-#include "../utilities/perf_clock.hpp"
+#include "performance_test/utilities/perf_clock.hpp"
 
 namespace performance_test
 {

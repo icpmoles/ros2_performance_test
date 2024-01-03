@@ -17,9 +17,9 @@
 
 #include <memory>
 
-#include "../communication_abstractions/communicator.hpp"
-#include "../experiment_metrics/subscriber_stats.hpp"
-#include "../utilities/memory_checker.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/experiment_metrics/subscriber_stats.hpp"
+#include "performance_test/utilities/memory_checker.hpp"
 
 namespace performance_test
 {

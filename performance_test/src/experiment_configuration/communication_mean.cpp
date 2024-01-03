@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "communication_mean.hpp"
+#include "performance_test/experiment_configuration/communication_mean.hpp"
 
 #include <string>
 

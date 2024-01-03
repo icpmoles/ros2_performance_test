@@ -21,11 +21,10 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include "../experiment_configuration/qos_abstraction.hpp"
-
-#include "communicator.hpp"
-#include "ros2_qos_adapter.hpp"
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
+#include "performance_test/communication_abstractions/ros2_qos_adapter.hpp"
+#include "performance_test/experiment_configuration/qos_abstraction.hpp"
 
 namespace performance_test
 {

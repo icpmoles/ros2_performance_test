@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "execution_strategy.hpp"
+#include "performance_test/experiment_configuration/execution_strategy.hpp"
 
 #include <string>
 

@@ -20,14 +20,14 @@
 #include <memory>
 #include <vector>
 
-#include "../communication_abstractions/resource_manager.hpp"
-#include "../experiment_configuration/experiment_configuration.hpp"
-#include "../outputs/output.hpp"
-#include "../utilities/cpu_usage_tracker.hpp"
-#include "../utilities/rt_enabler.hpp"
-#include "../experiment_metrics/analysis_result.hpp"
-#include "../experiment_metrics/publisher_stats.hpp"
-#include "../experiment_metrics/subscriber_stats.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_metrics/analysis_result.hpp"
+#include "performance_test/experiment_metrics/publisher_stats.hpp"
+#include "performance_test/experiment_metrics/subscriber_stats.hpp"
+#include "performance_test/outputs/output.hpp"
+#include "performance_test/utilities/cpu_usage_tracker.hpp"
+#include "performance_test/utilities/rt_enabler.hpp"
 
 namespace performance_test
 {

@@ -20,8 +20,8 @@
 #include <dds/DCPS/Marked_Default_Qos.h>
 #include <dds/DCPS/WaitSet.h>
 
-#include "communicator.hpp"
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 #ifdef LENGTH_UNLIMITED
 #undef LENGTH_UNLIMITED

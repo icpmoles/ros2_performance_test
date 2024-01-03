@@ -16,10 +16,10 @@
 #include <rclcpp/rclcpp.hpp>
 #endif
 
-#include "experiment_configuration/experiment_configuration.hpp"
-#include "experiment_execution/runner.hpp"
-#include "experiment_execution/runner_factory.hpp"
-#include "utilities/prevent_cpu_idle.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_execution/runner.hpp"
+#include "performance_test/experiment_execution/runner_factory.hpp"
+#include "performance_test/utilities/prevent_cpu_idle.hpp"
 
 int main(int argc, char ** argv)
 {

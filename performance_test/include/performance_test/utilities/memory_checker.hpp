@@ -17,7 +17,7 @@
 
 #include <string>
 
-#include "../experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 
 namespace performance_test
 {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 #if defined(PERFORMANCE_TEST_FASTRTPS_ENABLED)
   #include <fastdds/dds/domain/DomainParticipantFactory.hpp>
@@ -25,7 +25,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-  #include "iceoryx_posh/runtime/posh_runtime.hpp"
+  #include <iceoryx_posh/runtime/posh_runtime.hpp>
 #endif
 
 #include <cstdlib>

@@ -15,10 +15,9 @@
 #ifndef COMMUNICATION_ABSTRACTIONS__ROS2_QOS_ADAPTER_HPP_
 #define COMMUNICATION_ABSTRACTIONS__ROS2_QOS_ADAPTER_HPP_
 
-
 #include <rclcpp/rclcpp.hpp>
 
-#include "../experiment_configuration/qos_abstraction.hpp"
+#include "performance_test/experiment_configuration/qos_abstraction.hpp"
 
 namespace performance_test
 {

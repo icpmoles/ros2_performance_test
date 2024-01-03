@@ -23,8 +23,8 @@
 #include <dds_cpp/dds_cpp_rh_sm.hxx>
 #include <dds_cpp/dds_cpp_netio.hxx>
 
-#include "communicator.hpp"
-#include "resource_manager.hpp"
+#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 
 namespace performance_test

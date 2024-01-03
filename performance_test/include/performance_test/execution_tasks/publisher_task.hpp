@@ -19,11 +19,11 @@
 #include <thread>
 #include <functional>
 
-#include "../experiment_metrics/publisher_stats.hpp"
-#include "../utilities/memory_checker.hpp"
-#include "../utilities/perf_clock.hpp"
-#include "../utilities/timestamp_provider.hpp"
-#include "../utilities/spin_lock.hpp"
+#include "performance_test/experiment_metrics/publisher_stats.hpp"
+#include "performance_test/utilities/memory_checker.hpp"
+#include "performance_test/utilities/perf_clock.hpp"
+#include "performance_test/utilities/spin_lock.hpp"
+#include "performance_test/utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {
