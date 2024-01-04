@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_CONFIGURATION__EXECUTION_STRATEGY_HPP_
-#define EXPERIMENT_CONFIGURATION__EXECUTION_STRATEGY_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXECUTION_STRATEGY_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXECUTION_STRATEGY_HPP_
 
 #include <string>
 #include <ostream>
@@ -43,4 +43,4 @@ ExecutionStrategy execution_strategy_from_string(const std::string & s);
 
 }  // namespace performance_test
 
-#endif  // EXPERIMENT_CONFIGURATION__EXECUTION_STRATEGY_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXECUTION_STRATEGY_HPP_

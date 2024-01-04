@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
-#define COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
+#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
+#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
 
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
   #include <fastdds/dds/domain/DomainParticipant.hpp>
@@ -231,4 +231,4 @@ private:
 };
 
 }  // namespace performance_test
-#endif  // COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
+#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_

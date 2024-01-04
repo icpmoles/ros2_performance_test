@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_CONFIGURATION__EXTERNAL_INFO_STORAGE_HPP_
-#define EXPERIMENT_CONFIGURATION__EXTERNAL_INFO_STORAGE_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXTERNAL_INFO_STORAGE_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXTERNAL_INFO_STORAGE_HPP_
 
 #include <iostream>
 #include <string>
@@ -31,4 +31,4 @@ public:
   std::map<std::string, std::string> m_external_info;
 };
 }  // namespace performance_test
-#endif  // EXPERIMENT_CONFIGURATION__EXTERNAL_INFO_STORAGE_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXTERNAL_INFO_STORAGE_HPP_

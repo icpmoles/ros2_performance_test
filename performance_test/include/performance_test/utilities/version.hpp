@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__VERSION_H_
-#define PERFORMANCE_TEST__VERSION_H_
+#ifndef PERFORMANCE_TEST__UTILITIES__VERSION_HPP_
+#define PERFORMANCE_TEST__UTILITIES__VERSION_HPP_
 
 #ifdef PERFORMANCE_TEST_VERSION
 const char * version = PERFORMANCE_TEST_VERSION;
@@ -21,4 +21,4 @@ const char * version = PERFORMANCE_TEST_VERSION;
 const char * version = "unknown";
 #endif
 
-#endif  // PERFORMANCE_TEST__VERSION_H_
+#endif  // PERFORMANCE_TEST__UTILITIES__VERSION_HPP_

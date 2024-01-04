@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef UTILITIES__MSG_TRAITS_HPP_
-#define UTILITIES__MSG_TRAITS_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__MSG_TRAITS_HPP_
+#define PERFORMANCE_TEST__UTILITIES__MSG_TRAITS_HPP_
 
 namespace performance_test
 {
@@ -98,4 +98,4 @@ struct MsgTraits
 
 }  // namespace performance_test
 
-#endif  // UTILITIES__MSG_TRAITS_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__MSG_TRAITS_HPP_

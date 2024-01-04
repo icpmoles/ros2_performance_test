@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_CONFIGURATION__MESSAGES_HPP_
-#define EXPERIMENT_CONFIGURATION__MESSAGES_HPP_
+#ifndef PERFORMANCE_TEST__GENERATED_MESSAGES__MESSAGES_HPP_
+#define PERFORMANCE_TEST__GENERATED_MESSAGES__MESSAGES_HPP_
 
 #include <performance_test/utilities/for_each.hpp>
 
@@ -45,4 +45,4 @@ inline std::vector<std::string> supported_msg_names()
 }
 }
 
-#endif  // EXPERIMENT_CONFIGURATION__MESSAGES_HPP_
+#endif  // PERFORMANCE_TEST__GENERATED_MESSAGES__MESSAGES_HPP_

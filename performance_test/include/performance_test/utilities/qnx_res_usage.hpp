@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef UTILITIES__QNX_RES_USAGE_HPP_
-#define UTILITIES__QNX_RES_USAGE_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__QNX_RES_USAGE_HPP_
+#define PERFORMANCE_TEST__UTILITIES__QNX_RES_USAGE_HPP_
 
 #if defined(QNX)
 
@@ -60,4 +60,4 @@ uint64_t get_proc_rss_mem()
 }  // namespace performance_test
 
 #endif  // defined(QNX)
-#endif  // UTILITIES__QNX_RES_USAGE_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__QNX_RES_USAGE_HPP_

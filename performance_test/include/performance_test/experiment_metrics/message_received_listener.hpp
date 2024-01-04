@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_METRICS__MESSAGE_RECEIVED_LISTENER_HPP_
-#define EXPERIMENT_METRICS__MESSAGE_RECEIVED_LISTENER_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_METRICS__MESSAGE_RECEIVED_LISTENER_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_METRICS__MESSAGE_RECEIVED_LISTENER_HPP_
 
 #include <cstdint>
 
@@ -31,4 +31,4 @@ public:
 };
 }  // namespace performance_test
 
-#endif  // EXPERIMENT_METRICS__MESSAGE_RECEIVED_LISTENER_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_METRICS__MESSAGE_RECEIVED_LISTENER_HPP_

@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-#ifndef UTILITIES__SPIN_LOCK_HPP_
-#define UTILITIES__SPIN_LOCK_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__SPIN_LOCK_HPP_
+#define PERFORMANCE_TEST__UTILITIES__SPIN_LOCK_HPP_
 
 #include <atomic>
 
@@ -50,4 +50,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // UTILITIES__SPIN_LOCK_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__SPIN_LOCK_HPP_

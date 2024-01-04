@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_METRICS__PUBLISHER_STATS_HPP_
-#define EXPERIMENT_METRICS__PUBLISHER_STATS_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_METRICS__PUBLISHER_STATS_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_METRICS__PUBLISHER_STATS_HPP_
 
 #include <chrono>
 #include <memory>
@@ -80,4 +80,4 @@ private:
 };
 }  // namespace performance_test
 
-#endif  // EXPERIMENT_METRICS__PUBLISHER_STATS_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_METRICS__PUBLISHER_STATS_HPP_

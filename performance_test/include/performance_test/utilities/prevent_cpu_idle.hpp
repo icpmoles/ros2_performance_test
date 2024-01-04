@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef UTILITIES__PREVENT_CPU_IDLE_HPP_
-#define UTILITIES__PREVENT_CPU_IDLE_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__PREVENT_CPU_IDLE_HPP_
+#define PERFORMANCE_TEST__UTILITIES__PREVENT_CPU_IDLE_HPP_
 
 namespace performance_test
 {
 void prevent_cpu_idle();
 }  // namespace performance_test
 
-#endif  // UTILITIES__PREVENT_CPU_IDLE_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__PREVENT_CPU_IDLE_HPP_

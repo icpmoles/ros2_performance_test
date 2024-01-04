@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_CONFIGURATION__EXPERIMENT_CONFIGURATION_HPP_
-#define EXPERIMENT_CONFIGURATION__EXPERIMENT_CONFIGURATION_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXPERIMENT_CONFIGURATION_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXPERIMENT_CONFIGURATION_HPP_
 
 #include <atomic>
 #include <string>
@@ -178,4 +178,4 @@ std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration::
 std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration & e);
 }  // namespace performance_test
 
-#endif  // EXPERIMENT_CONFIGURATION__EXPERIMENT_CONFIGURATION_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__EXPERIMENT_CONFIGURATION_HPP_

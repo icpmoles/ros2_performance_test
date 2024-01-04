@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef UTILITIES__RT_ENABLER_HPP_
-#define UTILITIES__RT_ENABLER_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__RT_ENABLER_HPP_
+#define PERFORMANCE_TEST__UTILITIES__RT_ENABLER_HPP_
 
 #include <sys/mman.h>
 #include <malloc.h>
@@ -260,4 +260,4 @@ inline void pre_proc_rt_init(const uint32_t cpu_bit_mask_in, const int32_t prio)
 }  // namespace performance_test
 
 
-#endif  // UTILITIES__RT_ENABLER_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__RT_ENABLER_HPP_

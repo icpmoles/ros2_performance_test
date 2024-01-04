@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef UTILITIES__TIMESTAMP_PROVIDER_HPP_
-#define UTILITIES__TIMESTAMP_PROVIDER_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__TIMESTAMP_PROVIDER_HPP_
+#define PERFORMANCE_TEST__UTILITIES__TIMESTAMP_PROVIDER_HPP_
 
 #include "performance_test/utilities/perf_clock.hpp"
 
@@ -49,4 +49,4 @@ private:
   const std::int64_t m_timestamp;
 };
 }  // namespace performance_test
-#endif  // UTILITIES__TIMESTAMP_PROVIDER_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__TIMESTAMP_PROVIDER_HPP_

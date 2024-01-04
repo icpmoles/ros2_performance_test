@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_CONFIGURATION__QOS_ABSTRACTION_HPP_
-#define EXPERIMENT_CONFIGURATION__QOS_ABSTRACTION_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__QOS_ABSTRACTION_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__QOS_ABSTRACTION_HPP_
 
 #include <ostream>
 #include <string>
@@ -66,4 +66,4 @@ std::ostream & operator<<(std::ostream & stream, const QOSAbstraction e);
 
 }  // namespace performance_test
 
-#endif  // EXPERIMENT_CONFIGURATION__QOS_ABSTRACTION_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__QOS_ABSTRACTION_HPP_

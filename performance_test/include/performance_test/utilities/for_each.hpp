@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__FOR_EACH_HPP_
-#define PERFORMANCE_TEST__FOR_EACH_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__FOR_EACH_HPP_
+#define PERFORMANCE_TEST__UTILITIES__FOR_EACH_HPP_
 
 #include <tuple>
 #include <utility>
@@ -46,4 +46,4 @@ for_each(const std::tuple<Tp...> & t, FuncT f)
 
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__FOR_EACH_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__FOR_EACH_HPP_

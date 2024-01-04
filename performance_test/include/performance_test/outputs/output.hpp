@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef OUTPUTS__OUTPUT_HPP_
-#define OUTPUTS__OUTPUT_HPP_
+#ifndef PERFORMANCE_TEST__OUTPUTS__OUTPUT_HPP_
+#define PERFORMANCE_TEST__OUTPUTS__OUTPUT_HPP_
 
 #include <memory>
 
@@ -43,4 +43,4 @@ public:
 
 }  // namespace performance_test
 
-#endif  // OUTPUTS__OUTPUT_HPP_
+#endif  // PERFORMANCE_TEST__OUTPUTS__OUTPUT_HPP_

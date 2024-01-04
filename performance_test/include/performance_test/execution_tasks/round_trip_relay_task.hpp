@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXECUTION_TASKS__ROUND_TRIP_RELAY_TASK_HPP_
-#define EXECUTION_TASKS__ROUND_TRIP_RELAY_TASK_HPP_
+#ifndef PERFORMANCE_TEST__EXECUTION_TASKS__ROUND_TRIP_RELAY_TASK_HPP_
+#define PERFORMANCE_TEST__EXECUTION_TASKS__ROUND_TRIP_RELAY_TASK_HPP_
 
 #include <memory>
 
@@ -63,4 +63,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // EXECUTION_TASKS__ROUND_TRIP_RELAY_TASK_HPP_
+#endif  // PERFORMANCE_TEST__EXECUTION_TASKS__ROUND_TRIP_RELAY_TASK_HPP_

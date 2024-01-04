@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
-#define COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
+#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
+#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
 
 #include <cstdint>
 #include <stdexcept>
@@ -62,4 +62,4 @@ public:
 
 }  // namespace performance_test
 
-#endif  // COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
+#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_

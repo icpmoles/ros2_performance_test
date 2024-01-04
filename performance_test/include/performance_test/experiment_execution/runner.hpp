@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_EXECUTION__RUNNER_HPP_
-#define EXPERIMENT_EXECUTION__RUNNER_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_HPP_
 
 #include <algorithm>
 #include <chrono>
@@ -156,4 +156,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // EXPERIMENT_EXECUTION__RUNNER_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_HPP_

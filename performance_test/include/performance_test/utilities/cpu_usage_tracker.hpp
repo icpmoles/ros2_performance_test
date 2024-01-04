@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef UTILITIES__CPU_USAGE_TRACKER_HPP_
-#define UTILITIES__CPU_USAGE_TRACKER_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__CPU_USAGE_TRACKER_HPP_
+#define PERFORMANCE_TEST__UTILITIES__CPU_USAGE_TRACKER_HPP_
 
 #if !defined(WIN32)
 #include <sys/times.h>
@@ -150,4 +150,4 @@ private:
 };
 }  // namespace performance_test
 
-#endif  // UTILITIES__CPU_USAGE_TRACKER_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__CPU_USAGE_TRACKER_HPP_

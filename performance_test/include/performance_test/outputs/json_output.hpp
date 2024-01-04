@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef OUTPUTS__JSON_OUTPUT_HPP_
-#define OUTPUTS__JSON_OUTPUT_HPP_
+#ifndef PERFORMANCE_TEST__OUTPUTS__JSON_OUTPUT_HPP_
+#define PERFORMANCE_TEST__OUTPUTS__JSON_OUTPUT_HPP_
 
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
@@ -60,4 +60,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // OUTPUTS__JSON_OUTPUT_HPP_
+#endif  // PERFORMANCE_TEST__OUTPUTS__JSON_OUTPUT_HPP_

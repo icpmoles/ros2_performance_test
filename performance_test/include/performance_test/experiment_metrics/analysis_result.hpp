@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef EXPERIMENT_METRICS__ANALYSIS_RESULT_HPP_
-#define EXPERIMENT_METRICS__ANALYSIS_RESULT_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_METRICS__ANALYSIS_RESULT_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_METRICS__ANALYSIS_RESULT_HPP_
 
 #include <chrono>
 #include <sstream>
@@ -68,4 +68,4 @@ struct AnalysisResult
 
 }  // namespace performance_test
 
-#endif  // EXPERIMENT_METRICS__ANALYSIS_RESULT_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_METRICS__ANALYSIS_RESULT_HPP_

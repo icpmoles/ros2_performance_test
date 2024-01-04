@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef UTILITIES__MEMORY_CHECKER_HPP_
-#define UTILITIES__MEMORY_CHECKER_HPP_
+#ifndef PERFORMANCE_TEST__UTILITIES__MEMORY_CHECKER_HPP_
+#define PERFORMANCE_TEST__UTILITIES__MEMORY_CHECKER_HPP_
 
 #include <string>
 
@@ -42,4 +42,4 @@ private:
 };
 
 }  // namespace performance_test
-#endif  // UTILITIES__MEMORY_CHECKER_HPP_
+#endif  // PERFORMANCE_TEST__UTILITIES__MEMORY_CHECKER_HPP_

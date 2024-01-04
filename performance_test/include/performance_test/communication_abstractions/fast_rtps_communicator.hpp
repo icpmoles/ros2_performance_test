@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef COMMUNICATION_ABSTRACTIONS__FAST_RTPS_COMMUNICATOR_HPP_
-#define COMMUNICATION_ABSTRACTIONS__FAST_RTPS_COMMUNICATOR_HPP_
+#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__FAST_RTPS_COMMUNICATOR_HPP_
+#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__FAST_RTPS_COMMUNICATOR_HPP_
 
 #include <fastdds/dds/domain/DomainParticipant.hpp>
 #include <fastdds/dds/publisher/Publisher.hpp>
@@ -316,4 +316,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // COMMUNICATION_ABSTRACTIONS__FAST_RTPS_COMMUNICATOR_HPP_
+#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__FAST_RTPS_COMMUNICATOR_HPP_
