@@ -200,15 +200,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     TCLAP::ValueArg<uint32_t> ddsDomainIdArg("", "dds-domain_id",
       "The DDS domain id. Default is 0.", false, 0, "id", cmd);
 
-    TCLAP::SwitchArg reliableArg("", "reliable",
-      "DEPRECATED. Please use --reliability RELIABLE instead.", cmd, false);
-
-    TCLAP::SwitchArg transientArg("", "transient",
-      "DEPRECATED. Please use --durability TRANSIENT_LOCAL instead.", cmd, false);
-
-    TCLAP::SwitchArg keepLastArg("", "keep-last",
-      "DEPRECATED. Please use --history KEEP_LAST instead.", cmd, false);
-
     std::vector<std::string> allowedReliabilityArgs{"RELIABLE", "BEST_EFFORT"};
     TCLAP::ValuesConstraint<std::string> allowedReliabilityArgsVals(allowedReliabilityArgs);
     TCLAP::ValueArg<std::string> reliabilityArg("", "reliability",
@@ -304,6 +295,10 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     transient_qos = transientArg.getValue();
     keep_last_qos = keepLastArg.getValue();
     history_depth = historyDepthArg.getValue();
+    m_qos.reliability = qos_reliability_from_string(reliability_qos);
+    m_qos.durability = qos_durability_from_string(durability_qos);
+    m_qos.history_kind = qos_history_kind_from_string(history_qos);
+    m_qos.history_depth = history_depth;
     m_max_runtime = maxRuntimeArg.getValue();
     m_number_of_publishers = numPubsArg.getValue();
     m_number_of_subscribers = numSubsArg.getValue();
@@ -336,44 +331,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
       // application.
       exit(0);
     }
-
-    if (reliable_qos) {
-      m_qos.reliability = QOSAbstraction::Reliability::RELIABLE;
-      std::cout << "WARNING: The flag '--reliable' is deprecated.\n"
-        "Please use '--reliability RELIABLE' instead.\n";
-    } else {
-      if (reliability_qos == "RELIABLE") {
-        m_qos.reliability = QOSAbstraction::Reliability::RELIABLE;
-      } else if (reliability_qos == "BEST_EFFORT") {
-        m_qos.reliability = QOSAbstraction::Reliability::BEST_EFFORT;
-      }
-    }
-
-    if (transient_qos) {
-      m_qos.durability = QOSAbstraction::Durability::TRANSIENT_LOCAL;
-      std::cout << "WARNING: The flag '--transient' is deprecated.\n"
-        "Please use '--durability TRANSIENT_LOCAL' instead.\n";
-    } else {
-      if (durability_qos == "VOLATILE") {
-        m_qos.durability = QOSAbstraction::Durability::VOLATILE;
-      } else if (durability_qos == "TRANSIENT_LOCAL") {
-        m_qos.durability = QOSAbstraction::Durability::TRANSIENT_LOCAL;
-      }
-    }
-
-    if (keep_last_qos) {
-      m_qos.history_kind = QOSAbstraction::HistoryKind::KEEP_LAST;
-      std::cout << "WARNING: The flag '--keep-last' is deprecated.\n"
-        "Please use '--history KEEP_LAST' instead.\n";
-    } else {
-      if (history_qos == "KEEP_LAST") {
-        m_qos.history_kind = QOSAbstraction::HistoryKind::KEEP_LAST;
-      } else if (history_qos == "KEEP_ALL") {
-        m_qos.history_kind = QOSAbstraction::HistoryKind::KEEP_ALL;
-      }
-    }
-
-    m_qos.history_depth = history_depth;
 
     if (m_number_of_publishers > 1) {
       throw std::invalid_argument("More than one publisher is not supported at the moment");

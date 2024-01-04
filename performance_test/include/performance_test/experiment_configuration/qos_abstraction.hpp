@@ -64,6 +64,10 @@ std::ostream & operator<<(std::ostream & stream, const QOSAbstraction::HistoryKi
 /// Outstream operator for QOSAbstraction::QOSAbstraction.
 std::ostream & operator<<(std::ostream & stream, const QOSAbstraction e);
 
+QOSAbstraction::Reliability qos_reliability_from_string(const std::string & s);
+QOSAbstraction::Durability qos_durability_from_string(const std::string & s);
+QOSAbstraction::HistoryKind qos_history_kind_from_string(const std::string & s);
+
 }  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__QOS_ABSTRACTION_HPP_

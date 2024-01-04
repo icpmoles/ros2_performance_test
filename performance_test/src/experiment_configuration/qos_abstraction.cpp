@@ -76,4 +76,37 @@ std::ostream & operator<<(std::ostream & stream, const QOSAbstraction e)
          " History depth: " << e.history_depth;
 }
 
+QOSAbstraction::Reliability qos_reliability_from_string(const std::string & s)
+{
+  if (s == "RELIABLE") {
+    return QOSAbstraction::Reliability::RELIABLE;
+  }
+  if (s == "BEST_EFFORT") {
+    return QOSAbstraction::Reliability::BEST_EFFORT;
+  }
+  throw std::invalid_argument("Invalid QOS reliability string!");
+}
+
+QOSAbstraction::Durability qos_durability_from_string(const std::string & s)
+{
+  if (s == "VOLATILE") {
+    return QOSAbstraction::Durability::VOLATILE;
+  }
+  if (s == "TRANSIENT_LOCAL") {
+    return QOSAbstraction::Durability::TRANSIENT_LOCAL;
+  }
+  throw std::invalid_argument("Invalid QOS durability string!");
+}
+
+QOSAbstraction::HistoryKind qos_history_kind_from_string(const std::string & s)
+{
+  if (s == "KEEP_LAST") {
+    return QOSAbstraction::HistoryKind::KEEP_LAST;
+  }
+  if (s == "KEEP_ALL") {
+    return QOSAbstraction::HistoryKind::KEEP_ALL;
+  }
+  throw std::invalid_argument("Invalid QOS history string!");
+}
+
 }  // namespace performance_test
