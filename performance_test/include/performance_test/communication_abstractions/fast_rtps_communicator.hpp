@@ -137,7 +137,7 @@ public:
   explicit FastRTPSPublisher(const ExperimentConfiguration & ec)
   : m_ec(ec),
     m_resources(ResourceManager::get().fastdds_resources(
-      eprosima::fastdds::dds::TypeSupport(new TopicType()))),
+      ec, eprosima::fastdds::dds::TypeSupport(new TopicType()))),
     m_datawriter(create_datawriter(m_resources, ec))
   {
   }
@@ -256,7 +256,7 @@ public:
 
   explicit FastRTPSSubscriber(const ExperimentConfiguration & ec)
   : m_resources(ResourceManager::get().fastdds_resources(
-      eprosima::fastdds::dds::TypeSupport(new TopicType()))),
+      ec, eprosima::fastdds::dds::TypeSupport(new TopicType()))),
     m_datareader(create_datareader(m_resources, ec))
   {
   }

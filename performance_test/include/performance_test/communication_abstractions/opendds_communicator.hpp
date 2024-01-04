@@ -163,7 +163,7 @@ public:
   using DataWriterType = typename Topic::OpenDDSDataWriterType;
 
   explicit OpenDDSPublisher(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().opendds_participant()),
+  : m_participant(ResourceManager::get().opendds_participant(ec)),
     m_datawriter(make_opendds_datawriter(ec, m_participant))
   {
   }
@@ -197,7 +197,7 @@ private:
   {
     DDS::Publisher_ptr publisher;
     DDS::DataWriterQos dw_qos;
-    ResourceManager::get().opendds_publisher(publisher, dw_qos);
+    ResourceManager::get().opendds_publisher(ec, publisher, dw_qos);
 
     OpenDdsQOSAdapter qos_adapter(ec.qos());
     qos_adapter.apply_dw(dw_qos);
@@ -228,7 +228,7 @@ public:
   using DataTypeSeq = typename Topic::OpenDDSDataTypeSeq;
 
   explicit OpenDDSSubscriber(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().opendds_participant()),
+  : m_participant(ResourceManager::get().opendds_participant(ec)),
     m_datareader(make_opendds_datareader(ec, m_participant)),
     m_condition(m_datareader->get_statuscondition())
   {
@@ -284,7 +284,7 @@ private:
   {
     DDS::Subscriber_ptr subscriber;
     DDS::DataReaderQos dr_qos;
-    ResourceManager::get().opendds_subscriber(subscriber, dr_qos);
+    ResourceManager::get().opendds_subscriber(ec, subscriber, dr_qos);
 
     OpenDdsQOSAdapter qos_adapter(ec.qos());
     qos_adapter.apply_dr(dr_qos);

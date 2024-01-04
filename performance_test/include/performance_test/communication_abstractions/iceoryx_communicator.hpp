@@ -31,8 +31,8 @@ namespace performance_test
 class IceoryxCommunicator
 {
 public:
-  IceoryxCommunicator() {
-    ResourceManager::get().init_iceoryx_runtime();
+  explicit IceoryxCommunicator(const ExperimentConfiguration & ec) {
+    ResourceManager::get().init_iceoryx_runtime(ec);
   }
 };
 
@@ -43,7 +43,8 @@ public:
   using DataType = typename Msg::RosType;
 
   explicit IceoryxPublisher(const ExperimentConfiguration & ec)
-  : m_publisher(
+  : IceoryxCommunicator(ec),
+    m_publisher(
       iox::capro::ServiceDescription{
         iox::into<iox::lossy<iox::capro::IdString_t>>(Msg::msg_name()),
         iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name()),
@@ -87,7 +88,8 @@ public:
   using DataType = typename Msg::RosType;
 
   explicit IceoryxSubscriber(const ExperimentConfiguration & ec)
-  : m_subscriber(
+  : IceoryxCommunicator(ec),
+    m_subscriber(
       iox::capro::ServiceDescription{
         iox::into<iox::lossy<iox::capro::IdString_t>>(Msg::msg_name()),
         iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name()),

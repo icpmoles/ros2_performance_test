@@ -18,6 +18,7 @@
 #include <dds/dds.h>
 #include <dds/ddsc/dds_loan_api.h>
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -116,7 +117,7 @@ public:
   using DataType = typename Msg::CycloneDDSType;
 
   explicit CycloneDDSPublisher(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_participant()),
+  : m_participant(ResourceManager::get().cyclonedds_participant(ec)),
     m_datawriter(create_datawriter(ec, m_participant)) {}
 
   void publish_copy(
@@ -193,7 +194,7 @@ public:
   using DataType = typename Msg::CycloneDDSType;
 
   explicit CycloneDDSSubscriber(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_participant()),
+  : m_participant(ResourceManager::get().cyclonedds_participant(ec)),
     m_datareader(create_datareader(ec, m_participant)),
     m_waitset(create_waitset(m_participant, m_datareader)) {}
 

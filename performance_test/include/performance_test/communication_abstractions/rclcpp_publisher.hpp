@@ -37,7 +37,7 @@ public:
 
   explicit RclcppPublisher(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_node(ResourceManager::get().rclcpp_node()),
+    m_node(ResourceManager::get().rclcpp_node(ec)),
     m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos()).get()),
     m_publisher(m_node->create_publisher<DataType>(
         ec.topic_name() + ec.pub_topic_postfix(),

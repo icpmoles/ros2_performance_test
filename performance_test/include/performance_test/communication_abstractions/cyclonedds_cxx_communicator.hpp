@@ -72,7 +72,7 @@ public:
   using DataType = typename Msg::CycloneDDSCXXType;
 
   explicit CycloneDDSCXXPublisher(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_cxx_participant()),
+  : m_participant(ResourceManager::get().cyclonedds_cxx_participant(ec)),
     m_publisher(m_participant),
     m_datawriter(make_cyclonedds_cxx_datawriter<DataType>(
         m_participant, m_publisher, ec))
@@ -144,7 +144,7 @@ public:
   using DataType = typename Msg::CycloneDDSCXXType;
 
   explicit CycloneDDSCXXSubscriber(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_cxx_participant()),
+  : m_participant(ResourceManager::get().cyclonedds_cxx_participant(ec)),
     m_subscriber(m_participant),
     m_datareader(make_cyclonedds_cxx_datareader<DataType>(
         m_participant, m_subscriber, ec)),

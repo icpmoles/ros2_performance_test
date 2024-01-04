@@ -46,7 +46,7 @@ void ResourceManager::shutdown()
 }
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node() const
+std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node(const ExperimentConfiguration & ec) const
 {
   /* Temporarely commented out until ROS2 waitsets are available. As of now every ROS2 thread needs a node in the
    * current architecture.
@@ -55,13 +55,13 @@ std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node() const
 //    std::lock_guard<std::mutex> lock(m_global_mutex);
 //    if(!m_node)
 //    {
-//      m_node = rclcpp::Node::make_shared("performance_test", "", m_ec.use_ros_shm());
+//      m_node = rclcpp::Node::make_shared("performance_test", "", ec.use_ros_shm());
 //    }
 //    return m_node;
 
   std::string rand_str;
   // if security is enabled
-  if (m_ec.is_with_security()) {
+  if (ec.is_with_security()) {
     static uint32_t id = 0;
     rand_str = std::to_string(id++);
   } else {
@@ -71,7 +71,7 @@ std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node() const
   auto options = rclcpp::NodeOptions();
 
   auto env_name = "ROS_DOMAIN_ID";
-  auto env_value = std::to_string(m_ec.dds_domain_id());
+  auto env_value = std::to_string(ec.dds_domain_id());
 #ifdef _WIN32
   _putenv_s(env_name, env_value.c_str());
 #else
@@ -84,7 +84,7 @@ std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node() const
 
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
 const ResourceManager::FastDDSGlobalResources & ResourceManager::fastdds_resources(
-  eprosima::fastdds::dds::TypeSupport type) const
+  const ExperimentConfiguration & ec, eprosima::fastdds::dds::TypeSupport type) const
 {
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
@@ -120,7 +120,7 @@ const ResourceManager::FastDDSGlobalResources & ResourceManager::fastdds_resourc
 
     pqos.name("performance_test_fastDDS");
 
-    m_fastdds_resources.participant = factory->create_participant(m_ec.dds_domain_id(), pqos);
+    m_fastdds_resources.participant = factory->create_participant(ec.dds_domain_id(), pqos);
     if (m_fastdds_resources.participant == nullptr) {
       throw std::runtime_error("failed to create participant");
     }
@@ -139,7 +139,7 @@ const ResourceManager::FastDDSGlobalResources & ResourceManager::fastdds_resourc
 
     type.register_type(m_fastdds_resources.participant);
 
-    auto topic_name = m_ec.topic_name() + m_ec.pub_topic_postfix();
+    auto topic_name = ec.topic_name() + ec.pub_topic_postfix();
     m_fastdds_resources.topic = m_fastdds_resources.participant->create_topic(
       topic_name, type->getName(), eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
     if (m_fastdds_resources.topic == nullptr) {
@@ -151,7 +151,8 @@ const ResourceManager::FastDDSGlobalResources & ResourceManager::fastdds_resourc
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-DDSDomainParticipant * ResourceManager::connext_DDS_micro_participant() const
+DDSDomainParticipant * ResourceManager::connext_DDS_micro_participant(
+  const ExperimentConfiguration & ec) const
 {
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
@@ -222,7 +223,7 @@ DDSDomainParticipant * ResourceManager::connext_DDS_micro_participant() const
     dp_qos.resource_limits.shmem_ref_transfer_mode_max_segments = 500;
 
     m_connext_dds_micro_participant = factory->create_participant(
-      (DDS_DomainId_t)m_ec.dds_domain_id(), dp_qos,
+      (DDS_DomainId_t)ec.dds_domain_id(), dp_qos,
       nullptr /* listener */, DDS_STATUS_MASK_NONE);
 
     if (m_connext_dds_micro_participant == nullptr) {
@@ -233,10 +234,11 @@ DDSDomainParticipant * ResourceManager::connext_DDS_micro_participant() const
 }
 
 void ResourceManager::connext_dds_micro_publisher(
+  const ExperimentConfiguration & ec,
   DDSPublisher * & publisher,
   DDS_DataWriterQos & dw_qos) const
 {
-  auto participant = connext_DDS_micro_participant();
+  auto participant = connext_DDS_micro_participant(ec);
   std::lock_guard<std::mutex> lock(m_global_mutex);
   publisher = participant->create_publisher(
     DDS_PUBLISHER_QOS_DEFAULT, nullptr, DDS_STATUS_MASK_NONE);
@@ -250,10 +252,11 @@ void ResourceManager::connext_dds_micro_publisher(
 }
 
 void ResourceManager::connext_dds_micro_subscriber(
+  const ExperimentConfiguration & ec,
   DDSSubscriber * & subscriber,
   DDS_DataReaderQos & dr_qos) const
 {
-  auto participant = connext_DDS_micro_participant();
+  auto participant = connext_DDS_micro_participant(ec);
   std::lock_guard<std::mutex> lock(m_global_mutex);
   subscriber = participant->create_subscriber(
     DDS_SUBSCRIBER_QOS_DEFAULT, nullptr,
@@ -269,13 +272,14 @@ void ResourceManager::connext_dds_micro_subscriber(
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-DDSDomainParticipant * ResourceManager::connext_dds_participant() const
+DDSDomainParticipant * ResourceManager::connext_dds_participant(
+  const ExperimentConfiguration & ec) const
 {
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
   if (!m_connext_dds_participant) {
     m_connext_dds_participant = DDSTheParticipantFactory->create_participant(
-      m_ec.dds_domain_id(), DDS_PARTICIPANT_QOS_DEFAULT,
+      ec.dds_domain_id(), DDS_PARTICIPANT_QOS_DEFAULT,
       NULL /* listener */, DDS_STATUS_MASK_NONE);
     if (m_connext_dds_participant == NULL) {
       throw std::runtime_error("Participant is nullptr");
@@ -285,10 +289,11 @@ DDSDomainParticipant * ResourceManager::connext_dds_participant() const
 }
 
 void ResourceManager::connext_dds_publisher(
+  const ExperimentConfiguration & ec,
   DDSPublisher * & publisher,
   DDS_DataWriterQos & dw_qos) const
 {
-  auto participant = connext_dds_participant();
+  auto participant = connext_dds_participant(ec);
   std::lock_guard<std::mutex> lock(m_global_mutex);
   publisher = participant->create_publisher(
     DDS_PUBLISHER_QOS_DEFAULT, nullptr, DDS_STATUS_MASK_NONE);
@@ -302,10 +307,11 @@ void ResourceManager::connext_dds_publisher(
 }
 
 void ResourceManager::connext_dds_subscriber(
+  const ExperimentConfiguration & ec,
   DDSSubscriber * & subscriber,
   DDS_DataReaderQos & dr_qos) const
 {
-  auto participant = connext_dds_participant();
+  auto participant = connext_dds_participant(ec);
   std::lock_guard<std::mutex> lock(m_global_mutex);
   subscriber = participant->create_subscriber(
     DDS_SUBSCRIBER_QOS_DEFAULT, nullptr,
@@ -321,40 +327,41 @@ void ResourceManager::connext_dds_subscriber(
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-dds_entity_t ResourceManager::cyclonedds_participant() const
+dds_entity_t ResourceManager::cyclonedds_participant(const ExperimentConfiguration & ec) const
 {
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
   if (!m_cyclonedds_participant) {
-    m_cyclonedds_participant = dds_create_participant(m_ec.dds_domain_id(), nullptr, nullptr);
+    m_cyclonedds_participant = dds_create_participant(ec.dds_domain_id(), nullptr, nullptr);
   }
   return m_cyclonedds_participant;
 }
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-dds::domain::DomainParticipant ResourceManager::cyclonedds_cxx_participant() const
+dds::domain::DomainParticipant ResourceManager::cyclonedds_cxx_participant(
+  const ExperimentConfiguration & ec) const
 {
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
   // CycloneDDS-CXX has its own reference-counting mechanism
   if (m_cyclonedds_cxx_participant.is_nil()) {
-    m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(m_ec.dds_domain_id());
+    m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(ec.dds_domain_id());
   }
   return m_cyclonedds_cxx_participant;
 }
 #endif
 
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-void ResourceManager::init_iceoryx_runtime() const
+void ResourceManager::init_iceoryx_runtime(const ExperimentConfiguration & ec) const
 {
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
   if (!m_iceoryx_initialized) {
     m_iceoryx_initialized = true;
-    if (m_ec.number_of_subscribers() == 0) {
+    if (ec.number_of_subscribers() == 0) {
       iox::runtime::PoshRuntime::initRuntime("iox-perf-test-pub");
-    } else if (m_ec.number_of_publishers() == 0) {
+    } else if (ec.number_of_publishers() == 0) {
       iox::runtime::PoshRuntime::initRuntime("iox-perf-test-sub");
     } else {
       iox::runtime::PoshRuntime::initRuntime("iox-perf-test-intra");
@@ -365,7 +372,7 @@ void ResourceManager::init_iceoryx_runtime() const
 
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
 DDS::DomainParticipant_ptr
-ResourceManager::opendds_participant() const
+ResourceManager::opendds_participant(const ExperimentConfiguration & ec) const
 {
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
@@ -383,7 +390,7 @@ ResourceManager::opendds_participant() const
     config->instances_.push_back(inst);
     OpenDDS::DCPS::TransportRegistry::instance()->global_config(config);
 
-    int domain = m_ec.dds_domain_id();
+    int domain = ec.dds_domain_id();
     bool multicast = true;
     unsigned int resend = 1;
     std::string partition, governance, permissions;
@@ -402,7 +409,7 @@ ResourceManager::opendds_participant() const
     DDS::DomainParticipantQos dp_qos;
     dpf->get_default_participant_qos(dp_qos);
     m_opendds_participant = dpf->create_participant(
-      m_ec.dds_domain_id(),
+      ec.dds_domain_id(),
       PARTICIPANT_QOS_DEFAULT,
       nullptr,
       OpenDDS::DCPS::DEFAULT_STATUS_MASK);
@@ -412,10 +419,11 @@ ResourceManager::opendds_participant() const
 
 void
 ResourceManager::opendds_publisher(
+  const ExperimentConfiguration & ec,
   DDS::Publisher_ptr & publisher,
   DDS::DataWriterQos & dw_qos) const
 {
-  DDS::DomainParticipant_ptr participant = opendds_participant();
+  DDS::DomainParticipant_ptr participant = opendds_participant(ec);
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
   publisher = participant->create_publisher(
@@ -436,10 +444,11 @@ ResourceManager::opendds_publisher(
 
 void
 ResourceManager::opendds_subscriber(
+  const ExperimentConfiguration & ec,
   DDS::Subscriber_ptr & subscriber,
   DDS::DataReaderQos & dr_qos) const
 {
-  DDS::DomainParticipant_ptr participant = opendds_participant();
+  DDS::DomainParticipant_ptr participant = opendds_participant(ec);
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
   subscriber = participant->create_subscriber(

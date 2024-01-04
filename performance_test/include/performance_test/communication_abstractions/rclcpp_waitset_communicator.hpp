@@ -37,7 +37,7 @@ public:
   using DataType = typename Msg::RosType;
 
   explicit RclcppWaitsetSubscriber(const ExperimentConfiguration & ec)
-  : m_node(ResourceManager::get().rclcpp_node()),
+  : m_node(ResourceManager::get().rclcpp_node(ec)),
     m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos()).get()),
     m_subscription(this->m_node->template create_subscription<DataType>(
         ec.topic_name() + ec.sub_topic_postfix(),

@@ -84,7 +84,7 @@ public:
   ResourceManager & operator=(ResourceManager &&) = delete;
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-  std::shared_ptr<rclcpp::Node> rclcpp_node() const;
+  std::shared_ptr<rclcpp::Node> rclcpp_node(const ExperimentConfiguration & ec) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
@@ -97,78 +97,99 @@ public:
   };
 
   /// Returns FastDDS resources.
-  const FastDDSGlobalResources & fastdds_resources(eprosima::fastdds::dds::TypeSupport type) const;
+  const FastDDSGlobalResources & fastdds_resources(
+    const ExperimentConfiguration & ec, eprosima::fastdds::dds::TypeSupport type) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-  DDSDomainParticipant * connext_DDS_micro_participant() const;
+  DDSDomainParticipant * connext_DDS_micro_participant(
+    const ExperimentConfiguration & ec) const;
 
   /**
    * \brief Creates a new Connext DDS Micro publisher.
    * \param publisher Will be overwritten with the created publisher.
    * \param dw_qos Will be overwritten with the default QOS from the created publisher.
    */
-  void connext_dds_micro_publisher(DDSPublisher * & publisher, DDS_DataWriterQos & dw_qos) const;
+  void connext_dds_micro_publisher(
+    const ExperimentConfiguration & ec,
+    DDSPublisher * & publisher,
+    DDS_DataWriterQos & dw_qos) const;
 
   /**
    * \brief Creates a new Connext DDS Micro subscriber.
    * \param subscriber Will be overwritten with the created subscriber.
    * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
    */
-  void connext_dds_micro_subscriber(DDSSubscriber * & subscriber, DDS_DataReaderQos & dr_qos) const;
+  void connext_dds_micro_subscriber(
+    const ExperimentConfiguration & ec,
+    DDSSubscriber * & subscriber,
+    DDS_DataReaderQos & dr_qos) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-  DDSDomainParticipant * connext_dds_participant() const;
+  DDSDomainParticipant * connext_dds_participant(const ExperimentConfiguration & ec) const;
 
   /**
    * \brief Creates a new Connext DDS publisher.
    * \param publisher Will be overwritten with the created publisher.
    * \param dw_qos Will be overwritten with the default QOS from the created publisher.
    */
-  void connext_dds_publisher(DDSPublisher * & publisher, DDS_DataWriterQos & dw_qos) const;
+  void connext_dds_publisher(
+    const ExperimentConfiguration & ec,
+    DDSPublisher * & publisher,
+    DDS_DataWriterQos & dw_qos) const;
 
   /**
    * \brief Creates a new Connext DDS subscriber.
    * \param subscriber Will be overwritten with the created subscriber.
    * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
    */
-  void connext_dds_subscriber(DDSSubscriber * & subscriber, DDS_DataReaderQos & dr_qos) const;
+  void connext_dds_subscriber(
+    const ExperimentConfiguration & ec,
+    DDSSubscriber * & subscriber,
+    DDS_DataReaderQos & dr_qos) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-  dds_entity_t cyclonedds_participant() const;
+  dds_entity_t cyclonedds_participant(const ExperimentConfiguration & ec) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-  dds::domain::DomainParticipant cyclonedds_cxx_participant() const;
+  dds::domain::DomainParticipant cyclonedds_cxx_participant(
+    const ExperimentConfiguration & ec) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-  void init_iceoryx_runtime() const;
+  void init_iceoryx_runtime(const ExperimentConfiguration & ec) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-  DDS::DomainParticipant_ptr opendds_participant() const;
+  DDS::DomainParticipant_ptr opendds_participant(const ExperimentConfiguration & ec) const;
 
   /**
    * \brief Creates a new OpenDDS publisher.
    * \param publisher Will be overwritten with the created publisher.
    * \param dw_qos Will be overwritten with the default QOS from the created publisher.
    */
-  void opendds_publisher(DDS::Publisher_ptr & publisher, DDS::DataWriterQos & dw_qos) const;
+  void opendds_publisher(
+    const ExperimentConfiguration & ec,
+    DDS::Publisher_ptr & publisher,
+    DDS::DataWriterQos & dw_qos) const;
 
   /**
    * \brief Creates a new OpenDDS subscriber.
    * \param subscriber Will be overwritten with the created subscriber.
    * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
    */
-  void opendds_subscriber(DDS::Subscriber_ptr & subscriber, DDS::DataReaderQos & dr_qos) const;
+  void opendds_subscriber(
+    const ExperimentConfiguration & ec,
+    DDS::Subscriber_ptr & subscriber,
+    DDS::DataReaderQos & dr_qos) const;
 #endif
 
 private:
   ResourceManager()
-  : m_ec(ExperimentConfiguration::get())
+  : m_unused(nullptr)
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
     , m_node(nullptr)
 #endif
@@ -191,7 +212,7 @@ private:
 #endif
   {}
 
-  const ExperimentConfiguration & m_ec;
+  const void * m_unused;
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   mutable std::shared_ptr<rclcpp::Node> m_node;

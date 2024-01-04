@@ -141,13 +141,13 @@ public:
 
   explicit RTIMicroDDSPublisher(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_participant(ResourceManager::get().connext_DDS_micro_participant()),
+    m_participant(ResourceManager::get().connext_DDS_micro_participant(ec)),
     m_datawriter(nullptr),
     m_topic(RTIMicroDDSTopicManager<Topic>::register_topic(m_participant, m_ec))
   {
     DDSPublisher * publisher;
     DDS_DataWriterQos dw_qos;
-    ResourceManager::get().connext_dds_micro_publisher(publisher, dw_qos);
+    ResourceManager::get().connext_dds_micro_publisher(ec, publisher, dw_qos);
 
     dw_qos.resource_limits.max_samples = 100;
     dw_qos.resource_limits.max_samples_per_instance = 100;
@@ -295,14 +295,14 @@ public:
 
   explicit RTIMicroDDSSubscriber(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_participant(ResourceManager::get().connext_DDS_micro_participant()),
+    m_participant(ResourceManager::get().connext_DDS_micro_participant(ec)),
     m_datareader(nullptr),
     m_typed_datareader(nullptr),
     m_topic(RTIMicroDDSTopicManager<Topic>::register_topic(m_participant, m_ec))
   {
     DDSSubscriber * subscriber = nullptr;
     DDS_DataReaderQos dr_qos;
-    ResourceManager::get().connext_dds_micro_subscriber(subscriber, dr_qos);
+    ResourceManager::get().connext_dds_micro_subscriber(ec, subscriber, dr_qos);
 
     dr_qos.resource_limits.max_samples = 100;
     dr_qos.resource_limits.max_instances = 1;
