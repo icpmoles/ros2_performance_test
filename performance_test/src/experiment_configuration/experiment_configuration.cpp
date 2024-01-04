@@ -107,13 +107,6 @@ ExperimentConfiguration::ExperimentConfiguration()
 void ExperimentConfiguration::setup(int argc, char ** argv)
 {
   bool print_msg_list = false;
-  bool reliable_qos = false;
-  std::string reliability_qos;
-  std::string durability_qos;
-  std::string history_qos;
-  bool transient_qos = false;
-  bool keep_last_qos = false;
-  uint32_t history_depth = 0;
   int32_t prio = 0;
   uint32_t cpus = 0;
   try {
@@ -288,17 +281,10 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     m_msg_name = msgArg.getValue();
     print_msg_list = msgListArg.getValue();
     m_dds_domain_id = ddsDomainIdArg.getValue();
-    reliable_qos = reliableArg.getValue();
-    reliability_qos = reliabilityArg.getValue();
-    durability_qos = durabilityArg.getValue();
-    history_qos = historyArg.getValue();
-    transient_qos = transientArg.getValue();
-    keep_last_qos = keepLastArg.getValue();
-    history_depth = historyDepthArg.getValue();
-    m_qos.reliability = qos_reliability_from_string(reliability_qos);
-    m_qos.durability = qos_durability_from_string(durability_qos);
-    m_qos.history_kind = qos_history_kind_from_string(history_qos);
-    m_qos.history_depth = history_depth;
+    m_qos.reliability = qos_reliability_from_string(reliabilityArg.getValue());
+    m_qos.durability = qos_durability_from_string(durabilityArg.getValue());
+    m_qos.history_kind = qos_history_kind_from_string(historyArg.getValue());
+    m_qos.history_depth = historyDepthArg.getValue();
     m_max_runtime = maxRuntimeArg.getValue();
     m_number_of_publishers = numPubsArg.getValue();
     m_number_of_subscribers = numSubsArg.getValue();

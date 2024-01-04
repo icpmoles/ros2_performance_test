@@ -2,6 +2,11 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Removed
+- Removed the deprecated CLI flags for QOS settings:
+  - Instead of `--reliable`, use `--reliability RELIABLE`
+  - Instead of `--transient`, use `--durability TRANSIENT_LOCAL`
+  - Instead of `--keep-last`, use `--history KEEP_LAST`
 ### Fixed
 - Update the Apex.OS Runner to use `executor_runner::deferred` instead of `executor_runner::deferred_tag()`
 
