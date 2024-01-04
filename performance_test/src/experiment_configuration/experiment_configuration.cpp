@@ -106,7 +106,6 @@ ExperimentConfiguration::ExperimentConfiguration()
 
 void ExperimentConfiguration::setup(int argc, char ** argv)
 {
-  std::string comm_str;
   bool print_msg_list = false;
   bool reliable_qos = false;
   std::string reliability_qos;
@@ -292,7 +291,7 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     cmd.parse(argc, argv);
 
     m_rate = rateArg.getValue();
-    comm_str = communicationArg.getValue();
+    m_com_mean = communication_mean_from_string(communicationArg.getValue());
     m_execution_strategy = execution_strategy_from_string(executionStrategyArg.getValue());
     m_topic_name = topicArg.getValue();
     m_msg_name = msgArg.getValue();
@@ -337,62 +336,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
       // application.
       exit(0);
     }
-
-#ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
-    if (comm_str == "rclcpp-single-threaded-executor") {
-      m_com_mean = CommunicationMean::RCLCPP_SINGLE_THREADED_EXECUTOR;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
-    if (comm_str == "rclcpp-static-single-threaded-executor") {
-      m_com_mean = CommunicationMean::RCLCPP_STATIC_SINGLE_THREADED_EXECUTOR;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-    if (comm_str == "rclcpp-waitset") {
-      m_com_mean = CommunicationMean::RCLCPP_WAITSET;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-    if (comm_str == "FastRTPS") {
-      m_com_mean = CommunicationMean::FASTRTPS;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-    if (comm_str == "ConnextDDSMicro") {
-      m_com_mean = CommunicationMean::CONNEXTDDSMICRO;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-    if (comm_str == "ConnextDDS") {
-      m_com_mean = CommunicationMean::CONNEXTDDS;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-    if (comm_str == "CycloneDDS") {
-      m_com_mean = CommunicationMean::CYCLONEDDS;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-    if (comm_str == "CycloneDDS-CXX") {
-      m_com_mean = CommunicationMean::CYCLONEDDS_CXX;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-    if (comm_str == "iceoryx") {
-      m_com_mean = CommunicationMean::ICEORYX;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-    if (comm_str == "OpenDDS") {
-      m_com_mean = CommunicationMean::OPENDDS;
-    }
-#endif
-#ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-    if (comm_str == "ApexOSPollingSubscription") {
-      m_com_mean = CommunicationMean::ApexOSPollingSubscription;
-    }
-#endif
 
     if (reliable_qos) {
       m_qos.reliability = QOSAbstraction::Reliability::RELIABLE;

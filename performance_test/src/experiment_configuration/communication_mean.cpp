@@ -79,4 +79,64 @@ std::string to_string(const CommunicationMean cm)
   throw std::invalid_argument("Enum value not supported!");
 }
 
+CommunicationMean communication_mean_from_string(const std::string & s)
+{
+#ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
+  if (s == "rclcpp-single-threaded-executor") {
+    return CommunicationMean::RCLCPP_SINGLE_THREADED_EXECUTOR;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
+  if (s == "rclcpp-static-single-threaded-executor") {
+    return CommunicationMean::RCLCPP_STATIC_SINGLE_THREADED_EXECUTOR;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
+  if (s == "rclcpp-waitset") {
+    return CommunicationMean::RCLCPP_WAITSET;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
+  if (s == "ApexOSPollingSubscription") {
+    return CommunicationMean::ApexOSPollingSubscription;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
+  if (s == "FastRTPS") {
+    return CommunicationMean::FASTRTPS;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
+  if (s == "ConnextDDSMicro") {
+    return CommunicationMean::CONNEXTDDSMICRO;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
+  if (s == "ConnextDDS") {
+    return CommunicationMean::CONNEXTDDS;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
+  if (s == "CycloneDDS") {
+    return CommunicationMean::CYCLONEDDS;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
+  if (s == "CycloneDDS-CXX") {
+    return CommunicationMean::CYCLONEDDS_CXX;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
+  if (s == "iceoryx") {
+    return CommunicationMean::ICEORYX;
+  }
+#endif
+#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
+  if (s == "OpenDDS") {
+    return CommunicationMean::OPENDDS;
+  }
+#endif
+  throw std::invalid_argument("Invalid round trip mode string!");
+}
+
 }  // namespace performance_test

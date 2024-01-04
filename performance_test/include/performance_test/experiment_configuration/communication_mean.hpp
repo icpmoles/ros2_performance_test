@@ -65,6 +65,8 @@ inline std::ostream & operator<<(std::ostream & stream, const CommunicationMean 
   return stream << to_string(cm);
 }
 
+CommunicationMean communication_mean_from_string(const std::string & s);
+
 }  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__COMMUNICATION_MEAN_HPP_
