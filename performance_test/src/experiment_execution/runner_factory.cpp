@@ -29,11 +29,11 @@ std::unique_ptr<Runner> RunnerFactory::get(const ExperimentConfiguration & ec)
 {
   if (ec.execution_strategy() == ExecutionStrategy::INTER_THREAD) {
     switch (ec.roundtrip_mode()) {
-      case ExperimentConfiguration::RoundTripMode::NONE:
+      case RoundTripMode::NONE:
         return std::make_unique<InterThreadRunner>(ec);
-      case ExperimentConfiguration::RoundTripMode::MAIN:
+      case RoundTripMode::MAIN:
         return std::make_unique<RoundTripMainRunner>(ec);
-      case ExperimentConfiguration::RoundTripMode::RELAY:
+      case RoundTripMode::RELAY:
         return std::make_unique<RoundTripRelayRunner>(ec);
     }
   }

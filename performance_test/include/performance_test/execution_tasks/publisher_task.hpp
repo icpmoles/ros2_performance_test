@@ -52,8 +52,7 @@ public:
     const std::chrono::nanoseconds reserve = m_next_run - perf_clock::now();
 
     if (reserve.count() > 0 &&
-      m_ec.roundtrip_mode() !=
-      ExperimentConfiguration::RoundTripMode::RELAY)
+      m_ec.roundtrip_mode() != RoundTripMode::RELAY)
     {
       std::this_thread::sleep_until(m_next_run);
     }

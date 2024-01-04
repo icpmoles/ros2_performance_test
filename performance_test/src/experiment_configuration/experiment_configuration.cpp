@@ -54,22 +54,6 @@ static void handle_sigint(int sig)
 namespace performance_test
 {
 
-std::string to_string(const ExperimentConfiguration::RoundTripMode e)
-{
-  if (e == ExperimentConfiguration::RoundTripMode::MAIN) {
-    return "MAIN";
-  } else if (e == ExperimentConfiguration::RoundTripMode::RELAY) {
-    return "RELAY";
-  } else {
-    return "NONE";
-  }
-}
-
-std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration::RoundTripMode & e)
-{
-  return stream << to_string(e);
-}
-
 std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration & e)
 {
   if (e.is_setup()) {
@@ -133,7 +117,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
   uint32_t history_depth = 0;
   int32_t prio = 0;
   uint32_t cpus = 0;
-  std::string roundtrip_mode_str;
   try {
     TCLAP::CmdLine cmd("Apex.AI performance_test");
 
@@ -277,11 +260,11 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     TCLAP::SwitchArg withSecurityArg("", "with-security",
       "Make nodes with deterministic names for use with security.", cmd, false);
 
-    std::vector<std::string> allowedRelayModes{{"None", "Main", "Relay"}};
-    TCLAP::ValuesConstraint<std::string> allowedRelayModeVals(allowedRelayModes);
-    TCLAP::ValueArg<std::string> relayModeArg("", "roundtrip-mode",
+    std::vector<std::string> allowedRoundTripModes{{"None", "Main", "Relay"}};
+    TCLAP::ValuesConstraint<std::string> allowedRoundTripModeVals(allowedRoundTripModes);
+    TCLAP::ValueArg<std::string> roundTripModeArg("", "roundtrip-mode",
       "Select the round trip mode. Default is None.", false, "None",
-      &allowedRelayModeVals, cmd);
+      &allowedRoundTripModeVals, cmd);
 
     TCLAP::ValueArg<uint32_t> ignoreArg("", "ignore",
       "Ignore the first N seconds of the experiment. Default is 0.", false, 0, "N", cmd);
@@ -329,7 +312,7 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     prio = useRtPrioArg.getValue();
     cpus = useRtCpusArg.getValue();
     m_with_security = withSecurityArg.getValue();
-    roundtrip_mode_str = relayModeArg.getValue();
+    m_roundtrip_mode = round_trip_mode_from_string(roundTripModeArg.getValue());
     m_rows_to_ignore = ignoreArg.getValue();
     m_expected_num_pubs = expectedNumPubsArg.getValue();
     m_expected_num_subs = expectedNumSubsArg.getValue();
@@ -470,18 +453,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
       if (!use_ros2_layers()) {
         throw std::invalid_argument("Only ROS2 supports security!");
       }
-    }
-
-    m_roundtrip_mode = RoundTripMode::NONE;
-    const auto mode = roundtrip_mode_str;
-    if (mode == "None") {
-      m_roundtrip_mode = RoundTripMode::NONE;
-    } else if (mode == "Main") {
-      m_roundtrip_mode = RoundTripMode::MAIN;
-    } else if (mode == "Relay") {
-      m_roundtrip_mode = RoundTripMode::RELAY;
-    } else {
-      throw std::invalid_argument("Invalid roundtrip mode: " + mode);
     }
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
@@ -650,7 +621,7 @@ bool ExperimentConfiguration::is_zero_copy_transfer() const
   return m_is_zero_copy_transfer;
 }
 
-ExperimentConfiguration::RoundTripMode ExperimentConfiguration::roundtrip_mode() const
+RoundTripMode ExperimentConfiguration::roundtrip_mode() const
 {
   check_setup();
   return m_roundtrip_mode;
@@ -671,9 +642,9 @@ std::string ExperimentConfiguration::pub_topic_postfix() const
 {
   check_setup();
   std::string fix;
-  if (m_roundtrip_mode == ExperimentConfiguration::RoundTripMode::MAIN) {
+  if (m_roundtrip_mode == RoundTripMode::MAIN) {
     fix = "main";
-  } else if (m_roundtrip_mode == ExperimentConfiguration::RoundTripMode::RELAY) {
+  } else if (m_roundtrip_mode == RoundTripMode::RELAY) {
     fix = "relay";
   }
   return fix;
@@ -683,9 +654,9 @@ std::string ExperimentConfiguration::sub_topic_postfix() const
 {
   check_setup();
   std::string fix;
-  if (m_roundtrip_mode == ExperimentConfiguration::RoundTripMode::MAIN) {
+  if (m_roundtrip_mode == RoundTripMode::MAIN) {
     fix = "relay";
-  } else if (m_roundtrip_mode == ExperimentConfiguration::RoundTripMode::RELAY) {
+  } else if (m_roundtrip_mode == RoundTripMode::RELAY) {
     fix = "main";
   }
   return fix;

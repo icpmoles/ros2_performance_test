@@ -151,8 +151,7 @@ public:
             ec.topic_name() + ec.sub_topic_postfix(),
             ROS2QOSAdapter(ec.qos()).get()))
   {
-    if (m_ec.roundtrip_mode() ==
-        ExperimentConfiguration::RoundTripMode::RELAY) {
+    if (m_ec.roundtrip_mode() == RoundTripMode::RELAY) {
       m_publisher.emplace(node.create_publisher<MsgType>(
           m_ec.topic_name() + m_ec.pub_topic_postfix(),
           ROS2QOSAdapter(m_ec.qos()).get()));
@@ -192,8 +191,7 @@ private:
                      typename std::remove_cv<
                          typename std::remove_reference<T>::type>::type>::value,
         "Parameter type passed to callback() does not match");
-    if (m_ec.roundtrip_mode() ==
-        ExperimentConfiguration::RoundTripMode::RELAY) {
+    if (m_ec.roundtrip_mode() == RoundTripMode::RELAY) {
       m_publisher.value()->publish(data);
     } else {
       m_stats.on_message_received(

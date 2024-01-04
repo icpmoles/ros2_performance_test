@@ -118,7 +118,7 @@ public:
       throw std::invalid_argument(
               "Intra-thread execution only works with loaned messages (zero copy).");
     }
-    if (ec.roundtrip_mode() != ExperimentConfiguration::RoundTripMode::NONE) {
+    if (ec.roundtrip_mode() != RoundTripMode::NONE) {
       throw std::invalid_argument(
               "Intra-thread execution only works with RoundTripMode NONE.");
     }

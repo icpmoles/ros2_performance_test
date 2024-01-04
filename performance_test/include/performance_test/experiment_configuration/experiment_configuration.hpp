@@ -27,6 +27,7 @@
 #include "performance_test/experiment_configuration/external_info_storage.hpp"
 #include "performance_test/experiment_configuration/output_configuration.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
+#include "performance_test/experiment_configuration/round_trip_mode.hpp"
 
 #if PERFORMANCE_TEST_RT_ENABLED
 #include "performance_test/utilities/rt_enabler.hpp"
@@ -59,13 +60,6 @@ public:
   ExperimentConfiguration & operator=(ExperimentConfiguration const &) = delete;
 
   ExperimentConfiguration & operator=(ExperimentConfiguration &&) = delete;
-
-  enum RoundTripMode
-  {
-    NONE,  /// No roundtrip. Samples are only sent from sender to reciever.
-    MAIN,  /// Sends packages to the relay and receives packages from the relay.
-    RELAY  /// Relays packages from MAIN back to MAIN.
-  };
 
   /// \brief Derives an experiment configuration from command line arguments.
   void setup(int argc, char ** argv);
@@ -164,8 +158,6 @@ private:
   OutputConfiguration m_output_configuration;
 };
 
-std::string to_string(const ExperimentConfiguration::RoundTripMode e);
-std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration::RoundTripMode & e);
 std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration & e);
 }  // namespace performance_test
 
