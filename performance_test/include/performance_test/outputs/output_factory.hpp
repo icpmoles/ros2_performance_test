@@ -1,4 +1,4 @@
-// Copyright 2021 Apex.AI, Inc.
+// Copyright 2023 Apex.AI, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,32 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__OUTPUTS__STDOUT_OUTPUT_HPP_
-#define PERFORMANCE_TEST__OUTPUTS__STDOUT_OUTPUT_HPP_
+#ifndef PERFORMANCE_TEST__OUTPUTS__OUTPUT_FACTORY_HPP_
+#define PERFORMANCE_TEST__OUTPUTS__OUTPUT_FACTORY_HPP_
 
-#include <iostream>
 #include <memory>
+#include <vector>
 
-#include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_configuration/output_configuration.hpp"
 #include "performance_test/outputs/output.hpp"
 
 namespace performance_test
 {
-
-class StdoutOutput : public Output
+class OutputFactory
 {
 public:
-  StdoutOutput() = default;
-  virtual ~StdoutOutput() = default;
-
-  void open(const ExperimentConfiguration & ec) override;
-  void update(const AnalysisResult & result) override;
-  void close() override;
-
-private:
-  bool m_refresh = false;
+  static std::vector<std::shared_ptr<Output>> get(const OutputConfiguration & config);
 };
-
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__OUTPUTS__STDOUT_OUTPUT_HPP_
+#endif  // PERFORMANCE_TEST__OUTPUTS__OUTPUT_FACTORY_HPP_

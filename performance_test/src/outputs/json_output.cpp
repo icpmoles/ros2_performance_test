@@ -22,8 +22,8 @@
 
 namespace performance_test
 {
-JsonOutput::JsonOutput()
-: m_ec(ExperimentConfiguration::get()), m_sb(), m_writer(m_sb)
+JsonOutput::JsonOutput(const std::string & logfile_path)
+: m_logfile_path(logfile_path), m_sb(), m_writer(m_sb)
 {
 }
 
@@ -32,20 +32,20 @@ JsonOutput::~JsonOutput()
   close();
 }
 
-void JsonOutput::open()
+void JsonOutput::open(const ExperimentConfiguration & ec)
 {
   // Each second, around 750 bytes are written to the buffer,
   // so 1024 should be more than enough to prevent reallocations
   // after the experiment has started
-  m_sb.Reserve(1024 * static_cast<size_t>(m_ec.max_runtime()));
+  m_sb.Reserve(1024 * static_cast<size_t>(ec.max_runtime()));
 
-  if (m_ec.is_setup() && !m_ec.logfile_name().empty()) {
-    m_os.open(m_ec.logfile_name(), std::ofstream::out);
+  if (ec.is_setup() && !m_logfile_path.empty()) {
+    m_os.open(m_logfile_path, std::ofstream::out);
 
-    std::cout << "Writing JSON output to: " << m_ec.logfile_name() << std::endl;
+    std::cout << "Writing JSON output to: " << m_logfile_path << std::endl;
 
     m_writer.StartObject();
-    write(m_ec);
+    write(ec);
 
     m_writer.String("analysis_results");
     m_writer.StartArray();

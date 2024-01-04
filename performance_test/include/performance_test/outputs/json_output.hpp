@@ -31,15 +31,15 @@ namespace performance_test
 class JsonOutput : public Output
 {
 public:
-  JsonOutput();
+  explicit JsonOutput(const std::string & logfile_path);
   virtual ~JsonOutput();
 
-  void open() override;
+  void open(const ExperimentConfiguration & ec) override;
   void update(const AnalysisResult & result) override;
   void close() override;
 
 private:
-  const ExperimentConfiguration & m_ec;
+  const std::string m_logfile_path;
   mutable std::ofstream m_os;
   rapidjson::StringBuffer m_sb;
   rapidjson::Writer<rapidjson::StringBuffer> m_writer;

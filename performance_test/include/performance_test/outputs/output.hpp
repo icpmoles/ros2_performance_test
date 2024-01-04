@@ -17,6 +17,7 @@
 
 #include <memory>
 
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/analysis_result.hpp"
 
 namespace performance_test
@@ -32,7 +33,7 @@ public:
   virtual ~Output() = default;
 
   /// @brief initialize the output
-  virtual void open() = 0;
+  virtual void open(const ExperimentConfiguration & ec) = 0;
 
   /// @brief update output with given result
   virtual void update(const AnalysisResult & result) = 0;

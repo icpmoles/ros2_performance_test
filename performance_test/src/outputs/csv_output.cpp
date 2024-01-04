@@ -22,25 +22,25 @@
 
 namespace performance_test
 {
-CsvOutput::CsvOutput()
-: m_ec(ExperimentConfiguration::get()) {}
+CsvOutput::CsvOutput(const std::string & logfile_path)
+: m_logfile_path(logfile_path) {}
 
 CsvOutput::~CsvOutput()
 {
   close();
 }
 
-void CsvOutput::open()
+void CsvOutput::open(const ExperimentConfiguration & ec)
 {
-  if (m_ec.is_setup() && !m_ec.logfile_name().empty()) {
-    m_os.open(m_ec.logfile_name(), std::ofstream::out);
+  if (ec.is_setup() && !m_logfile_path.empty()) {
+    m_os.open(m_logfile_path, std::ofstream::out);
     m_is_open = true;
 
-    std::cout << "Writing CSV output to: " << m_ec.logfile_name() << std::endl;
+    std::cout << "Writing CSV output to: " << m_logfile_path << std::endl;
 
     // write experiment details
-    m_os << m_ec;
-    m_os << m_ec.get_external_info().m_to_log;
+    m_os << ec;
+    m_os << ec.get_external_info().m_to_log;
     m_os << std::endl << std::endl;
 
     // write header

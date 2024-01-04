@@ -26,6 +26,7 @@
 #include "performance_test/experiment_metrics/publisher_stats.hpp"
 #include "performance_test/experiment_metrics/subscriber_stats.hpp"
 #include "performance_test/outputs/output.hpp"
+#include "performance_test/outputs/output_factory.hpp"
 #include "performance_test/utilities/cpu_usage_tracker.hpp"
 #include "performance_test/utilities/rt_enabler.hpp"
 
@@ -38,13 +39,11 @@ public:
   explicit Runner(const ExperimentConfiguration & ec)
   : m_ec(ec),
     m_pub_stats(ec.number_of_publishers()),
-    m_sub_stats(ec.number_of_subscribers())
+    m_sub_stats(ec.number_of_subscribers()),
+    m_outputs(OutputFactory::get(ec.output_configuration()))
   {
-    for (const auto & output : ec.configured_outputs()) {
-      m_outputs.push_back(output);
-    }
     for (const auto & output : m_outputs) {
-      output->open();
+      output->open(ec);
     }
   }
 

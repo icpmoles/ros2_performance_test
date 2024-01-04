@@ -27,15 +27,11 @@
 
 namespace performance_test
 {
-
-StdoutOutput::StdoutOutput()
-: m_ec(ExperimentConfiguration::get()) {}
-
-void StdoutOutput::open()
+void StdoutOutput::open(const ExperimentConfiguration & ec)
 {
   // write experiment details
-  std::cout << m_ec;
-  std::cout << m_ec.get_external_info().m_to_log;
+  std::cout << ec;
+  std::cout << ec.get_external_info().m_to_log;
   std::cout << std::endl << std::endl;
 }
 

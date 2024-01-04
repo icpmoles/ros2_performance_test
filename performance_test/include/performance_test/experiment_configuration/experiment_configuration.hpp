@@ -25,8 +25,8 @@
 #include "performance_test/experiment_configuration/communication_mean.hpp"
 #include "performance_test/experiment_configuration/execution_strategy.hpp"
 #include "performance_test/experiment_configuration/external_info_storage.hpp"
+#include "performance_test/experiment_configuration/output_configuration.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
-#include "performance_test/outputs/output.hpp"
 
 #if PERFORMANCE_TEST_RT_ENABLED
 #include "performance_test/utilities/rt_enabler.hpp"
@@ -65,13 +65,6 @@ public:
     NONE,  /// No roundtrip. Samples are only sent from sender to reciever.
     MAIN,  /// Sends packages to the relay and receives packages from the relay.
     RELAY  /// Relays packages from MAIN back to MAIN.
-  };
-
-  enum class SupportedOutput
-  {
-    STDOUT,  // print results to stdout in readable format
-    CSV,     // print results to file in csv format
-    JSON     // print results to file in json format
   };
 
   /// \brief Derives an experiment configuration from command line arguments.
@@ -117,10 +110,9 @@ public:
   std::string sub_topic_postfix() const;
   /// \returns Returns the randomly generated unique ID of the experiment.
   std::string id() const;
-  std::string logfile_name() const;
   size_t unbounded_msg_size() const;
-  const std::vector<std::shared_ptr<Output>> & configured_outputs() const;
   bool prevent_cpu_idle() const;
+  OutputConfiguration output_configuration() const;
   /// \return Returns true if the user requested the application to exit.
   bool exit_requested() const;
   /// Request the application to exit.
@@ -139,9 +131,6 @@ private:
 
   std::string m_id;
   bool m_is_setup;
-  std::string m_logfile;
-  std::string m_logfile_name;
-  std::vector<std::shared_ptr<Output>> m_configured_outputs{};
   CommunicationMean m_com_mean;
   ExecutionStrategy m_execution_strategy;
   uint32_t m_dds_domain_id;
@@ -171,6 +160,8 @@ private:
   std::string m_perf_test_version;
 
   ExternalInfoStorage m_external_info;
+
+  OutputConfiguration m_output_configuration;
 };
 
 std::string to_string(const ExperimentConfiguration::RoundTripMode e);

@@ -28,15 +28,15 @@ namespace performance_test
 class CsvOutput : public Output
 {
 public:
-  CsvOutput();
+  explicit CsvOutput(const std::string & logfile_path);
   virtual ~CsvOutput();
 
-  void open() override;
+  void open(const ExperimentConfiguration & ec) override;
   void update(const AnalysisResult & result) override;
   void close() override;
 
 private:
-  const ExperimentConfiguration & m_ec;
+  const std::string m_logfile_path;
   mutable std::ofstream m_os;
   bool m_is_open = false;
 };

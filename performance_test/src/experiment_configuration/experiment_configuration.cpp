@@ -30,7 +30,6 @@
 #include <iostream>
 #include <iomanip>
 #include <exception>
-#include <regex>
 #include <string>
 #include <vector>
 #include <memory>
@@ -77,7 +76,7 @@ std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration &
     return stream <<
            "Experiment id: " << e.id() <<
            "\nPerformance Test Version: " << e.perf_test_version() <<
-           "\nLogfile name: " << e.logfile_name() <<
+           "\nLogfile name: " << e.output_configuration().logfile_path <<
            "\nCommunication mean: " << e.com_mean() <<
            "\nRMW Implementation: " << e.rmw_implementation() <<
            "\nDDS domain id: " << e.dds_domain_id() <<
@@ -312,7 +311,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     m_rate = rateArg.getValue();
     comm_str = communicationArg.getValue();
     m_execution_strategy = execution_strategy_from_string(executionStrategyArg.getValue());
-    m_logfile_name = LogfileArg.getValue();
     m_topic_name = topicArg.getValue();
     m_msg_name = msgArg.getValue();
     print_msg_list = msgListArg.getValue();
@@ -339,28 +337,8 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     m_is_zero_copy_transfer = zeroCopyArg.getValue();
     m_unbounded_msg_size = unboundedMsgSizeArg.getValue();
     m_prevent_cpu_idle = preventCpuIdleArg.getValue();
-
-    // Configure outputs
-    if (printToConsoleArg.getValue()) {
-      std::cout << "WARNING: Printing to the console degrades the performance." << std::endl;
-      std::cout << "It is recommended to use a log file instead with --logfile." << std::endl;
-      m_configured_outputs.push_back(std::make_shared<StdoutOutput>());
-    }
-
-    if (!m_logfile_name.empty()) {
-      if (std::regex_match(m_logfile_name, std::regex(".*\\.csv$"))) {
-        m_configured_outputs.push_back(std::make_shared<CsvOutput>());
-      } else if (std::regex_match(m_logfile_name, std::regex(".*\\.json$"))) {
-        m_configured_outputs.push_back(std::make_shared<JsonOutput>());
-      } else {
-        std::cerr << "Unsupported log file type: " << m_logfile_name << std::endl;
-        std::terminate();
-      }
-    }
-
-    if (m_configured_outputs.empty()) {
-      std::cout << "WARNING: No output configured" << std::endl;
-    }
+    m_output_configuration.print_to_console = printToConsoleArg.getValue();
+    m_output_configuration.logfile_path = LogfileArg.getValue();
   } catch (TCLAP::ArgException & e) {
     std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
   }
@@ -718,19 +696,6 @@ std::string ExperimentConfiguration::id() const
   return m_id;
 }
 
-std::string ExperimentConfiguration::logfile_name() const
-{
-  check_setup();
-  return m_logfile_name;
-}
-
-const std::vector<std::shared_ptr<Output>> &
-ExperimentConfiguration::configured_outputs() const
-{
-  check_setup();
-  return m_configured_outputs;
-}
-
 size_t ExperimentConfiguration::unbounded_msg_size() const
 {
   check_setup();
@@ -747,6 +712,11 @@ void ExperimentConfiguration::check_setup() const
 bool ExperimentConfiguration::prevent_cpu_idle() const
 {
   return m_prevent_cpu_idle;
+}
+
+OutputConfiguration ExperimentConfiguration::output_configuration() const
+{
+  return m_output_configuration;
 }
 
 bool ExperimentConfiguration::exit_requested() const
