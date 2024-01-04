@@ -90,7 +90,7 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
   write("is_zero_copy_transfer", ec.is_zero_copy_transfer());
   write("is_shared_memory_transfer", ec.is_shared_memory_transfer());
   write("roundtrip_mode", to_string(ec.roundtrip_mode()));
-  write("is_rt_init_required", ec.is_rt_init_required());
+  write("is_rt_init_required", ec.rt_config().is_rt_init_required());
   for (const auto & kvp : ec.get_external_info().m_external_info) {
     write(("external_info_" + kvp.first).c_str(), kvp.second);
   }

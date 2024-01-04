@@ -20,12 +20,17 @@
 #include "performance_test/experiment_execution/runner.hpp"
 #include "performance_test/experiment_execution/runner_factory.hpp"
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
+#include "performance_test/utilities/rt_enabler.hpp"
 
 int main(int argc, char ** argv)
 {
   // parse arguments and set up experiment configuration
   auto & ec = performance_test::ExperimentConfiguration::get();
   ec.setup(argc, argv);
+
+  if (ec.rt_config().is_rt_init_required()) {
+    performance_test::pre_proc_rt_init(ec.rt_config().cpus, ec.rt_config().prio);
+  }
 
   if (ec.prevent_cpu_idle()) {
     performance_test::prevent_cpu_idle();
@@ -43,5 +48,10 @@ int main(int argc, char ** argv)
 #endif
 
   auto r = performance_test::RunnerFactory::get(ec);
+
+  if (ec.rt_config().is_rt_init_required()) {
+    performance_test::post_proc_rt_init();
+  }
+
   r->run();
 }

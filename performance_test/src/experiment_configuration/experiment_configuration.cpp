@@ -96,7 +96,6 @@ ExperimentConfiguration::ExperimentConfiguration()
   m_expected_num_subs(),
   m_wait_for_matched_timeout(),
   m_check_memory(false),
-  m_is_rt_init_required(false),
   m_is_zero_copy_transfer(false),
   m_prevent_cpu_idle(false),
   m_exit_requested(false),
@@ -107,8 +106,6 @@ ExperimentConfiguration::ExperimentConfiguration()
 void ExperimentConfiguration::setup(int argc, char ** argv)
 {
   bool print_msg_list = false;
-  int32_t prio = 0;
-  uint32_t cpus = 0;
   try {
     TCLAP::CmdLine cmd("Apex.AI performance_test");
 
@@ -289,8 +286,8 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     m_number_of_publishers = numPubsArg.getValue();
     m_number_of_subscribers = numSubsArg.getValue();
     m_check_memory = checkMemoryArg.getValue();
-    prio = useRtPrioArg.getValue();
-    cpus = useRtCpusArg.getValue();
+    m_rt_config.prio = useRtPrioArg.getValue();
+    m_rt_config.cpus = useRtCpusArg.getValue();
     m_with_security = withSecurityArg.getValue();
     m_roundtrip_mode = round_trip_mode_from_string(roundTripModeArg.getValue());
     m_rows_to_ignore = ignoreArg.getValue();
@@ -324,15 +321,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
 
     if (m_expected_num_pubs > 1) {
       throw std::invalid_argument("More than one publisher is not supported at the moment");
-    }
-
-    if (prio != 0 || cpus != 0) {
-#if PERFORMANCE_TEST_RT_ENABLED
-      pre_proc_rt_init(cpus, prio);
-      m_is_rt_init_required = true;
-#else
-      throw std::invalid_argument("Built with RT optimizations disabled");
-#endif
     }
 
     if (m_with_security) {
@@ -475,10 +463,10 @@ bool ExperimentConfiguration::check_memory() const
   return m_check_memory;
 }
 
-bool ExperimentConfiguration::is_rt_init_required() const
+RealTimeConfiguration ExperimentConfiguration::rt_config() const
 {
   check_setup();
-  return m_is_rt_init_required;
+  return m_rt_config;
 }
 
 bool ExperimentConfiguration::is_with_security() const

@@ -28,7 +28,6 @@
 #include "performance_test/outputs/output.hpp"
 #include "performance_test/outputs/output_factory.hpp"
 #include "performance_test/utilities/cpu_usage_tracker.hpp"
-#include "performance_test/utilities/rt_enabler.hpp"
 
 namespace performance_test
 {
@@ -57,12 +56,6 @@ public:
 
   void run()
   {
-#if PERFORMANCE_TEST_RT_ENABLED
-    if (m_ec.is_rt_init_required()) {
-      post_proc_rt_init();
-    }
-#endif  // PERFORMANCE_TEST_RT_ENABLED
-
     m_running = true;
 
     run_pubs_and_subs();

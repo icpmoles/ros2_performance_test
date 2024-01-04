@@ -27,11 +27,8 @@
 #include "performance_test/experiment_configuration/external_info_storage.hpp"
 #include "performance_test/experiment_configuration/output_configuration.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
+#include "performance_test/experiment_configuration/real_time_configuration.hpp"
 #include "performance_test/experiment_configuration/round_trip_mode.hpp"
-
-#if PERFORMANCE_TEST_RT_ENABLED
-#include "performance_test/utilities/rt_enabler.hpp"
-#endif
 
 namespace performance_test
 {
@@ -89,9 +86,7 @@ public:
   uint32_t expected_num_subs() const;
   std::chrono::seconds expected_wait_for_matched_timeout() const;
   bool check_memory() const;
-  /// \returns Returns if post-proc RT initialization is required. This is set when the cpu
-  /// affinity or thread priority is overridden by the caller.
-  bool is_rt_init_required() const;
+  RealTimeConfiguration rt_config() const;
   bool is_with_security() const;
   /// \returns Returns whether shared memory transfer is enabled.
   /// Only implemented for Apex.OS.
@@ -142,7 +137,7 @@ private:
   uint32_t m_expected_num_subs;
   uint32_t m_wait_for_matched_timeout;
   bool m_check_memory;
-  bool m_is_rt_init_required;
+  RealTimeConfiguration m_rt_config;
   bool m_with_security;
   bool m_is_zero_copy_transfer;
   bool m_prevent_cpu_idle;

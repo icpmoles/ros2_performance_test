@@ -74,6 +74,9 @@ inline bool proc_is_rt()
 /// \return 0 on success, throw an exception on error
 inline void post_proc_rt_init()
 {
+#ifndef PERFORMANCE_TEST_RT_ENABLED
+  throw std::invalid_argument("Built with RT optimizations disabled");
+#endif  // PERFORMANCE_TEST_RT_ENABLED
   int32_t res = 0;
 
   // void * buf = nullptr;
@@ -144,6 +147,9 @@ inline void post_proc_rt_init()
 /// \return 0 on success, throw an exception on error
 inline void pre_proc_rt_init(const uint32_t cpu_bit_mask_in, const int32_t prio)
 {
+#ifndef PERFORMANCE_TEST_RT_ENABLED
+  throw std::invalid_argument("Built with RT optimizations disabled");
+#endif  // PERFORMANCE_TEST_RT_ENABLED
   int32_t res = 0;
 
   uint32_t cpu_bit_mask = cpu_bit_mask_in;
