@@ -19,6 +19,7 @@
 #include <cmath>
 
 #include "performance_test/experiment_metrics/analysis_result.hpp"
+#include "performance_test/utilities/version.hpp"
 
 namespace performance_test
 {
@@ -70,7 +71,7 @@ void JsonOutput::close()
 void JsonOutput::write(const ExperimentConfiguration & ec)
 {
   write("id", ec.id());
-  write("perf_test_version", ec.perf_test_version());
+  write("perf_test_version", version());
   write("com_mean_str", to_string(ec.com_mean()));
   write("rmw_implementation", ec.rmw_implementation());
   write("dds_domain_id", ec.dds_domain_id());

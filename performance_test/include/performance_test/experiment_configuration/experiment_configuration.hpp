@@ -94,7 +94,6 @@ public:
   bool is_zero_copy_transfer() const;
   RoundTripMode roundtrip_mode() const;
   std::string rmw_implementation() const;
-  std::string perf_test_version() const;
   std::string pub_topic_postfix() const;
   std::string sub_topic_postfix() const;
   /// \returns Returns the randomly generated unique ID of the experiment.
@@ -141,7 +140,6 @@ private:
   RoundTripMode m_roundtrip_mode;
 
   std::string m_rmw_implementation;
-  std::string m_perf_test_version;
 
   ExternalInfoStorage m_external_info;
 

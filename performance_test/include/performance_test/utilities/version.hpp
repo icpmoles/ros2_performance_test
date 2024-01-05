@@ -15,10 +15,16 @@
 #ifndef PERFORMANCE_TEST__UTILITIES__VERSION_HPP_
 #define PERFORMANCE_TEST__UTILITIES__VERSION_HPP_
 
+namespace performance_test
+{
+inline const char * version()
+{
 #ifdef PERFORMANCE_TEST_VERSION
-const char * version = PERFORMANCE_TEST_VERSION;
+  return PERFORMANCE_TEST_VERSION;
 #else
-const char * version = "unknown";
+  return "unknown";
 #endif
+}
+}  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__UTILITIES__VERSION_HPP_

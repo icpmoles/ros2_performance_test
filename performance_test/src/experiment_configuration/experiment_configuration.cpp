@@ -49,7 +49,7 @@ std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration &
   if (e.is_setup()) {
     return stream <<
            "Experiment id: " << e.id() <<
-           "\nPerformance Test Version: " << e.perf_test_version() <<
+           "\nPerformance Test Version: " << version() <<
            "\nLogfile name: " << e.output_configuration().logfile_path <<
            "\nCommunication mean: " << e.com_mean() <<
            "\nRMW Implementation: " << e.rmw_implementation() <<
@@ -292,8 +292,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
   }
 
-  m_perf_test_version = version;
-
   try {
     if (print_msg_list) {
       for (const auto & s : messages::supported_msg_names()) {
@@ -490,11 +488,6 @@ std::string ExperimentConfiguration::rmw_implementation() const
 {
   check_setup();
   return m_rmw_implementation;
-}
-
-std::string ExperimentConfiguration::perf_test_version() const
-{
-  return m_perf_test_version;
 }
 
 std::string ExperimentConfiguration::pub_topic_postfix() const
