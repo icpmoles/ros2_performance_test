@@ -42,108 +42,71 @@ namespace performance_test
 class ExperimentConfiguration
 {
 public:
-  // Implementing the standard C++11 singleton pattern.
-  /// The singleton instance getter.
-  static ExperimentConfiguration & get()
-  {
-    static ExperimentConfiguration instance;
+  ExperimentConfiguration() = default;
+  ExperimentConfiguration(
+    CommunicationMean com_mean,
+    ExecutionStrategy execution_strategy,
+    uint32_t dds_domain_id,
+    const QOSAbstraction & qos,
+    uint32_t rate,
+    const std::string & topic_name,
+    const std::string & msg_name,
+    size_t unbounded_msg_size,
+    uint64_t max_runtime,
+    uint32_t rows_to_ignore,
+    uint32_t number_of_publishers,
+    uint32_t number_of_subscribers,
+    uint32_t expected_num_pubs,
+    uint32_t expected_num_subs,
+    uint32_t wait_for_matched_timeout,
+    bool check_memory,
+    RealTimeConfiguration rt_config,
+    bool with_security,
+    bool is_zero_copy_transfer,
+    bool prevent_cpu_idle,
+    RoundTripMode roundtrip_mode,
+    const OutputConfiguration & output_configuration
+  );
 
-    return instance;
-  }
+  std::string id;
+  CommunicationMean com_mean;
+  ExecutionStrategy execution_strategy;
+  uint32_t dds_domain_id;
+  QOSAbstraction qos;
+  uint32_t rate;
+  std::string topic_name;
+  std::string msg_name;
+  size_t unbounded_msg_size;
 
-  ExperimentConfiguration(ExperimentConfiguration const &) = delete;
-  ExperimentConfiguration(ExperimentConfiguration &&) = delete;
+  uint64_t max_runtime;
+  uint32_t rows_to_ignore;
+  uint32_t number_of_publishers;
+  uint32_t number_of_subscribers;
+  uint32_t expected_num_pubs;
+  uint32_t expected_num_subs;
+  std::chrono::seconds wait_for_matched_timeout;
+  bool check_memory;
+  RealTimeConfiguration rt_config;
+  bool with_security;
+  bool is_zero_copy_transfer;
+  bool prevent_cpu_idle;
 
-  ExperimentConfiguration & operator=(ExperimentConfiguration const &) = delete;
+  RoundTripMode roundtrip_mode;
+  OutputConfiguration output_configuration;
+  ExternalInfoStorage external_info;
 
-  ExperimentConfiguration & operator=(ExperimentConfiguration &&) = delete;
-
-  /// \brief Derives an experiment configuration from command line arguments.
-  void setup(int argc, char ** argv);
-  /// Returns if the experiment configuration is set up and ready to use.
-  /// Note that all of the following getter functions will throw an exception
-  /// if the ExperimentConfiguration is not set up.
-  bool is_setup() const;
-
-  CommunicationMean com_mean() const;
-  ExecutionStrategy execution_strategy() const;
   /// \returns Returns whether the ROS 2 layers are used by the communication mean.
   bool use_ros2_layers() const;
-  uint32_t dds_domain_id() const;
-  QOSAbstraction qos() const;
-  uint32_t rate() const;
   /// \returns Returns the inverse of the configured publishing rate.
   std::chrono::duration<double> period() const;
   /// \returns Returns the inverse of the configured publishing rate, in nanoseconds.
   std::chrono::nanoseconds period_ns() const;
-  std::string topic_name() const;
-  std::string msg_name() const;
-  uint64_t max_runtime() const;
-  uint32_t rows_to_ignore() const;
-  uint32_t number_of_publishers() const;
-  uint32_t number_of_subscribers() const;
-  uint32_t expected_num_pubs() const;
-  uint32_t expected_num_subs() const;
-  std::chrono::seconds expected_wait_for_matched_timeout() const;
-  bool check_memory() const;
-  RealTimeConfiguration rt_config() const;
-  bool is_with_security() const;
   /// \returns Returns whether shared memory transfer is enabled.
   /// Only implemented for Apex.OS.
   bool is_shared_memory_transfer() const;
-  bool is_zero_copy_transfer() const;
-  RoundTripMode roundtrip_mode() const;
   std::string rmw_implementation() const;
   std::string pub_topic_postfix() const;
   std::string sub_topic_postfix() const;
-  /// \returns Returns the randomly generated unique ID of the experiment.
-  std::string id() const;
-  size_t unbounded_msg_size() const;
-  bool prevent_cpu_idle() const;
-  OutputConfiguration output_configuration() const;
-
-  ExternalInfoStorage get_external_info() const
-  {
-    return m_external_info;
-  }
-
-private:
-  ExperimentConfiguration();
-
-  /// Throws std::runtime_error if the experiment is not set up.
-  void check_setup() const;
-
-  std::string m_id;
-  bool m_is_setup;
-  CommunicationMean m_com_mean;
-  ExecutionStrategy m_execution_strategy;
-  uint32_t m_dds_domain_id;
-  QOSAbstraction m_qos;
-  uint32_t m_rate;
-  std::string m_topic_name;
-  std::string m_msg_name;
-  size_t m_unbounded_msg_size;
-
-  uint64_t m_max_runtime;
-  uint32_t m_rows_to_ignore;
-  uint32_t m_number_of_publishers;
-  uint32_t m_number_of_subscribers;
-  uint32_t m_expected_num_pubs;
-  uint32_t m_expected_num_subs;
-  uint32_t m_wait_for_matched_timeout;
-  bool m_check_memory;
-  RealTimeConfiguration m_rt_config;
-  bool m_with_security;
-  bool m_is_zero_copy_transfer;
-  bool m_prevent_cpu_idle;
-
-  RoundTripMode m_roundtrip_mode;
-
-  std::string m_rmw_implementation;
-
-  ExternalInfoStorage m_external_info;
-
-  OutputConfiguration m_output_configuration;
 };
 
 std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration & e);

@@ -35,14 +35,14 @@ public:
   explicit DataEntityRunner(const ExperimentConfiguration & ec)
   : Runner(ec)
   {
-    for (uint32_t i = 0; i < m_ec.number_of_publishers(); ++i) {
+    for (uint32_t i = 0; i < m_ec.number_of_publishers; ++i) {
       m_pubs.push_back(
         std::make_shared<PublisherTask>(
           ec,
           m_pub_stats.at(i),
           CommunicatorFactory::get_publisher(ec)));
     }
-    for (uint32_t i = 0; i < m_ec.number_of_subscribers(); ++i) {
+    for (uint32_t i = 0; i < m_ec.number_of_subscribers; ++i) {
       m_subs.push_back(
         std::make_shared<SubscriberTask>(
           ec,
@@ -106,19 +106,19 @@ public:
   explicit IntraThreadRunner(const ExperimentConfiguration & ec)
   : DataEntityRunner(ec)
   {
-    if (ec.number_of_publishers() != 1) {
+    if (ec.number_of_publishers != 1) {
       throw std::invalid_argument(
               "Intra-thread execution requires exactly one publisher.");
     }
-    if (ec.number_of_subscribers() < 1) {
+    if (ec.number_of_subscribers < 1) {
       throw std::invalid_argument(
               "Intra-thread execution requires at least one subscriber.");
     }
-    if (!ec.is_zero_copy_transfer()) {
+    if (!ec.is_zero_copy_transfer) {
       throw std::invalid_argument(
               "Intra-thread execution only works with loaned messages (zero copy).");
     }
-    if (ec.roundtrip_mode() != RoundTripMode::NONE) {
+    if (ec.roundtrip_mode != RoundTripMode::NONE) {
       throw std::invalid_argument(
               "Intra-thread execution only works with RoundTripMode NONE.");
     }
@@ -156,15 +156,15 @@ public:
   explicit RoundTripMainRunner(const ExperimentConfiguration & ec)
   : InterThreadRunner(ec)
   {
-    if (ec.number_of_publishers() != 1) {
+    if (ec.number_of_publishers != 1) {
       throw std::invalid_argument(
               "Round-trip main requires exactly one publisher.");
     }
-    if (ec.number_of_subscribers() != 1) {
+    if (ec.number_of_subscribers != 1) {
       throw std::invalid_argument(
               "Round-trip main requires exactly one subscriber.");
     }
-    if (ec.is_zero_copy_transfer()) {
+    if (ec.is_zero_copy_transfer) {
       throw std::invalid_argument(
               "Round-trip main can not use loaned messages (zero copy).");
     }
@@ -181,15 +181,15 @@ public:
         CommunicatorFactory::get_publisher(ec),
         CommunicatorFactory::get_subscriber(ec)))
   {
-    if (ec.number_of_publishers() != 1) {
+    if (ec.number_of_publishers != 1) {
       throw std::invalid_argument(
               "Round-trip relay requires exactly one publisher.");
     }
-    if (ec.number_of_subscribers() != 1) {
+    if (ec.number_of_subscribers != 1) {
       throw std::invalid_argument(
               "Round-trip relay requires exactly one subscriber.");
     }
-    if (ec.is_zero_copy_transfer()) {
+    if (ec.is_zero_copy_transfer) {
       throw std::invalid_argument(
               "Round-trip relay can not use loaned messages (zero copy).");
     }

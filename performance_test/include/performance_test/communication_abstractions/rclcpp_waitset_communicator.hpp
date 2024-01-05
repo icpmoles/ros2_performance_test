@@ -38,9 +38,9 @@ public:
 
   explicit RclcppWaitsetSubscriber(const ExperimentConfiguration & ec)
   : m_node(ResourceManager::get().rclcpp_node(ec)),
-    m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos()).get()),
+    m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos).get()),
     m_subscription(this->m_node->template create_subscription<DataType>(
-        ec.topic_name() + ec.sub_topic_postfix(),
+        ec.topic_name + ec.sub_topic_postfix(),
         m_ROS2QOSAdapter,
         [](const typename DataType::SharedPtr) {})),
     m_timeout(std::max(
@@ -49,10 +49,10 @@ public:
   {
     m_waitset.add_subscription(m_subscription);
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-    if (ec.expected_num_pubs() > 0) {
+    if (ec.expected_num_pubs > 0) {
       m_subscription->wait_for_matched(
-        ec.expected_num_pubs(),
-        ec.expected_wait_for_matched_timeout());
+        ec.expected_num_pubs,
+        ec.wait_for_matched_timeout);
     }
 #endif
   }

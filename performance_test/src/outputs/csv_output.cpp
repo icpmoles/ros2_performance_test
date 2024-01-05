@@ -17,6 +17,7 @@
 #include <iomanip>
 #include <iostream>
 #include <memory>
+#include <string>
 
 #include "performance_test/experiment_metrics/analysis_result.hpp"
 
@@ -32,7 +33,7 @@ CsvOutput::~CsvOutput()
 
 void CsvOutput::open(const ExperimentConfiguration & ec)
 {
-  if (ec.is_setup() && !m_logfile_path.empty()) {
+  if (!m_logfile_path.empty()) {
     m_os.open(m_logfile_path, std::ofstream::out);
     m_is_open = true;
 
@@ -40,7 +41,7 @@ void CsvOutput::open(const ExperimentConfiguration & ec)
 
     // write experiment details
     m_os << ec;
-    m_os << ec.get_external_info().m_to_log;
+    m_os << ec.external_info.m_to_log;
     m_os << std::endl << std::endl;
 
     // write header

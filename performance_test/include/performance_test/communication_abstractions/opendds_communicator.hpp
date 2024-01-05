@@ -129,7 +129,7 @@ public:
     timeout.nanosec = 500;
 
     DDS::Topic_ptr topic = participant->find_topic(
-      ec.topic_name().c_str(),
+      ec.topic_name.c_str(),
       timeout);
 
     if (CORBA::is_nil(topic)) {
@@ -141,7 +141,7 @@ public:
         throw std::runtime_error("failed to register type");
       }
       topic = participant->create_topic(
-        ec.topic_name().c_str(),
+        ec.topic_name.c_str(),
         Topic::msg_name().c_str(),
         TOPIC_QOS_DEFAULT,
         nullptr,
@@ -199,7 +199,7 @@ private:
     DDS::DataWriterQos dw_qos;
     ResourceManager::get().opendds_publisher(ec, publisher, dw_qos);
 
-    OpenDdsQOSAdapter qos_adapter(ec.qos());
+    OpenDdsQOSAdapter qos_adapter(ec.qos);
     qos_adapter.apply_dw(dw_qos);
 
     DDS::DataWriter_ptr datawriter = publisher->create_datawriter(
@@ -286,7 +286,7 @@ private:
     DDS::DataReaderQos dr_qos;
     ResourceManager::get().opendds_subscriber(ec, subscriber, dr_qos);
 
-    OpenDdsQOSAdapter qos_adapter(ec.qos());
+    OpenDdsQOSAdapter qos_adapter(ec.qos);
     qos_adapter.apply_dr(dr_qos);
 
     DDS::DataReader_ptr datareader = subscriber->create_datareader(

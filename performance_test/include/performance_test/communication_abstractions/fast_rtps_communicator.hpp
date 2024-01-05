@@ -180,8 +180,8 @@ private:
     const ExperimentConfiguration & ec
   )
   {
-    const bool interprocess = ec.number_of_publishers() == 0 || ec.number_of_subscribers() == 0;
-    const FastRTPSQOSAdapter qos(ec.qos(), interprocess);
+    const bool interprocess = ec.number_of_publishers == 0 || ec.number_of_subscribers == 0;
+    const FastRTPSQOSAdapter qos(ec.qos, interprocess);
 
     eprosima::fastdds::dds::DataWriterQos wqos;
     resources.publisher->get_default_datawriter_qos(wqos);
@@ -225,7 +225,7 @@ private:
   std::enable_if_t<MsgTraits::has_unbounded_sequence_func<T>::value, void>
   init_unbounded_sequence(T & msg)
   {
-    msg.unbounded_sequence().resize(m_ec.unbounded_msg_size());
+    msg.unbounded_sequence().resize(m_ec.unbounded_msg_size);
   }
 
   template<typename T>
@@ -238,7 +238,7 @@ private:
   std::enable_if_t<MsgTraits::has_unbounded_string_func<T>::value, void>
   init_unbounded_string(T & msg)
   {
-    msg.unbounded_string().resize(m_ec.unbounded_msg_size());
+    msg.unbounded_string().resize(m_ec.unbounded_msg_size);
   }
 
   template<typename T>
@@ -298,8 +298,8 @@ private:
     const ExperimentConfiguration & ec
   )
   {
-    const bool interprocess = ec.number_of_publishers() == 0 || ec.number_of_subscribers() == 0;
-    const FastRTPSQOSAdapter qos(ec.qos(), interprocess);
+    const bool interprocess = ec.number_of_publishers == 0 || ec.number_of_subscribers == 0;
+    const FastRTPSQOSAdapter qos(ec.qos, interprocess);
 
     eprosima::fastdds::dds::DataReaderQos rqos;
     resources.subscriber->get_default_datareader_qos(rqos);

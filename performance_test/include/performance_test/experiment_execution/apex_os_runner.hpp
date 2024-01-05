@@ -36,14 +36,14 @@ public:
   explicit ApexOsRunner(const ExperimentConfiguration & ec)
   : Runner(ec)
   {
-    for (uint32_t i = 0; i < m_ec.number_of_publishers(); ++i) {
+    for (uint32_t i = 0; i < m_ec.number_of_publishers; ++i) {
       m_pubs.push_back(performance_test::ApexOsEntityFactory::get_publisher(
-          m_ec.msg_name(), m_pub_stats.at(i), m_ec));
+          m_ec.msg_name, m_pub_stats.at(i), m_ec));
     }
 
-    for (uint32_t i = 0; i < m_ec.number_of_subscribers(); ++i) {
+    for (uint32_t i = 0; i < m_ec.number_of_subscribers; ++i) {
       m_subs.push_back(performance_test::ApexOsEntityFactory::get_subscriber(
-          m_ec.msg_name(), m_sub_stats.at(i), m_ec));
+          m_ec.msg_name, m_sub_stats.at(i), m_ec));
     }
   }
 
@@ -108,19 +108,19 @@ public:
     m_executor(apex::executor::executor_factory::create()),
     m_runner(apex::executor::executor_runner::deferred, *m_executor)
   {
-    if (ec.number_of_publishers() != 1) {
+    if (ec.number_of_publishers != 1) {
       throw std::invalid_argument(
               "Intra-thread execution requires exactly one publisher.");
     }
-    if (ec.number_of_subscribers() < 1) {
+    if (ec.number_of_subscribers < 1) {
       throw std::invalid_argument(
               "Intra-thread execution requires at least one subscriber.");
     }
-    if (!ec.is_zero_copy_transfer()) {
+    if (!ec.is_zero_copy_transfer) {
       throw std::invalid_argument(
               "Intra-thread execution only works with loaned messages (zero copy).");
     }
-    if (ec.roundtrip_mode() != RoundTripMode::NONE) {
+    if (ec.roundtrip_mode != RoundTripMode::NONE) {
       throw std::invalid_argument(
               "Intra-thread execution only works with RoundTripMode NONE.");
     }

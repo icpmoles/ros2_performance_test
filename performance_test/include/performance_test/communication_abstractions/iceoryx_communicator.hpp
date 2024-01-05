@@ -47,7 +47,7 @@ public:
     m_publisher(
       iox::capro::ServiceDescription{
         iox::into<iox::lossy<iox::capro::IdString_t>>(Msg::msg_name()),
-        iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name()),
+        iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name),
         "Object"
       },
       iox::popo::PublisherOptions{}) {}
@@ -92,7 +92,7 @@ public:
     m_subscriber(
       iox::capro::ServiceDescription{
         iox::into<iox::lossy<iox::capro::IdString_t>>(Msg::msg_name()),
-        iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name()),
+        iox::into<iox::lossy<iox::capro::IdString_t>>(ec.topic_name),
         "Object"
       },
       subscriber_options(ec))
@@ -152,7 +152,7 @@ public:
 private:
   static iox::popo::SubscriberOptions subscriber_options(const ExperimentConfiguration & ec) {
     iox::popo::SubscriberOptions options;
-    options.queueCapacity = ec.qos().history_depth;
+    options.queueCapacity = ec.qos.history_depth;
     return options;
   }
 

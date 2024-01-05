@@ -160,18 +160,18 @@ private:
   )
   {
     dds_qos_t * dw_qos = dds_create_qos();
-    if (ec.is_zero_copy_transfer()) {
-      CycloneDDSIceoryxQOSAdapter qos_adapter(ec.qos());
+    if (ec.is_zero_copy_transfer) {
+      CycloneDDSIceoryxQOSAdapter qos_adapter(ec.qos);
       qos_adapter.apply(dw_qos);
     } else {
-      CycloneDDSQOSAdapter qos_adapter(ec.qos());
+      CycloneDDSQOSAdapter qos_adapter(ec.qos);
       qos_adapter.apply(dw_qos);
     }
 
     dds_entity_t topic = dds_create_topic(
       participant,
       Msg::CycloneDDSDesc(),
-      (ec.topic_name() + ec.pub_topic_postfix()).c_str(),
+      (ec.topic_name + ec.pub_topic_postfix()).c_str(),
       nullptr,
       nullptr);
 
@@ -236,18 +236,18 @@ private:
   )
   {
     dds_qos_t * dw_qos = dds_create_qos();
-    if (ec.is_zero_copy_transfer()) {
-      CycloneDDSIceoryxQOSAdapter qos_adapter(ec.qos());
+    if (ec.is_zero_copy_transfer) {
+      CycloneDDSIceoryxQOSAdapter qos_adapter(ec.qos);
       qos_adapter.apply(dw_qos);
     } else {
-      CycloneDDSQOSAdapter qos_adapter(ec.qos());
+      CycloneDDSQOSAdapter qos_adapter(ec.qos);
       qos_adapter.apply(dw_qos);
     }
 
     dds_entity_t topic = dds_create_topic(
       participant,
       Msg::CycloneDDSDesc(),
-      (ec.topic_name() + ec.sub_topic_postfix()).c_str(),
+      (ec.topic_name + ec.sub_topic_postfix()).c_str(),
       nullptr,
       nullptr);
 

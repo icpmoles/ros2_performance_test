@@ -39,7 +39,7 @@ void apply_cylonedds_cxx_qos(
   const ExperimentConfiguration & ec
 )
 {
-  const QOSAbstraction qos = ec.qos();
+  const QOSAbstraction qos = ec.qos;
 
   if (qos.reliability == QOSAbstraction::Reliability::BEST_EFFORT) {
     rw_qos.policy(dds::core::policy::Reliability::BestEffort());
@@ -77,7 +77,7 @@ public:
     m_datawriter(make_cyclonedds_cxx_datawriter<DataType>(
         m_participant, m_publisher, ec))
   {
-    if (ec.is_zero_copy_transfer() && !m_datawriter.delegate()->is_loan_supported()) {
+    if (ec.is_zero_copy_transfer && !m_datawriter.delegate()->is_loan_supported()) {
       throw std::runtime_error("Zero-copy transfer is not supported.");
     }
   }
@@ -118,7 +118,7 @@ private:
     const ExperimentConfiguration & ec
   )
   {
-    std::string topic_name = ec.topic_name() + ec.pub_topic_postfix();
+    std::string topic_name = ec.topic_name + ec.pub_topic_postfix();
     auto topic = dds::topic::Topic<DataType>(participant, topic_name);
 
     dds::pub::qos::DataWriterQos dw_qos = publisher.default_datawriter_qos();
@@ -202,7 +202,7 @@ private:
     const ExperimentConfiguration & ec
   )
   {
-    std::string topic_name = ec.topic_name() + ec.sub_topic_postfix();
+    std::string topic_name = ec.topic_name + ec.sub_topic_postfix();
     auto topic = dds::topic::Topic<DataType>(participant, topic_name);
 
     dds::sub::qos::DataReaderQos dr_qos = subscriber.default_datareader_qos();

@@ -15,7 +15,9 @@
 #include "performance_test/outputs/output_factory.hpp"
 
 #include <iostream>
+#include <memory>
 #include <regex>
+#include <vector>
 
 #include "performance_test/outputs/csv_output.hpp"
 #include "performance_test/outputs/stdout_output.hpp"

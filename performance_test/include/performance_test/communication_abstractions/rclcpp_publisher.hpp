@@ -38,16 +38,16 @@ public:
   explicit RclcppPublisher(const ExperimentConfiguration & ec)
   : m_ec(ec),
     m_node(ResourceManager::get().rclcpp_node(ec)),
-    m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos()).get()),
+    m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos).get()),
     m_publisher(m_node->create_publisher<DataType>(
-        ec.topic_name() + ec.pub_topic_postfix(),
+        ec.topic_name + ec.pub_topic_postfix(),
         m_ROS2QOSAdapter))
   {
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-    if (ec.expected_num_subs() > 0) {
+    if (ec.expected_num_subs > 0) {
       m_publisher->wait_for_matched(
-        ec.expected_num_subs(),
-        ec.expected_wait_for_matched_timeout());
+        ec.expected_num_subs,
+        ec.wait_for_matched_timeout);
     }
 #endif
   }
@@ -142,7 +142,7 @@ private:
   std::enable_if_t<MsgTraits::has_unbounded_sequence<T>::value, void>
   init_unbounded_sequence(T & msg)
   {
-    msg.unbounded_sequence.resize(m_ec.unbounded_msg_size());
+    msg.unbounded_sequence.resize(m_ec.unbounded_msg_size);
   }
 
   template<typename T>
@@ -155,7 +155,7 @@ private:
   std::enable_if_t<MsgTraits::has_unbounded_string<T>::value, void>
   init_unbounded_string(T & msg)
   {
-    msg.unbounded_string.resize(m_ec.unbounded_msg_size());
+    msg.unbounded_string.resize(m_ec.unbounded_msg_size);
   }
 
   template<typename T>

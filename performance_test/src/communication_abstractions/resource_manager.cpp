@@ -61,7 +61,7 @@ std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node(const ExperimentConfi
 
   std::string rand_str;
   // if security is enabled
-  if (ec.is_with_security()) {
+  if (ec.with_security) {
     static uint32_t id = 0;
     rand_str = std::to_string(id++);
   } else {
@@ -71,7 +71,7 @@ std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node(const ExperimentConfi
   auto options = rclcpp::NodeOptions();
 
   auto env_name = "ROS_DOMAIN_ID";
-  auto env_value = std::to_string(ec.dds_domain_id());
+  auto env_value = std::to_string(ec.dds_domain_id);
 #ifdef _WIN32
   _putenv_s(env_name, env_value.c_str());
 #else
@@ -120,7 +120,7 @@ const ResourceManager::FastDDSGlobalResources & ResourceManager::fastdds_resourc
 
     pqos.name("performance_test_fastDDS");
 
-    m_fastdds_resources.participant = factory->create_participant(ec.dds_domain_id(), pqos);
+    m_fastdds_resources.participant = factory->create_participant(ec.dds_domain_id, pqos);
     if (m_fastdds_resources.participant == nullptr) {
       throw std::runtime_error("failed to create participant");
     }
@@ -139,7 +139,7 @@ const ResourceManager::FastDDSGlobalResources & ResourceManager::fastdds_resourc
 
     type.register_type(m_fastdds_resources.participant);
 
-    auto topic_name = ec.topic_name() + ec.pub_topic_postfix();
+    auto topic_name = ec.topic_name + ec.pub_topic_postfix();
     m_fastdds_resources.topic = m_fastdds_resources.participant->create_topic(
       topic_name, type->getName(), eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
     if (m_fastdds_resources.topic == nullptr) {
@@ -223,7 +223,7 @@ DDSDomainParticipant * ResourceManager::connext_DDS_micro_participant(
     dp_qos.resource_limits.shmem_ref_transfer_mode_max_segments = 500;
 
     m_connext_dds_micro_participant = factory->create_participant(
-      (DDS_DomainId_t)ec.dds_domain_id(), dp_qos,
+      (DDS_DomainId_t)ec.dds_domain_id, dp_qos,
       nullptr /* listener */, DDS_STATUS_MASK_NONE);
 
     if (m_connext_dds_micro_participant == nullptr) {
@@ -279,7 +279,7 @@ DDSDomainParticipant * ResourceManager::connext_dds_participant(
 
   if (!m_connext_dds_participant) {
     m_connext_dds_participant = DDSTheParticipantFactory->create_participant(
-      ec.dds_domain_id(), DDS_PARTICIPANT_QOS_DEFAULT,
+      ec.dds_domain_id, DDS_PARTICIPANT_QOS_DEFAULT,
       NULL /* listener */, DDS_STATUS_MASK_NONE);
     if (m_connext_dds_participant == NULL) {
       throw std::runtime_error("Participant is nullptr");
@@ -332,7 +332,7 @@ dds_entity_t ResourceManager::cyclonedds_participant(const ExperimentConfigurati
   std::lock_guard<std::mutex> lock(m_global_mutex);
 
   if (!m_cyclonedds_participant) {
-    m_cyclonedds_participant = dds_create_participant(ec.dds_domain_id(), nullptr, nullptr);
+    m_cyclonedds_participant = dds_create_participant(ec.dds_domain_id, nullptr, nullptr);
   }
   return m_cyclonedds_participant;
 }
@@ -346,7 +346,7 @@ dds::domain::DomainParticipant ResourceManager::cyclonedds_cxx_participant(
 
   // CycloneDDS-CXX has its own reference-counting mechanism
   if (m_cyclonedds_cxx_participant.is_nil()) {
-    m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(ec.dds_domain_id());
+    m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(ec.dds_domain_id);
   }
   return m_cyclonedds_cxx_participant;
 }
@@ -359,9 +359,9 @@ void ResourceManager::init_iceoryx_runtime(const ExperimentConfiguration & ec) c
 
   if (!m_iceoryx_initialized) {
     m_iceoryx_initialized = true;
-    if (ec.number_of_subscribers() == 0) {
+    if (ec.number_of_subscribers == 0) {
       iox::runtime::PoshRuntime::initRuntime("iox-perf-test-pub");
-    } else if (ec.number_of_publishers() == 0) {
+    } else if (ec.number_of_publishers == 0) {
       iox::runtime::PoshRuntime::initRuntime("iox-perf-test-sub");
     } else {
       iox::runtime::PoshRuntime::initRuntime("iox-perf-test-intra");
@@ -390,7 +390,7 @@ ResourceManager::opendds_participant(const ExperimentConfiguration & ec) const
     config->instances_.push_back(inst);
     OpenDDS::DCPS::TransportRegistry::instance()->global_config(config);
 
-    int domain = ec.dds_domain_id();
+    int domain = ec.dds_domain_id;
     bool multicast = true;
     unsigned int resend = 1;
     std::string partition, governance, permissions;
@@ -409,7 +409,7 @@ ResourceManager::opendds_participant(const ExperimentConfiguration & ec) const
     DDS::DomainParticipantQos dp_qos;
     dpf->get_default_participant_qos(dp_qos);
     m_opendds_participant = dpf->create_participant(
-      ec.dds_domain_id(),
+      ec.dds_domain_id,
       PARTICIPANT_QOS_DEFAULT,
       nullptr,
       OpenDDS::DCPS::DEFAULT_STATUS_MASK);

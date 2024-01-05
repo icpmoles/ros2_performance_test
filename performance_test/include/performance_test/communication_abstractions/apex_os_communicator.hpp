@@ -42,18 +42,18 @@ public:
         m_ec(ec),
         m_stats(stats),
         m_publisher(node.create_publisher<MsgType>(
-            ec.topic_name() + ec.pub_topic_postfix(),
-            ROS2QOSAdapter(ec.qos()).get()))
+            ec.topic_name + ec.pub_topic_postfix(),
+            ROS2QOSAdapter(ec.qos).get()))
   {
-    if (m_ec.expected_num_subs() > 0) {
-      m_publisher->wait_for_matched(m_ec.expected_num_subs(),
-                                    m_ec.expected_wait_for_matched_timeout());
+    if (m_ec.expected_num_subs > 0) {
+      m_publisher->wait_for_matched(m_ec.expected_num_subs,
+                                    m_ec.wait_for_matched_timeout);
     }
   }
 
 private:
   void execute_impl() override {
-    if (m_ec.is_zero_copy_transfer()) {
+    if (m_ec.is_zero_copy_transfer) {
       if (!m_publisher->can_loan_messages()) {
         throw std::runtime_error(
             "RMW implementation does not support zero copy!");
@@ -111,7 +111,7 @@ private:
   std::enable_if_t<MsgTraits::has_unbounded_sequence<T>::value, void>
   init_unbounded_sequence(T & msg)
   {
-    msg.unbounded_sequence.resize(m_ec.unbounded_msg_size());
+    msg.unbounded_sequence.resize(m_ec.unbounded_msg_size);
   }
 
   template<typename T>
@@ -124,7 +124,7 @@ private:
   std::enable_if_t<MsgTraits::has_unbounded_string<T>::value, void>
   init_unbounded_string(T & msg)
   {
-    msg.unbounded_string.resize(m_ec.unbounded_msg_size());
+    msg.unbounded_string.resize(m_ec.unbounded_msg_size);
   }
 
   template<typename T>
@@ -148,21 +148,21 @@ public:
         m_ec(ec),
         m_stats(stats),
         m_subscription(node.template create_polling_subscription<MsgType>(
-            ec.topic_name() + ec.sub_topic_postfix(),
-            ROS2QOSAdapter(ec.qos()).get()))
+            ec.topic_name + ec.sub_topic_postfix(),
+            ROS2QOSAdapter(ec.qos).get()))
   {
-    if (m_ec.roundtrip_mode() == RoundTripMode::RELAY) {
+    if (m_ec.roundtrip_mode == RoundTripMode::RELAY) {
       m_publisher.emplace(node.create_publisher<MsgType>(
-          m_ec.topic_name() + m_ec.pub_topic_postfix(),
-          ROS2QOSAdapter(m_ec.qos()).get()));
+          m_ec.topic_name + m_ec.pub_topic_postfix(),
+          ROS2QOSAdapter(m_ec.qos).get()));
     }
 
-    if (this->m_ec.expected_num_pubs() > 0) {
+    if (this->m_ec.expected_num_pubs > 0) {
       m_subscription->wait_for_matched(
-          this->m_ec.expected_num_pubs(),
-          this->m_ec.expected_wait_for_matched_timeout(),
+          this->m_ec.expected_num_pubs,
+          this->m_ec.wait_for_matched_timeout,
           std::greater_equal<size_t>(), 0U, std::greater_equal<size_t>(),
-          std::chrono::milliseconds(10 * this->m_ec.number_of_subscribers()));
+          std::chrono::milliseconds(10 * this->m_ec.number_of_subscribers));
     }
   }
 
@@ -191,7 +191,7 @@ private:
                      typename std::remove_cv<
                          typename std::remove_reference<T>::type>::type>::value,
         "Parameter type passed to callback() does not match");
-    if (m_ec.roundtrip_mode() == RoundTripMode::RELAY) {
+    if (m_ec.roundtrip_mode == RoundTripMode::RELAY) {
       m_publisher.value()->publish(data);
     } else {
       m_stats.on_message_received(

@@ -31,7 +31,7 @@ void StdoutOutput::open(const ExperimentConfiguration & ec)
 {
   // write experiment details
   std::cout << ec;
-  std::cout << ec.get_external_info().m_to_log;
+  std::cout << ec.external_info.m_to_log;
   std::cout << std::endl << std::endl;
 }
 

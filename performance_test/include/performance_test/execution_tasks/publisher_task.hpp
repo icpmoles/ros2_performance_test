@@ -52,12 +52,12 @@ public:
     const std::chrono::nanoseconds reserve = m_next_run - perf_clock::now();
 
     if (reserve.count() > 0 &&
-      m_ec.roundtrip_mode() != RoundTripMode::RELAY)
+      m_ec.roundtrip_mode != RoundTripMode::RELAY)
     {
       std::this_thread::sleep_until(m_next_run);
     }
 
-    if (m_ec.is_zero_copy_transfer()) {
+    if (m_ec.is_zero_copy_transfer) {
       m_pub->publish_loaned(m_timestamp_provider, m_stats.next_sample_id());
     } else {
       m_pub->publish_copy(m_timestamp_provider, m_stats.next_sample_id());

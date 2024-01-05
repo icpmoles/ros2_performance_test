@@ -240,6 +240,7 @@ endif()
 
 
 set(sources
+    include/performance_test/cli/cli_parser.hpp
     include/performance_test/communication_abstractions/communicator.hpp
     include/performance_test/communication_abstractions/communicator_factory.hpp
     include/performance_test/communication_abstractions/resource_manager.hpp
@@ -276,6 +277,7 @@ set(sources
     include/performance_test/utilities/sample_statistics.hpp
     include/performance_test/utilities/spin_lock.hpp
     include/performance_test/utilities/version.hpp
+    src/cli/cli_parser.cpp
     src/communication_abstractions/communicator_factory.cpp
     src/communication_abstractions/resource_manager.cpp
     src/experiment_configuration/communication_mean.cpp

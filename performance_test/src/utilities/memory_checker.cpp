@@ -28,7 +28,7 @@ namespace performance_test
 MemoryChecker::MemoryChecker(const ExperimentConfiguration & ec)
 : m_memory_tools_on(false)
 {
-  if (ec.check_memory()) {
+  if (ec.check_memory) {
 #ifdef PERFORMANCE_TEST_MEMORYTOOLS_ENABLED
     osrf_testing_tools_cpp::memory_tools::initialize();
     osrf_testing_tools_cpp::memory_tools::enable_monitoring_in_all_threads();

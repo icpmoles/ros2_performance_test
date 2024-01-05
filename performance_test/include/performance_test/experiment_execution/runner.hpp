@@ -38,9 +38,9 @@ class Runner
 public:
   explicit Runner(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_pub_stats(ec.number_of_publishers()),
-    m_sub_stats(ec.number_of_subscribers()),
-    m_outputs(OutputFactory::get(ec.output_configuration()))
+    m_pub_stats(ec.number_of_publishers),
+    m_sub_stats(ec.number_of_subscribers),
+    m_outputs(OutputFactory::get(ec.output_configuration))
   {
     for (const auto & output : m_outputs) {
       output->open(ec);
@@ -117,7 +117,7 @@ private:
     auto time_elapsed_s =
       std::chrono::duration_cast<std::chrono::seconds>(time_elapsed).count();
 
-    return time_elapsed_s > m_ec.rows_to_ignore();
+    return time_elapsed_s > m_ec.rows_to_ignore;
   }
 
   bool check_exit(perf_clock::time_point experiment_start)
@@ -127,7 +127,7 @@ private:
       return true;
     }
 
-    if (m_ec.max_runtime() == 0) {
+    if (m_ec.max_runtime == 0) {
       // Run forever,
       return false;
     }
@@ -136,7 +136,7 @@ private:
       std::chrono::duration<double>(perf_clock::now() - experiment_start)
       .count();
 
-    if (runtime_sec > static_cast<double>(m_ec.max_runtime())) {
+    if (runtime_sec > static_cast<double>(m_ec.max_runtime)) {
       std::cout << "Maximum runtime reached. Exiting." << std::endl;
       return true;
     } else {

@@ -35,18 +35,18 @@ public:
 
   explicit RclcppCallbackSubscriber(const ExperimentConfiguration & ec)
   : m_node(ResourceManager::get().rclcpp_node(ec)),
-    m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos()).get()),
+    m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos).get()),
     m_subscription(m_node->create_subscription<DataType>(
-        ec.topic_name() + ec.sub_topic_postfix(),
+        ec.topic_name + ec.sub_topic_postfix(),
         m_ROS2QOSAdapter,
         [this](const typename DataType::SharedPtr data) {this->callback(data);}))
   {
     m_executor.add_node(this->m_node);
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-    if (ec.expected_num_pubs() > 0) {
+    if (ec.expected_num_pubs > 0) {
       m_subscription->wait_for_matched(
-        ec.expected_num_pubs(),
-        ec.expected_wait_for_matched_timeout());
+        ec.expected_num_pubs,
+        ec.wait_for_matched_timeout);
     }
 #endif
   }

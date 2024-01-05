@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__REAL_TIME_CONFIGURATION_HPP_
-#define PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__REAL_TIME_CONFIGURATION_HPP_
+#ifndef PERFORMANCE_TEST__CLI__CLI_PARSER_HPP_
+#define PERFORMANCE_TEST__CLI__CLI_PARSER_HPP_
 
-#include <ostream>
 #include <string>
+
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 
 namespace performance_test
 {
-struct RealTimeConfiguration
+class CLIParser
 {
-  int32_t prio;
-  uint32_t cpus;
-  bool is_rt_init_required() const
-  {
-    return prio != 0 || cpus != 0;
-  }
+public:
+  CLIParser(int argc, char ** argv);
+
+  mutable bool print_msg_list;
+  mutable ExperimentConfiguration experiment_configuration;
 };
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__EXPERIMENT_CONFIGURATION__REAL_TIME_CONFIGURATION_HPP_
+#endif  // PERFORMANCE_TEST__CLI__CLI_PARSER_HPP_

@@ -101,7 +101,7 @@ public:
       }
 
       m_topic = m_participant->create_topic(
-        m_ec.topic_name().c_str(),
+        m_ec.topic_name.c_str(),
         Topic::msg_name().c_str(),
         DDS_TOPIC_QOS_DEFAULT,
         nullptr,
@@ -151,7 +151,7 @@ public:
     dw_qos.resource_limits.max_instances = 1;
     dw_qos.resource_limits.initial_instances = 1;
 
-    ConnextDDSQOSAdapter qos_adapter(m_ec.qos());
+    ConnextDDSQOSAdapter qos_adapter(m_ec.qos);
     qos_adapter.apply(dw_qos);
 
     m_datawriter = publisher->create_datawriter(
@@ -233,7 +233,7 @@ public:
     dr_qos.reader_resource_limits.max_remote_writers = 10;
     dr_qos.reader_resource_limits.max_remote_writers_per_instance = 10;
 
-    ConnextDDSQOSAdapter qos_adapter(m_ec.qos());
+    ConnextDDSQOSAdapter qos_adapter(m_ec.qos);
     qos_adapter.apply(dr_qos);
 
     /* Only DDS_DATA_AVAILABLE_STATUS supported currently */

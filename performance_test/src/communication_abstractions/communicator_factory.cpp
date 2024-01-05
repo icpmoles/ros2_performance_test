@@ -75,63 +75,63 @@ std::shared_ptr<Publisher> CommunicatorFactory::get_publisher(
     messages::MessageTypeList(),
     [&ptr, &ec](const auto & msg_type) {
       using T = std::remove_cv_t<std::remove_reference_t<decltype(msg_type)>>;
-      if (T::msg_name() == ec.msg_name()) {
+      if (T::msg_name() == ec.msg_name) {
         if (ptr) {
           throw std::runtime_error(
             "It seems that two msgs have the same name");
         }
 #ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
-        if (ec.com_mean() == CommunicationMean::RCLCPP_SINGLE_THREADED_EXECUTOR) {
+        if (ec.com_mean == CommunicationMean::RCLCPP_SINGLE_THREADED_EXECUTOR) {
           ptr = std::make_shared<RclcppPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
-        if (ec.com_mean() == CommunicationMean::RCLCPP_STATIC_SINGLE_THREADED_EXECUTOR) {
+        if (ec.com_mean == CommunicationMean::RCLCPP_STATIC_SINGLE_THREADED_EXECUTOR) {
           ptr = std::make_shared<RclcppPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-        if (ec.com_mean() == CommunicationMean::RCLCPP_WAITSET) {
+        if (ec.com_mean == CommunicationMean::RCLCPP_WAITSET) {
           ptr = std::make_shared<RclcppPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-        if (ec.com_mean() == CommunicationMean::ApexOSPollingSubscription) {
+        if (ec.com_mean == CommunicationMean::ApexOSPollingSubscription) {
           ptr = std::make_shared<RclcppPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-        if (ec.com_mean() == CommunicationMean::FASTRTPS) {
+        if (ec.com_mean == CommunicationMean::FASTRTPS) {
           ptr = std::make_shared<FastRTPSPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-        if (ec.com_mean() == CommunicationMean::CONNEXTDDSMICRO) {
+        if (ec.com_mean == CommunicationMean::CONNEXTDDSMICRO) {
           ptr = std::make_shared<RTIMicroDDSPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-        if (ec.com_mean() == CommunicationMean::CONNEXTDDS) {
+        if (ec.com_mean == CommunicationMean::CONNEXTDDS) {
           ptr = std::make_shared<RTIDDSPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-        if (ec.com_mean() == CommunicationMean::CYCLONEDDS) {
+        if (ec.com_mean == CommunicationMean::CYCLONEDDS) {
           ptr = std::make_shared<CycloneDDSPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-        if (ec.com_mean() == CommunicationMean::CYCLONEDDS_CXX) {
+        if (ec.com_mean == CommunicationMean::CYCLONEDDS_CXX) {
           ptr = std::make_shared<CycloneDDSCXXPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-        if (ec.com_mean() == CommunicationMean::ICEORYX) {
+        if (ec.com_mean == CommunicationMean::ICEORYX) {
           ptr = std::make_shared<IceoryxPublisher<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-        if (ec.com_mean() == CommunicationMean::OPENDDS) {
+        if (ec.com_mean == CommunicationMean::OPENDDS) {
           ptr = std::make_shared<OpenDDSPublisher<T>>(ec);
         }
 #endif
@@ -153,63 +153,63 @@ std::shared_ptr<Subscriber> CommunicatorFactory::get_subscriber(
     messages::MessageTypeList(),
     [&ptr, &ec](const auto & msg_type) {
       using T = std::remove_cv_t<std::remove_reference_t<decltype(msg_type)>>;
-      if (T::msg_name() == ec.msg_name()) {
+      if (T::msg_name() == ec.msg_name) {
         if (ptr) {
           throw std::runtime_error(
             "It seems that two msgs have the same name");
         }
 #ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
-        if (ec.com_mean() == CommunicationMean::RCLCPP_SINGLE_THREADED_EXECUTOR) {
+        if (ec.com_mean == CommunicationMean::RCLCPP_SINGLE_THREADED_EXECUTOR) {
           ptr = std::make_shared<RclcppSingleThreadedExecutorSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
-        if (ec.com_mean() == CommunicationMean::RCLCPP_STATIC_SINGLE_THREADED_EXECUTOR) {
+        if (ec.com_mean == CommunicationMean::RCLCPP_STATIC_SINGLE_THREADED_EXECUTOR) {
           ptr = std::make_shared<RclcppStaticSingleThreadedExecutorSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-        if (ec.com_mean() == CommunicationMean::RCLCPP_WAITSET) {
+        if (ec.com_mean == CommunicationMean::RCLCPP_WAITSET) {
           ptr = std::make_shared<RclcppWaitsetSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-        if (ec.com_mean() == CommunicationMean::ApexOSPollingSubscription) {
+        if (ec.com_mean == CommunicationMean::ApexOSPollingSubscription) {
           ptr = std::make_shared<ApexOSPollingSubscriptionSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-        if (ec.com_mean() == CommunicationMean::FASTRTPS) {
+        if (ec.com_mean == CommunicationMean::FASTRTPS) {
           ptr = std::make_shared<FastRTPSSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-        if (ec.com_mean() == CommunicationMean::CONNEXTDDSMICRO) {
+        if (ec.com_mean == CommunicationMean::CONNEXTDDSMICRO) {
           ptr = std::make_shared<RTIMicroDDSSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-        if (ec.com_mean() == CommunicationMean::CONNEXTDDS) {
+        if (ec.com_mean == CommunicationMean::CONNEXTDDS) {
           ptr = std::make_shared<RTIDDSSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-        if (ec.com_mean() == CommunicationMean::CYCLONEDDS) {
+        if (ec.com_mean == CommunicationMean::CYCLONEDDS) {
           ptr = std::make_shared<CycloneDDSSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-        if (ec.com_mean() == CommunicationMean::CYCLONEDDS_CXX) {
+        if (ec.com_mean == CommunicationMean::CYCLONEDDS_CXX) {
           ptr = std::make_shared<CycloneDDSCXXSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-        if (ec.com_mean() == CommunicationMean::ICEORYX) {
+        if (ec.com_mean == CommunicationMean::ICEORYX) {
           ptr = std::make_shared<IceoryxSubscriber<T>>(ec);
         }
 #endif
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-        if (ec.com_mean() == CommunicationMean::OPENDDS) {
+        if (ec.com_mean == CommunicationMean::OPENDDS) {
           ptr = std::make_shared<OpenDDSSubscriber<T>>(ec);
         }
 #endif

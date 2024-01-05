@@ -38,9 +38,9 @@ void JsonOutput::open(const ExperimentConfiguration & ec)
   // Each second, around 750 bytes are written to the buffer,
   // so 1024 should be more than enough to prevent reallocations
   // after the experiment has started
-  m_sb.Reserve(1024 * static_cast<size_t>(ec.max_runtime()));
+  m_sb.Reserve(1024 * static_cast<size_t>(ec.max_runtime));
 
-  if (ec.is_setup() && !m_logfile_path.empty()) {
+  if (!m_logfile_path.empty()) {
     m_os.open(m_logfile_path, std::ofstream::out);
 
     std::cout << "Writing JSON output to: " << m_logfile_path << std::endl;
@@ -70,29 +70,29 @@ void JsonOutput::close()
 
 void JsonOutput::write(const ExperimentConfiguration & ec)
 {
-  write("id", ec.id());
+  write("id", ec.id);
   write("perf_test_version", version());
-  write("com_mean_str", to_string(ec.com_mean()));
+  write("com_mean_str", to_string(ec.com_mean));
   write("rmw_implementation", ec.rmw_implementation());
-  write("dds_domain_id", ec.dds_domain_id());
-  write("qos_reliability", to_string(ec.qos().reliability));
-  write("qos_durability", to_string(ec.qos().durability));
-  write("qos_history_kind", to_string(ec.qos().history_kind));
-  write("qos_history_depth", ec.qos().history_depth);
-  write("execution_strategy", to_string(ec.execution_strategy()));
-  write("rate", ec.rate());
-  write("topic_name", ec.topic_name());
-  write("msg_name", ec.msg_name());
-  write("max_runtime", ec.max_runtime());
-  write("number_of_publishers", ec.number_of_publishers());
-  write("number_of_subscribers", ec.number_of_subscribers());
-  write("check_memory", ec.check_memory());
-  write("with_security", ec.is_with_security());
-  write("is_zero_copy_transfer", ec.is_zero_copy_transfer());
+  write("dds_domain_id", ec.dds_domain_id);
+  write("qos_reliability", to_string(ec.qos.reliability));
+  write("qos_durability", to_string(ec.qos.durability));
+  write("qos_history_kind", to_string(ec.qos.history_kind));
+  write("qos_history_depth", ec.qos.history_depth);
+  write("execution_strategy", to_string(ec.execution_strategy));
+  write("rate", ec.rate);
+  write("topic_name", ec.topic_name);
+  write("msg_name", ec.msg_name);
+  write("max_runtime", ec.max_runtime);
+  write("number_of_publishers", ec.number_of_publishers);
+  write("number_of_subscribers", ec.number_of_subscribers);
+  write("check_memory", ec.check_memory);
+  write("with_security", ec.with_security);
+  write("is_zero_copy_transfer", ec.is_zero_copy_transfer);
   write("is_shared_memory_transfer", ec.is_shared_memory_transfer());
-  write("roundtrip_mode", to_string(ec.roundtrip_mode()));
-  write("is_rt_init_required", ec.rt_config().is_rt_init_required());
-  for (const auto & kvp : ec.get_external_info().m_external_info) {
+  write("roundtrip_mode", to_string(ec.roundtrip_mode));
+  write("is_rt_init_required", ec.rt_config.is_rt_init_required());
+  for (const auto & kvp : ec.external_info.m_external_info) {
     write(("external_info_" + kvp.first).c_str(), kvp.second);
   }
 }

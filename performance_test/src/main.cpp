@@ -16,24 +16,31 @@
 #include <rclcpp/rclcpp.hpp>
 #endif
 
-#include "performance_test/experiment_configuration/experiment_configuration.hpp"
-#include "performance_test/experiment_execution/runner.hpp"
+#include "performance_test/cli/cli_parser.hpp"
 #include "performance_test/experiment_execution/runner_factory.hpp"
+#include "performance_test/generated_messages/messages.hpp"
 #include "performance_test/utilities/exit_request_handler.hpp"
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
 #include "performance_test/utilities/rt_enabler.hpp"
 
 int main(int argc, char ** argv)
 {
-  // parse arguments and set up experiment configuration
-  auto & ec = performance_test::ExperimentConfiguration::get();
-  ec.setup(argc, argv);
+  performance_test::CLIParser parser(argc, argv);
 
-  if (ec.rt_config().is_rt_init_required()) {
-    performance_test::pre_proc_rt_init(ec.rt_config().cpus, ec.rt_config().prio);
+  if (parser.print_msg_list) {
+    for (const auto & s : performance_test::messages::supported_msg_names()) {
+      std::cout << s << std::endl;
+    }
+    return 0;
   }
 
-  if (ec.prevent_cpu_idle()) {
+  auto ec = parser.experiment_configuration;
+
+  if (ec.rt_config.is_rt_init_required()) {
+    performance_test::pre_proc_rt_init(ec.rt_config.cpus, ec.rt_config.prio);
+  }
+
+  if (ec.prevent_cpu_idle) {
     performance_test::prevent_cpu_idle();
   }
 
@@ -52,7 +59,7 @@ int main(int argc, char ** argv)
 
   auto r = performance_test::RunnerFactory::get(ec);
 
-  if (ec.rt_config().is_rt_init_required()) {
+  if (ec.rt_config.is_rt_init_required()) {
     performance_test::post_proc_rt_init();
   }
 

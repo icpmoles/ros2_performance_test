@@ -1,0 +1,239 @@
+// Copyright 2023 Apex.AI, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include "performance_test/cli/cli_parser.hpp"
+
+#include <string>
+#include <vector>
+
+#include <tclap/CmdLine.h>
+
+#include "performance_test/generated_messages/messages.hpp"
+
+namespace performance_test
+{
+
+CLIParser::CLIParser(int argc, char ** argv)
+{
+  try {
+    TCLAP::CmdLine cmd("Apex.AI performance_test");
+
+    TCLAP::SwitchArg printToConsoleArg("", "print-to-console",
+      "Print metrics to console.", cmd, false);
+
+    TCLAP::ValueArg<std::string> LogfileArg("l", "logfile",
+      "Specify the name of the log file, e.g. -l \"log_$(date +%F_%H-%M-%S).json\"."
+      " Supported formats: csv, json", false, "", "name", cmd);
+
+    TCLAP::ValueArg<uint32_t> rateArg("r", "rate",
+      "The publishing rate. 0 means publish as fast as possible. "
+      "Default is 1000.", false, 1000, "N", cmd);
+
+    std::vector<std::string> allowedCommunications;
+
+#ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
+    allowedCommunications.push_back("rclcpp-single-threaded-executor");
+#endif
+#ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
+    allowedCommunications.push_back("rclcpp-static-single-threaded-executor");
+#endif
+#ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
+    allowedCommunications.push_back("rclcpp-waitset");
+#endif
+#ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
+    allowedCommunications.push_back("ApexOSPollingSubscription");
+#endif
+#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
+    allowedCommunications.push_back("FastRTPS");
+#endif
+#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
+    allowedCommunications.push_back("ConnextDDSMicro");
+#endif
+#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
+    allowedCommunications.push_back("ConnextDDS");
+#endif
+#ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
+    allowedCommunications.push_back("CycloneDDS");
+#endif
+#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
+    allowedCommunications.push_back("CycloneDDS-CXX");
+#endif
+#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
+    allowedCommunications.push_back("iceoryx");
+#endif
+#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
+    allowedCommunications.push_back("OpenDDS");
+#endif
+    TCLAP::ValuesConstraint<std::string> allowedCommunicationVals(allowedCommunications);
+    TCLAP::ValueArg<std::string> communicationArg("c", "communication",
+      "The communication plugin to use. "
+      "Default is " + allowedCommunications[0] + ".", false, allowedCommunications[0],
+      &allowedCommunicationVals, cmd);
+
+    std::vector<std::string> allowedExecStrats;
+    allowedExecStrats.push_back("INTER_THREAD");
+    allowedExecStrats.push_back("INTRA_THREAD");
+#ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
+    allowedExecStrats.push_back("APEX_SINGLE_EXECUTOR");
+    allowedExecStrats.push_back("APEX_EXECUTOR_PER_COMMUNICATOR");
+    allowedExecStrats.push_back("APEX_CHAIN");
+#endif
+    TCLAP::ValuesConstraint<std::string> allowedExecStratVals(allowedExecStrats);
+    TCLAP::ValueArg<std::string> executionStrategyArg("e", "execution-strategy",
+      "The execution strategy to use. "
+      "Default is " + allowedExecStrats[0] + ".", false, allowedExecStrats[0],
+      &allowedExecStratVals, cmd);
+
+    TCLAP::ValueArg<std::string> topicArg("t", "topic", "The topic name. Default is test_topic.",
+      false, "test_topic", "topic", cmd);
+
+    std::vector<std::string> allowedMsgs = messages::supported_msg_names();
+    TCLAP::ValuesConstraint<std::string> allowedMsgVals(allowedMsgs);
+    TCLAP::ValueArg<std::string> msgArg("m", "msg",
+      "The message type. Use --msg-list to list the options. "
+      "Default is " + allowedMsgs[0] + ".", false, allowedMsgs[0], &allowedMsgVals, cmd);
+
+    TCLAP::SwitchArg msgListArg("", "msg-list",
+      "Print the list of available msg types and exit.", cmd, false);
+
+    TCLAP::ValueArg<uint32_t> ddsDomainIdArg("", "dds-domain_id",
+      "The DDS domain id. Default is 0.", false, 0, "id", cmd);
+
+    std::vector<std::string> allowedReliabilityArgs{"RELIABLE", "BEST_EFFORT"};
+    TCLAP::ValuesConstraint<std::string> allowedReliabilityArgsVals(allowedReliabilityArgs);
+    TCLAP::ValueArg<std::string> reliabilityArg("", "reliability",
+      "The QOS Reliability type. Default is BEST_EFFORT.", false, "BEST_EFFORT",
+      &allowedReliabilityArgsVals, cmd);
+
+    std::vector<std::string> allowedDurabilityArgs{"TRANSIENT_LOCAL", "VOLATILE"};
+    TCLAP::ValuesConstraint<std::string> allowedDurabilityArgsVals(allowedDurabilityArgs);
+    TCLAP::ValueArg<std::string> durabilityArg("", "durability",
+      "The QOS Durability type. Default is VOLATILE.", false, "VOLATILE",
+      &allowedDurabilityArgsVals, cmd);
+
+    std::vector<std::string> allowedHistoryArgs{"KEEP_LAST", "KEEP_ALL"};
+    TCLAP::ValuesConstraint<std::string> allowedHistoryArgsVals(allowedHistoryArgs);
+    TCLAP::ValueArg<std::string> historyArg("", "history",
+      "The QOS History type. Default is KEEP_ALL.", false, "KEEP_ALL",
+      &allowedHistoryArgsVals, cmd);
+
+    TCLAP::ValueArg<uint32_t> historyDepthArg("", "history-depth",
+      "The history depth QOS. Default is 1000.", false, 1000, "N", cmd);
+
+    TCLAP::ValueArg<uint64_t> maxRuntimeArg("", "max-runtime",
+      "Run N seconds, then exit. 0 means run forever. Default is 0.", false, 0, "N", cmd);
+
+    TCLAP::ValueArg<uint32_t> numPubsArg("p", "num-pub-threads",
+      "Number of publisher threads. Default is 1.", false, 1, "N", cmd);
+
+    TCLAP::ValueArg<uint32_t> numSubsArg("s", "num-sub-threads",
+      "Number of subscriber threads. Default is 1.", false, 1, "N", cmd);
+
+    TCLAP::SwitchArg checkMemoryArg("", "check-memory",
+      "Print backtrace of all memory operations performed by the middleware. "
+      "This will slow down the application!", cmd, false);
+
+    TCLAP::ValueArg<int32_t> useRtPrioArg("", "use-rt-prio",
+      "Set RT priority using a SCHED_FIFO real-time policy. "
+      "This option requires permissions to set a real-time priority. "
+      "Default is 0 (disabled).",
+      false, 0, "N", cmd);
+
+    TCLAP::ValueArg<uint32_t> useRtCpusArg("", "use-rt-cpus",
+      "Set RT CPU affinity mask. "
+      "The affinity mask has to be in decimal system. "
+      "For example, 10 sets the affinity for processors 1 and 3. "
+      "Default is 0 (disabled).",
+      false, 0, "N", cmd);
+
+    TCLAP::SwitchArg withSecurityArg("", "with-security",
+      "Make nodes with deterministic names for use with security.", cmd, false);
+
+    std::vector<std::string> allowedRoundTripModes{{"None", "Main", "Relay"}};
+    TCLAP::ValuesConstraint<std::string> allowedRoundTripModeVals(allowedRoundTripModes);
+    TCLAP::ValueArg<std::string> roundTripModeArg("", "roundtrip-mode",
+      "Select the round trip mode. Default is None.", false, "None",
+      &allowedRoundTripModeVals, cmd);
+
+    TCLAP::ValueArg<uint32_t> ignoreArg("", "ignore",
+      "Ignore the first N seconds of the experiment. Default is 0.", false, 0, "N", cmd);
+
+    TCLAP::ValueArg<uint32_t> expectedNumPubsArg("", "expected-num-pubs",
+      "Expected number of publishers for wait-for-matched. Default is 0.", false, 0, "N", cmd);
+
+    TCLAP::ValueArg<uint32_t> expectedNumSubsArg("", "expected-num-subs",
+      "Expected number of subscribers for wait-for-matched. Default is 0.", false, 0, "N", cmd);
+
+    TCLAP::ValueArg<uint32_t> waitForMatchedTimeoutArg("", "wait-for-matched-timeout",
+      "Maximum time in seconds to wait for matched pubs/subs. Default is 30.", false, 30, "N", cmd);
+
+    TCLAP::SwitchArg zeroCopyArg("", "zero-copy",
+      "Use zero copy transfer.", cmd, false);
+
+    TCLAP::ValueArg<uint32_t> unboundedMsgSizeArg("", "unbounded-msg-size",
+      "The number of bytes to use for an unbounded message type. "
+      "Ignored for other messages. Default is 0.",
+      false, 0, "N", cmd);
+
+    TCLAP::SwitchArg preventCpuIdleArg("", "prevent-cpu-idle",
+      "Prevent CPU from entering idle states.", cmd, false);
+
+    cmd.parse(argc, argv);
+
+    print_msg_list = msgListArg.getValue();
+
+    QOSAbstraction qos;
+    qos.reliability = qos_reliability_from_string(reliabilityArg.getValue());
+    qos.durability = qos_durability_from_string(durabilityArg.getValue());
+    qos.history_kind = qos_history_kind_from_string(historyArg.getValue());
+    qos.history_depth = historyDepthArg.getValue();
+
+    RealTimeConfiguration rt_config;
+    rt_config.prio = useRtPrioArg.getValue();
+    rt_config.cpus = useRtCpusArg.getValue();
+
+    OutputConfiguration output_config;
+    output_config.print_to_console = printToConsoleArg.getValue();
+    output_config.logfile_path = LogfileArg.getValue();
+
+    experiment_configuration = ExperimentConfiguration(
+      communication_mean_from_string(communicationArg.getValue()),
+      execution_strategy_from_string(executionStrategyArg.getValue()),
+      ddsDomainIdArg.getValue(),
+      qos,
+      rateArg.getValue(),
+      topicArg.getValue(),
+      msgArg.getValue(),
+      unboundedMsgSizeArg.getValue(),
+      maxRuntimeArg.getValue(),
+      ignoreArg.getValue(),
+      numPubsArg.getValue(),
+      numSubsArg.getValue(),
+      expectedNumPubsArg.getValue(),
+      expectedNumSubsArg.getValue(),
+      waitForMatchedTimeoutArg.getValue(),
+      checkMemoryArg.getValue(),
+      rt_config,
+      withSecurityArg.getValue(),
+      zeroCopyArg.getValue(),
+      preventCpuIdleArg.getValue(),
+      round_trip_mode_from_string(roundTripModeArg.getValue()),
+      output_config
+    );
+  } catch (TCLAP::ArgException & e) {
+    std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
+  }
+}
+
+}  // namespace performance_test
