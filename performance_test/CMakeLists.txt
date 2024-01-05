@@ -266,6 +266,7 @@ set(sources
     include/performance_test/outputs/output_factory.hpp
     include/performance_test/outputs/stdout_output.hpp
     include/performance_test/utilities/cpu_usage_tracker.hpp
+    include/performance_test/utilities/exit_request_handler.hpp
     include/performance_test/utilities/for_each.hpp
     include/performance_test/utilities/memory_checker.hpp
     include/performance_test/utilities/msg_traits.hpp
@@ -290,6 +291,7 @@ set(sources
     src/outputs/json_output.cpp
     src/outputs/output_factory.cpp
     src/outputs/stdout_output.cpp
+    src/utilities/exit_request_handler.cpp
     src/utilities/memory_checker.cpp
     src/utilities/prevent_cpu_idle.cpp
 )

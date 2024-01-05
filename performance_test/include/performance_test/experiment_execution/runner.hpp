@@ -28,6 +28,7 @@
 #include "performance_test/outputs/output.hpp"
 #include "performance_test/outputs/output_factory.hpp"
 #include "performance_test/utilities/cpu_usage_tracker.hpp"
+#include "performance_test/utilities/exit_request_handler.hpp"
 
 namespace performance_test
 {
@@ -121,7 +122,7 @@ private:
 
   bool check_exit(perf_clock::time_point experiment_start)
   {
-    if (m_ec.exit_requested()) {
+    if (ExitRequestHandler::get().exit_requested()) {
       std::cout << "Caught signal. Exiting." << std::endl;
       return true;
     }

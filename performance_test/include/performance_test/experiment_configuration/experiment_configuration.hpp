@@ -102,10 +102,6 @@ public:
   size_t unbounded_msg_size() const;
   bool prevent_cpu_idle() const;
   OutputConfiguration output_configuration() const;
-  /// \return Returns true if the user requested the application to exit.
-  bool exit_requested() const;
-  /// Request the application to exit.
-  void request_exit();
 
   ExternalInfoStorage get_external_info() const
   {
@@ -141,7 +137,6 @@ private:
   bool m_with_security;
   bool m_is_zero_copy_transfer;
   bool m_prevent_cpu_idle;
-  std::atomic_bool m_exit_requested;
 
   RoundTripMode m_roundtrip_mode;
 

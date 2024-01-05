@@ -19,6 +19,7 @@
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_execution/runner.hpp"
 #include "performance_test/experiment_execution/runner_factory.hpp"
+#include "performance_test/utilities/exit_request_handler.hpp"
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
 #include "performance_test/utilities/rt_enabler.hpp"
 
@@ -35,6 +36,8 @@ int main(int argc, char ** argv)
   if (ec.prevent_cpu_idle()) {
     performance_test::prevent_cpu_idle();
   }
+
+  performance_test::ExitRequestHandler::get().setup(ec.use_ros2_layers());
 
 #if defined(PERFORMANCE_TEST_RCLCPP_ENABLED)
   // initialize ros

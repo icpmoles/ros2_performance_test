@@ -35,21 +35,11 @@
 #include <memory>
 #include <sole/sole.hpp>
 
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-#include <rclcpp/rclcpp.hpp>
-#endif
-
 #include "performance_test/generated_messages/messages.hpp"
 #include "performance_test/outputs/csv_output.hpp"
 #include "performance_test/outputs/stdout_output.hpp"
 #include "performance_test/outputs/json_output.hpp"
 #include "performance_test/utilities/version.hpp"
-
-static void handle_sigint(int sig)
-{
-  std::signal(sig, SIG_DFL);
-  performance_test::ExperimentConfiguration::get().request_exit();
-}
 
 namespace performance_test
 {
@@ -98,7 +88,6 @@ ExperimentConfiguration::ExperimentConfiguration()
   m_check_memory(false),
   m_is_zero_copy_transfer(false),
   m_prevent_cpu_idle(false),
-  m_exit_requested(false),
   m_roundtrip_mode(RoundTripMode::NONE)
 {
 }
@@ -340,10 +329,6 @@ void ExperimentConfiguration::setup(int argc, char ** argv)
     std::cerr << e.what() << std::endl;
     exit(1);
   }
-
-  if (!use_ros2_layers()) {
-    std::signal(SIGINT, handle_sigint);
-  }
 }
 
 bool ExperimentConfiguration::is_setup() const
@@ -562,20 +547,6 @@ bool ExperimentConfiguration::prevent_cpu_idle() const
 OutputConfiguration ExperimentConfiguration::output_configuration() const
 {
   return m_output_configuration;
-}
-
-bool ExperimentConfiguration::exit_requested() const
-{
-  bool ret_val = m_exit_requested;
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-  ret_val |= use_ros2_layers() && !rclcpp::ok();
-#endif
-  return ret_val;
-}
-
-void ExperimentConfiguration::request_exit()
-{
-  m_exit_requested = true;
 }
 
 }  // namespace performance_test
