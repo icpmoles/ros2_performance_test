@@ -243,7 +243,6 @@ set(sources
     include/performance_test/cli/cli_parser.hpp
     include/performance_test/communication_abstractions/communicator.hpp
     include/performance_test/communication_abstractions/communicator_factory.hpp
-    include/performance_test/communication_abstractions/resource_manager.hpp
     include/performance_test/execution_tasks/publisher_task.hpp
     include/performance_test/execution_tasks/round_trip_relay_task.hpp
     include/performance_test/execution_tasks/subscriber_task.hpp
@@ -279,7 +278,6 @@ set(sources
     include/performance_test/utilities/version.hpp
     src/cli/cli_parser.cpp
     src/communication_abstractions/communicator_factory.cpp
-    src/communication_abstractions/resource_manager.cpp
     src/experiment_configuration/communication_mean.cpp
     src/experiment_configuration/execution_strategy.cpp
     src/experiment_configuration/experiment_configuration.cpp

@@ -21,7 +21,6 @@
 #include <memory>
 #include <vector>
 
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/analysis_result.hpp"
 #include "performance_test/experiment_metrics/publisher_stats.hpp"
@@ -53,7 +52,6 @@ public:
     for (const auto & output : m_outputs) {
       output->close();
     }
-    ResourceManager::shutdown();
   }
 
   void run()
