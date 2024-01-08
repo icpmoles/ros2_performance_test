@@ -15,12 +15,12 @@
 #ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__CONNEXT_DDS_COMMUNICATOR_HPP_
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__CONNEXT_DDS_COMMUNICATOR_HPP_
 
+#include <mutex>
 #include <vector>
 
 #include <ndds/ndds_cpp.h>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 namespace performance_test
 {
@@ -121,6 +121,90 @@ private:
 template<class Topic>
 DDSTopic * RTIDDSTopicManager<Topic>::m_topic = nullptr;
 
+class RTIDDSResourceManager
+{
+public:
+  static RTIDDSResourceManager & get()
+  {
+    static RTIDDSResourceManager instance;
+    return instance;
+  }
+
+  RTIDDSResourceManager(RTIDDSResourceManager const &) = delete;
+  RTIDDSResourceManager(RTIDDSResourceManager &&) = delete;
+  RTIDDSResourceManager & operator=(RTIDDSResourceManager const &) = delete;
+  RTIDDSResourceManager & operator=(RTIDDSResourceManager &&) = delete;
+
+  DDSDomainParticipant * connext_dds_participant(const ExperimentConfiguration & ec) const
+  {
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+
+    if (!m_connext_dds_participant) {
+      m_connext_dds_participant = DDSTheParticipantFactory->create_participant(
+        ec.dds_domain_id, DDS_PARTICIPANT_QOS_DEFAULT,
+        NULL /* listener */, DDS_STATUS_MASK_NONE);
+      if (m_connext_dds_participant == NULL) {
+        throw std::runtime_error("Participant is nullptr");
+      }
+    }
+    return m_connext_dds_participant;
+  }
+
+  /**
+   * \brief Creates a new Connext DDS publisher.
+   * \param publisher Will be overwritten with the created publisher.
+   * \param dw_qos Will be overwritten with the default QOS from the created publisher.
+   */
+  void connext_dds_publisher(
+    const ExperimentConfiguration & ec,
+    DDSPublisher * & publisher,
+    DDS_DataWriterQos & dw_qos) const
+  {
+    auto participant = connext_dds_participant(ec);
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+    publisher = participant->create_publisher(
+      DDS_PUBLISHER_QOS_DEFAULT, nullptr, DDS_STATUS_MASK_NONE);
+    if (publisher == nullptr) {
+      throw std::runtime_error("Pulisher is nullptr");
+    }
+    auto retcode = publisher->get_default_datawriter_qos(dw_qos);
+    if (retcode != DDS_RETCODE_OK) {
+      throw std::runtime_error("Failed to get default datawriter");
+    }
+  }
+
+  /**
+   * \brief Creates a new Connext DDS subscriber.
+   * \param subscriber Will be overwritten with the created subscriber.
+   * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
+   */
+  void connext_dds_subscriber(
+    const ExperimentConfiguration & ec,
+    DDSSubscriber * & subscriber,
+    DDS_DataReaderQos & dr_qos) const
+  {
+    auto participant = connext_dds_participant(ec);
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+    subscriber = participant->create_subscriber(
+      DDS_SUBSCRIBER_QOS_DEFAULT, nullptr,
+      DDS_STATUS_MASK_NONE);
+    if (subscriber == nullptr) {
+      throw std::runtime_error("m_subscriber == nullptr");
+    }
+    auto retcode = subscriber->get_default_datareader_qos(dr_qos);
+    if (retcode != DDS_RETCODE_OK) {
+      throw std::runtime_error("failed get_default_datareader_qos");
+    }
+  }
+
+private:
+  RTIDDSResourceManager()
+  : m_connext_dds_participant(nullptr) {}
+
+  mutable DDSDomainParticipant * m_connext_dds_participant;
+  mutable std::mutex m_global_mutex;
+};
+
 /**
  * \brief The plugin for Connext DDS.
  * \tparam Topic The topic type to use.
@@ -138,13 +222,13 @@ public:
 
   explicit RTIDDSPublisher(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_participant(ResourceManager::get().connext_dds_participant(ec)),
+    m_participant(RTIDDSResourceManager::get().connext_dds_participant(ec)),
     m_datawriter(nullptr),
     m_topic(RTIDDSTopicManager::register_topic(m_participant, m_ec))
   {
     DDSPublisher * publisher;
     DDS_DataWriterQos dw_qos;
-    ResourceManager::get().connext_dds_publisher(ec, publisher, dw_qos);
+    RTIDDSResourceManager::get().connext_dds_publisher(ec, publisher, dw_qos);
 
     dw_qos.resource_limits.max_samples = 100;
     dw_qos.resource_limits.max_samples_per_instance = 100;
@@ -216,14 +300,14 @@ public:
 
   explicit RTIDDSSubscriber(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_participant(ResourceManager::get().connext_dds_participant(ec)),
+    m_participant(RTIDDSResourceManager::get().connext_dds_participant(ec)),
     m_datareader(nullptr),
     m_typed_datareader(nullptr),
     m_topic(RTIDDSTopicManager::register_topic(m_participant, m_ec))
   {
     DDSSubscriber * subscriber = nullptr;
     DDS_DataReaderQos dr_qos;
-    ResourceManager::get().connext_dds_subscriber(ec, subscriber, dr_qos);
+    RTIDDSResourceManager::get().connext_dds_subscriber(ec, subscriber, dr_qos);
 
     dr_qos.resource_limits.max_samples = 100;
     dr_qos.resource_limits.max_instances = 1;

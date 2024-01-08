@@ -19,10 +19,6 @@
   #include <rti_me_cpp.hxx>
 #endif
 
-#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-  #include <ndds/ndds_cpp.h>
-#endif
-
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   #include <rclcpp/rclcpp.hpp>
 #endif
@@ -85,30 +81,6 @@ public:
     DDS_DataReaderQos & dr_qos) const;
 #endif
 
-#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-  DDSDomainParticipant * connext_dds_participant(const ExperimentConfiguration & ec) const;
-
-  /**
-   * \brief Creates a new Connext DDS publisher.
-   * \param publisher Will be overwritten with the created publisher.
-   * \param dw_qos Will be overwritten with the default QOS from the created publisher.
-   */
-  void connext_dds_publisher(
-    const ExperimentConfiguration & ec,
-    DDSPublisher * & publisher,
-    DDS_DataWriterQos & dw_qos) const;
-
-  /**
-   * \brief Creates a new Connext DDS subscriber.
-   * \param subscriber Will be overwritten with the created subscriber.
-   * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
-   */
-  void connext_dds_subscriber(
-    const ExperimentConfiguration & ec,
-    DDSSubscriber * & subscriber,
-    DDS_DataReaderQos & dr_qos) const;
-#endif
-
 private:
   ResourceManager()
   : m_unused(nullptr)
@@ -117,9 +89,6 @@ private:
 #endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
     , m_connext_dds_micro_participant(nullptr)
-#endif
-#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-    , m_connext_dds_participant(nullptr)
 #endif
   {}
 
@@ -133,10 +102,6 @@ private:
   mutable DDSDomainParticipant * m_connext_dds_micro_participant;
   mutable NETIO_SHMEMInterfaceFactoryProperty m_shmem_property;
   mutable DPDE_DiscoveryPluginProperty m_dpde_property;
-#endif
-
-#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-  mutable DDSDomainParticipant * m_connext_dds_participant;
 #endif
 
   mutable std::mutex m_global_mutex;
