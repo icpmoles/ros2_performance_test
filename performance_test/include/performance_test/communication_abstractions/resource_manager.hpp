@@ -15,10 +15,6 @@
 #ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
 
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-  #include <rclcpp/rclcpp.hpp>
-#endif
-
 #include <cstdlib>
 #include <memory>
 #include <mutex>
@@ -48,23 +44,12 @@ public:
   ResourceManager & operator=(ResourceManager const &) = delete;
   ResourceManager & operator=(ResourceManager &&) = delete;
 
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-  std::shared_ptr<rclcpp::Node> rclcpp_node(const ExperimentConfiguration & ec) const;
-#endif
-
 private:
   ResourceManager()
   : m_unused(nullptr)
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-    , m_node(nullptr)
-#endif
   {}
 
   const void * m_unused;
-
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-  mutable std::shared_ptr<rclcpp::Node> m_node;
-#endif
 
   mutable std::mutex m_global_mutex;
 };

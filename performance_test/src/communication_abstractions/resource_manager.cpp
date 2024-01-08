@@ -25,41 +25,4 @@ void ResourceManager::shutdown()
 {
 }
 
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-std::shared_ptr<rclcpp::Node> ResourceManager::rclcpp_node(const ExperimentConfiguration & ec) const
-{
-  /* Temporarely commented out until ROS2 waitsets are available. As of now every ROS2 thread needs a node in the
-   * current architecture.
-   */
-
-//    std::lock_guard<std::mutex> lock(m_global_mutex);
-//    if(!m_node)
-//    {
-//      m_node = rclcpp::Node::make_shared("performance_test", "", ec.use_ros_shm());
-//    }
-//    return m_node;
-
-  std::string rand_str;
-  // if security is enabled
-  if (ec.with_security) {
-    static uint32_t id = 0;
-    rand_str = std::to_string(id++);
-  } else {
-    rand_str = std::to_string(std::rand());
-  }
-
-  auto options = rclcpp::NodeOptions();
-
-  auto env_name = "ROS_DOMAIN_ID";
-  auto env_value = std::to_string(ec.dds_domain_id);
-#ifdef _WIN32
-  _putenv_s(env_name, env_value.c_str());
-#else
-  setenv(env_name, env_value.c_str(), true);
-#endif
-
-  return rclcpp::Node::make_shared("performance_test" + rand_str, options);
-}
-#endif
-
 }  // namespace performance_test

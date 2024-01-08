@@ -22,7 +22,7 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
+#include "performance_test/communication_abstractions/rclcpp_resource_manager.hpp"
 #include "performance_test/communication_abstractions/ros2_qos_adapter.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
 
@@ -38,7 +38,7 @@ public:
   using DataType = typename Msg::RosType;
 
   explicit ApexOSPollingSubscriptionSubscriber(const ExperimentConfiguration & ec)
-  : m_node(ResourceManager::get().rclcpp_node(ec)),
+  : m_node(RclcppResourceManager::get().rclcpp_node(ec)),
     m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos).get()),
     m_polling_subscription(m_node->create_polling_subscription<DataType>(
         ec.topic_name + ec.sub_topic_postfix(),
