@@ -15,10 +15,6 @@
 #ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
 
-#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-  #include <rti_me_cpp.hxx>
-#endif
-
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   #include <rclcpp/rclcpp.hpp>
 #endif
@@ -56,39 +52,11 @@ public:
   std::shared_ptr<rclcpp::Node> rclcpp_node(const ExperimentConfiguration & ec) const;
 #endif
 
-#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-  DDSDomainParticipant * connext_DDS_micro_participant(
-    const ExperimentConfiguration & ec) const;
-
-  /**
-   * \brief Creates a new Connext DDS Micro publisher.
-   * \param publisher Will be overwritten with the created publisher.
-   * \param dw_qos Will be overwritten with the default QOS from the created publisher.
-   */
-  void connext_dds_micro_publisher(
-    const ExperimentConfiguration & ec,
-    DDSPublisher * & publisher,
-    DDS_DataWriterQos & dw_qos) const;
-
-  /**
-   * \brief Creates a new Connext DDS Micro subscriber.
-   * \param subscriber Will be overwritten with the created subscriber.
-   * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
-   */
-  void connext_dds_micro_subscriber(
-    const ExperimentConfiguration & ec,
-    DDSSubscriber * & subscriber,
-    DDS_DataReaderQos & dr_qos) const;
-#endif
-
 private:
   ResourceManager()
   : m_unused(nullptr)
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
     , m_node(nullptr)
-#endif
-#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-    , m_connext_dds_micro_participant(nullptr)
 #endif
   {}
 
@@ -96,12 +64,6 @@ private:
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   mutable std::shared_ptr<rclcpp::Node> m_node;
-#endif
-
-#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-  mutable DDSDomainParticipant * m_connext_dds_micro_participant;
-  mutable NETIO_SHMEMInterfaceFactoryProperty m_shmem_property;
-  mutable DPDE_DiscoveryPluginProperty m_dpde_property;
 #endif
 
   mutable std::mutex m_global_mutex;

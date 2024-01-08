@@ -15,6 +15,7 @@
 #ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__CONNEXT_DDS_MICRO_COMMUNICATOR_HPP_
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__CONNEXT_DDS_MICRO_COMMUNICATOR_HPP_
 
+#include <mutex>
 #include <vector>
 
 #include <rti_me_cpp.hxx>
@@ -24,7 +25,6 @@
 #include <dds_cpp/dds_cpp_netio.hxx>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 
 namespace performance_test
@@ -125,6 +125,159 @@ private:
 template<class Topic>
 DDSTopic * RTIMicroDDSTopicManager<Topic>::m_topic = nullptr;
 
+class RTIMicroDDSResourceManager
+{
+public:
+  static RTIMicroDDSResourceManager & get()
+  {
+    static RTIMicroDDSResourceManager instance;
+    return instance;
+  }
+
+  RTIMicroDDSResourceManager(RTIMicroDDSResourceManager const &) = delete;
+  RTIMicroDDSResourceManager(RTIMicroDDSResourceManager &&) = delete;
+  RTIMicroDDSResourceManager & operator=(RTIMicroDDSResourceManager const &) = delete;
+  RTIMicroDDSResourceManager & operator=(RTIMicroDDSResourceManager &&) = delete;
+
+  DDSDomainParticipant * connext_DDS_micro_participant(
+    const ExperimentConfiguration & ec) const
+  {
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+
+    if (!m_connext_dds_micro_participant) {
+      DDSDomainParticipantFactory * factory = DDSDomainParticipantFactory::get_instance();
+      RTRegistry * registry = factory->get_registry();
+
+      registry->register_component("wh", WHSMHistoryFactory::get_interface(), nullptr, nullptr);
+      registry->register_component("rh", RHSMHistoryFactory::get_interface(), nullptr, nullptr);
+      registry->unregister(NETIO_DEFAULT_UDP_NAME, nullptr, nullptr);
+
+      m_shmem_property.received_message_count_max = 1024 * 16;
+      m_shmem_property.receive_buffer_size = 1024 * 1024 * 128 * 2;
+      registry->register_component(
+        NETIO_DEFAULT_SHMEM_NAME,
+        SHMEMInterfaceFactory::get_interface(),
+        &m_shmem_property._parent._parent,
+        nullptr);
+
+      registry->register_component(
+        "dpde",
+        DPDEDiscoveryFactory::get_interface(),
+        &m_dpde_property._parent,
+        nullptr);
+
+      auto dp_qos = DDS_PARTICIPANT_QOS_DEFAULT;
+      factory->get_default_participant_qos(dp_qos);
+
+      dp_qos.participant_name.set_name("participant_name");
+
+      dp_qos.discovery.discovery.name.set_name("dpde");
+
+      dp_qos.discovery.initial_peers.maximum(1);
+      dp_qos.discovery.initial_peers.length(1);
+      *dp_qos.discovery.initial_peers.get_reference(0) =
+        DDS_String_dup("_shmem://");
+
+      dp_qos.transports.enabled_transports.ensure_length(2, 2);
+      *dp_qos.transports.enabled_transports.get_reference(0) =
+        DDS_String_dup(NETIO_DEFAULT_SHMEM_NAME);
+      *dp_qos.transports.enabled_transports.get_reference(1) =
+        DDS_String_dup(NETIO_DEFAULT_INTRA_NAME);
+
+      dp_qos.discovery.enabled_transports.ensure_length(1, 1);
+      *dp_qos.discovery.enabled_transports.get_reference(0) =
+        DDS_String_dup("_shmem://");
+
+      dp_qos.user_traffic.enabled_transports.ensure_length(2, 2);
+      *dp_qos.user_traffic.enabled_transports.get_reference(0) =
+        DDS_String_dup("_intra://");
+      *dp_qos.user_traffic.enabled_transports.get_reference(1) =
+        DDS_String_dup("_shmem://");
+
+      dp_qos.resource_limits.local_writer_allocation = 500;
+      dp_qos.resource_limits.local_reader_allocation = 500;
+      dp_qos.resource_limits.local_publisher_allocation = 10;
+      dp_qos.resource_limits.local_subscriber_allocation = 10;
+      dp_qos.resource_limits.local_topic_allocation = 500;
+      dp_qos.resource_limits.local_type_allocation = 500;
+      dp_qos.resource_limits.remote_participant_allocation = 200;
+      dp_qos.resource_limits.remote_writer_allocation = 200;
+      dp_qos.resource_limits.remote_reader_allocation = 200;
+      dp_qos.resource_limits.matching_writer_reader_pair_allocation = 200;
+      dp_qos.resource_limits.matching_reader_writer_pair_allocation = 200;
+      dp_qos.resource_limits.max_receive_ports = 200;
+      dp_qos.resource_limits.max_destination_ports = 200;
+      dp_qos.resource_limits.unbound_data_buffer_size = 65536;
+      dp_qos.resource_limits.shmem_ref_transfer_mode_max_segments = 500;
+
+      m_connext_dds_micro_participant = factory->create_participant(
+        (DDS_DomainId_t)ec.dds_domain_id, dp_qos,
+        nullptr /* listener */, DDS_STATUS_MASK_NONE);
+
+      if (m_connext_dds_micro_participant == nullptr) {
+        throw std::runtime_error("failed to create participant");
+      }
+    }
+    return m_connext_dds_micro_participant;
+  }
+
+  /**
+   * \brief Creates a new Connext DDS Micro publisher.
+   * \param publisher Will be overwritten with the created publisher.
+   * \param dw_qos Will be overwritten with the default QOS from the created publisher.
+   */
+  void connext_dds_micro_publisher(
+    const ExperimentConfiguration & ec,
+    DDSPublisher * & publisher,
+    DDS_DataWriterQos & dw_qos) const
+  {
+    auto participant = connext_DDS_micro_participant(ec);
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+    publisher = participant->create_publisher(
+      DDS_PUBLISHER_QOS_DEFAULT, nullptr, DDS_STATUS_MASK_NONE);
+    if (publisher == nullptr) {
+      throw std::runtime_error("Pulisher is nullptr");
+    }
+    auto retcode = publisher->get_default_datawriter_qos(dw_qos);
+    if (retcode != DDS_RETCODE_OK) {
+      throw std::runtime_error("Failed to get default datawriter");
+    }
+  }
+
+  /**
+   * \brief Creates a new Connext DDS Micro subscriber.
+   * \param subscriber Will be overwritten with the created subscriber.
+   * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
+   */
+  void connext_dds_micro_subscriber(
+    const ExperimentConfiguration & ec,
+    DDSSubscriber * & subscriber,
+    DDS_DataReaderQos & dr_qos) const
+  {
+    auto participant = connext_DDS_micro_participant(ec);
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+    subscriber = participant->create_subscriber(
+      DDS_SUBSCRIBER_QOS_DEFAULT, nullptr,
+      DDS_STATUS_MASK_NONE);
+    if (subscriber == nullptr) {
+      throw std::runtime_error("m_subscriber == nullptr");
+    }
+    auto retcode = subscriber->get_default_datareader_qos(dr_qos);
+    if (retcode != DDS_RETCODE_OK) {
+      throw std::runtime_error("failed get_default_datareader_qos");
+    }
+  }
+
+private:
+  RTIMicroDDSResourceManager()
+  : m_connext_dds_micro_participant(nullptr) {}
+
+  mutable DDSDomainParticipant * m_connext_dds_micro_participant;
+  mutable NETIO_SHMEMInterfaceFactoryProperty m_shmem_property;
+  mutable DPDE_DiscoveryPluginProperty m_dpde_property;
+  mutable std::mutex m_global_mutex;
+};
+
 /**
  * \brief The plugin for Connext DDS Micro.
  * \tparam Topic The topic type to use.
@@ -141,13 +294,13 @@ public:
 
   explicit RTIMicroDDSPublisher(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_participant(ResourceManager::get().connext_DDS_micro_participant(ec)),
+    m_participant(RTIMicroDDSResourceManager::get().connext_DDS_micro_participant(ec)),
     m_datawriter(nullptr),
     m_topic(RTIMicroDDSTopicManager<Topic>::register_topic(m_participant, m_ec))
   {
     DDSPublisher * publisher;
     DDS_DataWriterQos dw_qos;
-    ResourceManager::get().connext_dds_micro_publisher(ec, publisher, dw_qos);
+    RTIMicroDDSResourceManager::get().connext_dds_micro_publisher(ec, publisher, dw_qos);
 
     dw_qos.resource_limits.max_samples = 100;
     dw_qos.resource_limits.max_samples_per_instance = 100;
@@ -295,14 +448,14 @@ public:
 
   explicit RTIMicroDDSSubscriber(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_participant(ResourceManager::get().connext_DDS_micro_participant(ec)),
+    m_participant(RTIMicroDDSResourceManager::get().connext_DDS_micro_participant(ec)),
     m_datareader(nullptr),
     m_typed_datareader(nullptr),
     m_topic(RTIMicroDDSTopicManager<Topic>::register_topic(m_participant, m_ec))
   {
     DDSSubscriber * subscriber = nullptr;
     DDS_DataReaderQos dr_qos;
-    ResourceManager::get().connext_dds_micro_subscriber(ec, subscriber, dr_qos);
+    RTIMicroDDSResourceManager::get().connext_dds_micro_subscriber(ec, subscriber, dr_qos);
 
     dr_qos.resource_limits.max_samples = 100;
     dr_qos.resource_limits.max_instances = 1;
