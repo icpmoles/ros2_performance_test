@@ -17,22 +17,36 @@
 
 #include <string>
 #include <memory>
+#include <mutex>
 #include <vector>
 
 #include <iceoryx_posh/popo/untyped_publisher.hpp>
 #include <iceoryx_posh/popo/untyped_subscriber.hpp>
+#include <iceoryx_posh/runtime/posh_runtime.hpp>
 #include <iceoryx_dust/cxx/std_string_support.hpp>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 namespace performance_test
 {
 class IceoryxCommunicator
 {
 public:
-  explicit IceoryxCommunicator(const ExperimentConfiguration & ec) {
-    ResourceManager::get().init_iceoryx_runtime(ec);
+  explicit IceoryxCommunicator(const ExperimentConfiguration & ec)
+  {
+    static bool initialized = false;
+    static std::mutex m;
+    std::lock_guard lock(m);
+    if (!initialized) {
+      initialized = true;
+      if (ec.number_of_subscribers == 0) {
+        iox::runtime::PoshRuntime::initRuntime("iox-perf-test-pub");
+      } else if (ec.number_of_publishers == 0) {
+        iox::runtime::PoshRuntime::initRuntime("iox-perf-test-sub");
+      } else {
+        iox::runtime::PoshRuntime::initRuntime("iox-perf-test-intra");
+      }
+    }
   }
 };
 

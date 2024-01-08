@@ -24,10 +24,6 @@
   #include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 #endif
 
-#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-  #include <iceoryx_posh/runtime/posh_runtime.hpp>
-#endif
-
 #include <cstdlib>
 #include <memory>
 #include <string>
@@ -349,24 +345,6 @@ dds::domain::DomainParticipant ResourceManager::cyclonedds_cxx_participant(
     m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(ec.dds_domain_id);
   }
   return m_cyclonedds_cxx_participant;
-}
-#endif
-
-#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-void ResourceManager::init_iceoryx_runtime(const ExperimentConfiguration & ec) const
-{
-  std::lock_guard<std::mutex> lock(m_global_mutex);
-
-  if (!m_iceoryx_initialized) {
-    m_iceoryx_initialized = true;
-    if (ec.number_of_subscribers == 0) {
-      iox::runtime::PoshRuntime::initRuntime("iox-perf-test-pub");
-    } else if (ec.number_of_publishers == 0) {
-      iox::runtime::PoshRuntime::initRuntime("iox-perf-test-sub");
-    } else {
-      iox::runtime::PoshRuntime::initRuntime("iox-perf-test-intra");
-    }
-  }
 }
 #endif
 

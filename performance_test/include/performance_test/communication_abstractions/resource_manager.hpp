@@ -159,10 +159,6 @@ public:
     const ExperimentConfiguration & ec) const;
 #endif
 
-#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-  void init_iceoryx_runtime(const ExperimentConfiguration & ec) const;
-#endif
-
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
   DDS::DomainParticipant_ptr opendds_participant(const ExperimentConfiguration & ec) const;
 
@@ -242,10 +238,6 @@ private:
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
   mutable dds::domain::DomainParticipant m_cyclonedds_cxx_participant{dds::core::null};
-#endif
-
-#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-  mutable bool m_iceoryx_initialized = false;
 #endif
 
   mutable std::mutex m_global_mutex;
