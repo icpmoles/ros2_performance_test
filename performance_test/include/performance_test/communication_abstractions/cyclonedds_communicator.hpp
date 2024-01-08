@@ -19,15 +19,14 @@
 #include <dds/ddsc/dds_loan_api.h>
 
 #include <iostream>
+#include <mutex>
 #include <string>
 #include <vector>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 namespace performance_test
 {
-
 /**
  * \brief Translates abstract QOS settings to specific QOS settings for Cyclone DDS
  * data writers and readers.
@@ -110,6 +109,37 @@ private:
   const QOSAbstraction m_qos;
 };
 
+class CycloneDDSResourceManager
+{
+public:
+  static CycloneDDSResourceManager & get()
+  {
+    static CycloneDDSResourceManager instance;
+    return instance;
+  }
+
+  CycloneDDSResourceManager(CycloneDDSResourceManager const &) = delete;
+  CycloneDDSResourceManager(CycloneDDSResourceManager &&) = delete;
+  CycloneDDSResourceManager & operator=(CycloneDDSResourceManager const &) = delete;
+  CycloneDDSResourceManager &operator=(CycloneDDSResourceManager &&) = delete;
+
+  dds_entity_t cyclonedds_participant(const ExperimentConfiguration &ec) const
+  {
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+    if (!m_cyclonedds_participant) {
+      m_cyclonedds_participant = dds_create_participant(ec.dds_domain_id, nullptr, nullptr);
+    }
+    return m_cyclonedds_participant;
+  }
+
+private:
+  CycloneDDSResourceManager()
+  : m_cyclonedds_participant(0) {}
+
+  mutable dds_entity_t m_cyclonedds_participant;
+  mutable std::mutex m_global_mutex;
+};
+
 template<class Msg>
 class CycloneDDSPublisher : public Publisher
 {
@@ -117,7 +147,7 @@ public:
   using DataType = typename Msg::CycloneDDSType;
 
   explicit CycloneDDSPublisher(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_participant(ec)),
+  : m_participant(CycloneDDSResourceManager::get().cyclonedds_participant(ec)),
     m_datawriter(create_datawriter(ec, m_participant)) {}
 
   void publish_copy(
@@ -194,7 +224,7 @@ public:
   using DataType = typename Msg::CycloneDDSType;
 
   explicit CycloneDDSSubscriber(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_participant(ec)),
+  : m_participant(CycloneDDSResourceManager::get().cyclonedds_participant(ec)),
     m_datareader(create_datareader(ec, m_participant)),
     m_waitset(create_waitset(m_participant, m_datareader)) {}
 

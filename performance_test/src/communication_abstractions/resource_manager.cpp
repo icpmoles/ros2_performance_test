@@ -238,18 +238,6 @@ void ResourceManager::connext_dds_subscriber(
 }
 #endif
 
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-dds_entity_t ResourceManager::cyclonedds_participant(const ExperimentConfiguration & ec) const
-{
-  std::lock_guard<std::mutex> lock(m_global_mutex);
-
-  if (!m_cyclonedds_participant) {
-    m_cyclonedds_participant = dds_create_participant(ec.dds_domain_id, nullptr, nullptr);
-  }
-  return m_cyclonedds_participant;
-}
-#endif
-
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
 dds::domain::DomainParticipant ResourceManager::cyclonedds_cxx_participant(
   const ExperimentConfiguration & ec) const
