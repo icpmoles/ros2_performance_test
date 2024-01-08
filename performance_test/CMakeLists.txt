@@ -250,7 +250,6 @@ set(sources
     include/performance_test/experiment_configuration/communication_mean.hpp
     include/performance_test/experiment_configuration/execution_strategy.hpp
     include/performance_test/experiment_configuration/experiment_configuration.hpp
-    include/performance_test/experiment_configuration/external_info_storage.hpp
     include/performance_test/experiment_configuration/output_configuration.hpp
     include/performance_test/experiment_configuration/qos_abstraction.hpp
     include/performance_test/experiment_configuration/round_trip_mode.hpp
@@ -268,6 +267,7 @@ set(sources
     include/performance_test/outputs/stdout_output.hpp
     include/performance_test/utilities/cpu_usage_tracker.hpp
     include/performance_test/utilities/exit_request_handler.hpp
+    include/performance_test/utilities/external_info.hpp
     include/performance_test/utilities/for_each.hpp
     include/performance_test/utilities/memory_checker.hpp
     include/performance_test/utilities/msg_traits.hpp
@@ -283,7 +283,6 @@ set(sources
     src/experiment_configuration/communication_mean.cpp
     src/experiment_configuration/execution_strategy.cpp
     src/experiment_configuration/experiment_configuration.cpp
-    src/experiment_configuration/external_info_storage.cpp
     src/experiment_configuration/qos_abstraction.cpp
     src/experiment_configuration/round_trip_mode.cpp
     src/experiment_execution/runner_factory.cpp
@@ -294,6 +293,7 @@ set(sources
     src/outputs/output_factory.cpp
     src/outputs/stdout_output.cpp
     src/utilities/exit_request_handler.cpp
+    src/utilities/external_info.cpp
     src/utilities/memory_checker.cpp
     src/utilities/prevent_cpu_idle.cpp
 )

@@ -1,4 +1,4 @@
-// Copyright 2017 Apex.AI, Inc.
+// Copyright 2023 Apex.AI, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "performance_test/experiment_configuration/external_info_storage.hpp"
+#ifndef PERFORMANCE_TEST__UTILITIES__EXTERNAL_INFO_HPP_
+#define PERFORMANCE_TEST__UTILITIES__EXTERNAL_INFO_HPP_
 
-#include <rapidjson/document.h>
+#include <map>
 #include <string>
 
 namespace performance_test
 {
-
-ExternalInfoStorage::ExternalInfoStorage()
+class ExternalInfo
 {
-  const auto ptr = std::getenv("APEX_PERFORMANCE_TEST");
-  if (ptr) {
-    rapidjson::Document document;
-    document.Parse(ptr);
+public:
+  static std::string as_string();
+  static std::map<std::string, std::string> as_map();
 
-    for (auto & m : document.GetObject()) {
-      m_to_log = m_to_log + m.name.GetString() + ": " + m.value.GetString() + "\n";
-      m_external_info[m.name.GetString()] = m.value.GetString();
-    }
-  }
-}
+private:
+  ExternalInfo();
+};
 }  // namespace performance_test
+
+#endif  // PERFORMANCE_TEST__UTILITIES__EXTERNAL_INFO_HPP_

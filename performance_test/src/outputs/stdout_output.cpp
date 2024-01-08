@@ -24,6 +24,7 @@
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/analysis_result.hpp"
+#include "performance_test/utilities/external_info.hpp"
 
 namespace performance_test
 {
@@ -31,7 +32,7 @@ void StdoutOutput::open(const ExperimentConfiguration & ec)
 {
   // write experiment details
   std::cout << ec;
-  std::cout << ec.external_info.m_to_log;
+  std::cout << ExternalInfo::as_string();
   std::cout << std::endl << std::endl;
 }
 

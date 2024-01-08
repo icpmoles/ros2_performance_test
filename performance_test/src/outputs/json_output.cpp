@@ -16,9 +16,11 @@
 
 #include <string>
 #include <iomanip>
+#include <iostream>
 #include <cmath>
 
 #include "performance_test/experiment_metrics/analysis_result.hpp"
+#include "performance_test/utilities/external_info.hpp"
 #include "performance_test/utilities/version.hpp"
 
 namespace performance_test
@@ -92,7 +94,7 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
   write("is_shared_memory_transfer", ec.is_shared_memory_transfer());
   write("roundtrip_mode", to_string(ec.roundtrip_mode));
   write("is_rt_init_required", ec.rt_config.is_rt_init_required());
-  for (const auto & kvp : ec.external_info.m_external_info) {
+  for (const auto & kvp : ExternalInfo::as_map()) {
     write(("external_info_" + kvp.first).c_str(), kvp.second);
   }
 }

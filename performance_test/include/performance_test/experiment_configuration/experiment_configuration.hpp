@@ -24,7 +24,6 @@
 
 #include "performance_test/experiment_configuration/communication_mean.hpp"
 #include "performance_test/experiment_configuration/execution_strategy.hpp"
-#include "performance_test/experiment_configuration/external_info_storage.hpp"
 #include "performance_test/experiment_configuration/output_configuration.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
 #include "performance_test/experiment_configuration/real_time_configuration.hpp"
@@ -93,7 +92,6 @@ public:
 
   RoundTripMode roundtrip_mode;
   OutputConfiguration output_configuration;
-  ExternalInfoStorage external_info;
 
   /// \returns Returns whether the ROS 2 layers are used by the communication mean.
   bool use_ros2_layers() const;

@@ -20,6 +20,7 @@
 #include <string>
 
 #include "performance_test/experiment_metrics/analysis_result.hpp"
+#include "performance_test/utilities/external_info.hpp"
 
 namespace performance_test
 {
@@ -41,7 +42,7 @@ void CsvOutput::open(const ExperimentConfiguration & ec)
 
     // write experiment details
     m_os << ec;
-    m_os << ec.external_info.m_to_log;
+    m_os << ExternalInfo::as_string();
     m_os << std::endl << std::endl;
 
     // write header
