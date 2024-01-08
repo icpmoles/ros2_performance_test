@@ -31,20 +31,6 @@
   #include <dds/dds.hpp>
 #endif
 
-#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-  #include <dds/DCPS/RTPS/RtpsDiscovery.h>
-  #include <dds/DCPS/transport/framework/TransportRegistry.h>
-  #include <dds/DCPS/transport/rtps_udp/RtpsUdpInst_rch.h>
-  #include <dds/DCPS/transport/rtps_udp/RtpsUdpInst.h>
-  #include <dds/DdsDcpsInfrastructureC.h>
-  #include <dds/DdsDcpsPublicationC.h>
-  #include <dds/DdsDcpsSubscriptionC.h>
-  #include <dds/DCPS/Marked_Default_Qos.h>
-  #include <dds/DCPS/Service_Participant.h>
-  #include <dds/DCPS/WaitSet.h>
-  #include <dds/DCPS/StaticIncludes.h>
-#endif
-
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   #include <rclcpp/rclcpp.hpp>
 #endif
@@ -140,30 +126,6 @@ public:
     const ExperimentConfiguration & ec) const;
 #endif
 
-#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-  DDS::DomainParticipant_ptr opendds_participant(const ExperimentConfiguration & ec) const;
-
-  /**
-   * \brief Creates a new OpenDDS publisher.
-   * \param publisher Will be overwritten with the created publisher.
-   * \param dw_qos Will be overwritten with the default QOS from the created publisher.
-   */
-  void opendds_publisher(
-    const ExperimentConfiguration & ec,
-    DDS::Publisher_ptr & publisher,
-    DDS::DataWriterQos & dw_qos) const;
-
-  /**
-   * \brief Creates a new OpenDDS subscriber.
-   * \param subscriber Will be overwritten with the created subscriber.
-   * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
-   */
-  void opendds_subscriber(
-    const ExperimentConfiguration & ec,
-    DDS::Subscriber_ptr & subscriber,
-    DDS::DataReaderQos & dr_qos) const;
-#endif
-
 private:
   ResourceManager()
   : m_unused(nullptr)
@@ -179,10 +141,6 @@ private:
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
     , m_cyclonedds_participant(0)
-#endif
-
-#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-    , m_opendds_participant(nullptr)
 #endif
   {}
 
@@ -200,10 +158,6 @@ private:
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
   mutable DDSDomainParticipant * m_connext_dds_participant;
-#endif
-
-#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-  mutable DDS::DomainParticipant_ptr m_opendds_participant;
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED

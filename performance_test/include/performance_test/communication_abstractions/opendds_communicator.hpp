@@ -15,13 +15,23 @@
 #ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__OPENDDS_COMMUNICATOR_HPP_
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__OPENDDS_COMMUNICATOR_HPP_
 
+#include <mutex>
+#include <string>
 #include <vector>
 
+#include <dds/DCPS/RTPS/RtpsDiscovery.h>
+#include <dds/DCPS/transport/framework/TransportRegistry.h>
+#include <dds/DCPS/transport/rtps_udp/RtpsUdpInst_rch.h>
+#include <dds/DCPS/transport/rtps_udp/RtpsUdpInst.h>
+#include <dds/DdsDcpsInfrastructureC.h>
+#include <dds/DdsDcpsPublicationC.h>
+#include <dds/DdsDcpsSubscriptionC.h>
 #include <dds/DCPS/Marked_Default_Qos.h>
+#include <dds/DCPS/Service_Participant.h>
 #include <dds/DCPS/WaitSet.h>
+#include <dds/DCPS/StaticIncludes.h>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 #ifdef LENGTH_UNLIMITED
 #undef LENGTH_UNLIMITED
@@ -117,6 +127,131 @@ private:
   const QOSAbstraction m_qos;
 };
 
+class OpenDDSResourceManager
+{
+public:
+  static OpenDDSResourceManager & get()
+  {
+    static OpenDDSResourceManager instance;
+    return instance;
+  }
+
+  OpenDDSResourceManager(OpenDDSResourceManager const &) = delete;
+  OpenDDSResourceManager(OpenDDSResourceManager &&) = delete;
+  OpenDDSResourceManager & operator=(OpenDDSResourceManager const &) = delete;
+  OpenDDSResourceManager & operator=(OpenDDSResourceManager &&) = delete;
+
+  DDS::DomainParticipant_ptr opendds_participant(const ExperimentConfiguration & ec) const
+  {
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+
+    if (CORBA::is_nil(m_opendds_participant)) {
+      DDS::DomainParticipantFactory_var dpf = TheParticipantFactory;
+
+      OpenDDS::DCPS::TransportConfig_rch config =
+        OpenDDS::DCPS::TransportRegistry::instance()->create_config("ApexAiConfig");
+      OpenDDS::DCPS::TransportInst_rch inst =
+        OpenDDS::DCPS::TransportRegistry::instance()->create_inst("rtps_tran", "rtps_udp");
+      OpenDDS::DCPS::RtpsUdpInst_rch rui =
+        OpenDDS::DCPS::static_rchandle_cast<OpenDDS::DCPS::RtpsUdpInst>(inst);
+      rui->handshake_timeout_ = 1;
+
+      config->instances_.push_back(inst);
+      OpenDDS::DCPS::TransportRegistry::instance()->global_config(config);
+
+      int domain = ec.dds_domain_id;
+      bool multicast = true;
+      unsigned int resend = 1;
+      std::string partition, governance, permissions;
+      int defaultSize = 0;
+
+      OpenDDS::RTPS::RtpsDiscovery_rch disc;
+      disc = OpenDDS::DCPS::make_rch<OpenDDS::RTPS::RtpsDiscovery>("RtpsDiscovery");
+      rui->use_multicast_ = true;
+      rui->local_address("127.0.0.1:");
+      rui->multicast_interface_ = "lo";
+      disc->sedp_multicast(true);
+
+      TheServiceParticipant->add_discovery(
+        OpenDDS::DCPS::static_rchandle_cast<OpenDDS::DCPS::Discovery>(disc));
+      TheServiceParticipant->set_repo_domain(domain, disc->key());
+      DDS::DomainParticipantQos dp_qos;
+      dpf->get_default_participant_qos(dp_qos);
+      m_opendds_participant = dpf->create_participant(
+        ec.dds_domain_id,
+        PARTICIPANT_QOS_DEFAULT,
+        nullptr,
+        OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+    }
+    return m_opendds_participant;
+  }
+
+  /**
+   * \brief Creates a new OpenDDS publisher.
+   * \param publisher Will be overwritten with the created publisher.
+   * \param dw_qos Will be overwritten with the default QOS from the created publisher.
+   */
+  void opendds_publisher(
+    const ExperimentConfiguration & ec,
+    DDS::Publisher_ptr & publisher,
+    DDS::DataWriterQos & dw_qos) const
+  {
+    DDS::DomainParticipant_ptr participant = opendds_participant(ec);
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+
+    publisher = participant->create_publisher(
+      PUBLISHER_QOS_DEFAULT,
+      nullptr,
+      OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+
+    if (CORBA::is_nil(publisher)) {
+      throw std::runtime_error("Failed to create publisher");
+    }
+
+    DDS::ReturnCode_t ret;
+    ret = publisher->get_default_datawriter_qos(dw_qos);
+    if (ret != DDS::RETCODE_OK) {
+      throw std::runtime_error("Failed to get default datawriter qos");
+    }
+  }
+
+  /**
+   * \brief Creates a new OpenDDS subscriber.
+   * \param subscriber Will be overwritten with the created subscriber.
+   * \param dr_qos Will be overwritten with the default QOS from the created subscriber.
+   */
+  void opendds_subscriber(
+    const ExperimentConfiguration & ec,
+    DDS::Subscriber_ptr & subscriber,
+    DDS::DataReaderQos & dr_qos) const
+  {
+    DDS::DomainParticipant_ptr participant = opendds_participant(ec);
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+
+    subscriber = participant->create_subscriber(
+      SUBSCRIBER_QOS_DEFAULT,
+      nullptr,
+      OpenDDS::DCPS::DEFAULT_STATUS_MASK);
+
+    if (CORBA::is_nil(subscriber)) {
+      throw std::runtime_error("Failed to create subscriber");
+    }
+
+    DDS::ReturnCode_t ret;
+    ret = subscriber->get_default_datareader_qos(dr_qos);
+    if (ret != DDS::RETCODE_OK) {
+      throw std::runtime_error("Failed to get default datareader qos");
+    }
+  }
+
+private:
+  OpenDDSResourceManager()
+  : m_opendds_participant(nullptr) {}
+
+  mutable std::mutex m_global_mutex;
+  mutable DDS::DomainParticipant_ptr m_opendds_participant;
+};
+
 class OpenDDSResources {
 public:
   template<class Topic>
@@ -163,7 +298,7 @@ public:
   using DataWriterType = typename Topic::OpenDDSDataWriterType;
 
   explicit OpenDDSPublisher(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().opendds_participant(ec)),
+  : m_participant(OpenDDSResourceManager::get().opendds_participant(ec)),
     m_datawriter(make_opendds_datawriter(ec, m_participant))
   {
   }
@@ -197,7 +332,7 @@ private:
   {
     DDS::Publisher_ptr publisher;
     DDS::DataWriterQos dw_qos;
-    ResourceManager::get().opendds_publisher(ec, publisher, dw_qos);
+    OpenDDSResourceManager::get().opendds_publisher(ec, publisher, dw_qos);
 
     OpenDdsQOSAdapter qos_adapter(ec.qos);
     qos_adapter.apply_dw(dw_qos);
@@ -228,7 +363,7 @@ public:
   using DataTypeSeq = typename Topic::OpenDDSDataTypeSeq;
 
   explicit OpenDDSSubscriber(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().opendds_participant(ec)),
+  : m_participant(OpenDDSResourceManager::get().opendds_participant(ec)),
     m_datareader(make_opendds_datareader(ec, m_participant)),
     m_condition(m_datareader->get_statuscondition())
   {
@@ -284,7 +419,7 @@ private:
   {
     DDS::Subscriber_ptr subscriber;
     DDS::DataReaderQos dr_qos;
-    ResourceManager::get().opendds_subscriber(ec, subscriber, dr_qos);
+    OpenDDSResourceManager::get().opendds_subscriber(ec, subscriber, dr_qos);
 
     OpenDdsQOSAdapter qos_adapter(ec.qos);
     qos_adapter.apply_dr(dr_qos);
