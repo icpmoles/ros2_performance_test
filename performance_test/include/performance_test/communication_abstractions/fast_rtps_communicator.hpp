@@ -16,21 +16,28 @@
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__FAST_RTPS_COMMUNICATOR_HPP_
 
 #include <fastdds/dds/domain/DomainParticipant.hpp>
+#include <fastdds/dds/domain/DomainParticipantFactory.hpp>
+#include <fastdds/dds/domain/qos/DomainParticipantQos.hpp>
 #include <fastdds/dds/publisher/Publisher.hpp>
 #include <fastdds/dds/publisher/DataWriter.hpp>
 #include <fastdds/dds/publisher/DataWriterListener.hpp>
+#include <fastdds/dds/publisher/qos/PublisherQos.hpp>
 #include <fastdds/dds/topic/Topic.hpp>
 #include <fastdds/dds/topic/TypeSupport.hpp>
 #include <fastdds/dds/subscriber/DataReader.hpp>
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/subscriber/Subscriber.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
+#include <fastdds/dds/subscriber/qos/SubscriberQos.hpp>
 #include <fastdds/dds/core/LoanableSequence.hpp>
+#include <fastdds/rtps/transport/shared_mem/SharedMemTransportDescriptor.h>
+#include <fastdds/rtps/transport/UDPv4TransportDescriptor.h>
 
+#include <memory>
+#include <mutex>
 #include <vector>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
 #include "performance_test/utilities/msg_traits.hpp"
 
@@ -127,6 +134,103 @@ private:
   }
 };
 
+class FastDDSResourceManager
+{
+public:
+  static FastDDSResourceManager & get()
+  {
+    static FastDDSResourceManager instance;
+    return instance;
+  }
+
+  FastDDSResourceManager(FastDDSResourceManager const &) = delete;
+  FastDDSResourceManager(FastDDSResourceManager &&) = delete;
+  FastDDSResourceManager &operator=(FastDDSResourceManager const &) = delete;
+  FastDDSResourceManager &operator=(FastDDSResourceManager &&) = delete;
+
+  struct FastDDSGlobalResources
+  {
+    eprosima::fastdds::dds::DomainParticipant * participant;
+    eprosima::fastdds::dds::Publisher * publisher;
+    eprosima::fastdds::dds::Subscriber * subscriber;
+    eprosima::fastdds::dds::Topic * topic;
+  };
+
+  const FastDDSGlobalResources & fastdds_resources(
+    const ExperimentConfiguration & ec, eprosima::fastdds::dds::TypeSupport type) const
+    {
+      std::lock_guard<std::mutex> lock(m_global_mutex);
+
+      if (!m_fastdds_resources.participant) {
+        eprosima::fastdds::dds::DomainParticipantQos pqos;
+
+        auto factory = eprosima::fastdds::dds::DomainParticipantFactory::get_instance();
+
+        // Load XML profiles and get default participant QoS
+        factory->load_profiles();
+        factory->get_default_participant_qos(pqos);
+
+        // Participant is always considered alive
+        pqos.wire_protocol().builtin.discovery_config.leaseDuration =
+          eprosima::fastrtps::c_TimeInfinite;
+
+        // Only tune transports if not tuned on the XML
+        if (!(pqos.transport() == eprosima::fastdds::dds::PARTICIPANT_QOS_DEFAULT.transport())) {
+          // tuning system network stack
+          pqos.transport().send_socket_buffer_size = 1048576;
+          pqos.transport().listen_socket_buffer_size = 4194304;
+          // set shm transport
+          pqos.transport().use_builtin_transports = false;
+          auto shm_transport =
+            std::make_shared<eprosima::fastdds::rtps::SharedMemTransportDescriptor>();
+          // changes to 6MB, default is 0.5MB, 512 * 1024 B
+          shm_transport->segment_size(6 * 1024 * 1024);
+          pqos.transport().user_transports.push_back(shm_transport);
+          // set udp as fallback transport
+          auto udp_transport =
+            std::make_shared<eprosima::fastdds::rtps::UDPv4TransportDescriptor>();
+          pqos.transport().user_transports.push_back(udp_transport);
+        }
+
+        pqos.name("performance_test_fastDDS");
+
+        m_fastdds_resources.participant = factory->create_participant(ec.dds_domain_id, pqos);
+        if (m_fastdds_resources.participant == nullptr) {
+          throw std::runtime_error("failed to create participant");
+        }
+
+        m_fastdds_resources.publisher = m_fastdds_resources.participant->create_publisher(
+          eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT);
+        if (m_fastdds_resources.publisher == nullptr) {
+          throw std::runtime_error("failed to create publisher");
+        }
+
+        m_fastdds_resources.subscriber = m_fastdds_resources.participant->create_subscriber(
+          eprosima::fastdds::dds::SUBSCRIBER_QOS_DEFAULT);
+        if (m_fastdds_resources.subscriber == nullptr) {
+          throw std::runtime_error("failed to create subscriber");
+        }
+
+        type.register_type(m_fastdds_resources.participant);
+
+        auto topic_name = ec.topic_name + ec.pub_topic_postfix();
+        m_fastdds_resources.topic = m_fastdds_resources.participant->create_topic(
+          topic_name, type->getName(), eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
+        if (m_fastdds_resources.topic == nullptr) {
+          throw std::runtime_error("failed to create topic");
+        }
+      }
+      return m_fastdds_resources;
+    }
+
+private:
+  FastDDSResourceManager()
+  : m_fastdds_resources{nullptr, nullptr, nullptr, nullptr} {}
+
+  mutable std::mutex m_global_mutex;
+  mutable FastDDSGlobalResources m_fastdds_resources;
+};
+
 template<class Topic>
 class FastRTPSPublisher : public Publisher
 {
@@ -136,7 +240,7 @@ public:
 
   explicit FastRTPSPublisher(const ExperimentConfiguration & ec)
   : m_ec(ec),
-    m_resources(ResourceManager::get().fastdds_resources(
+    m_resources(FastDDSResourceManager::get().fastdds_resources(
       ec, eprosima::fastdds::dds::TypeSupport(new TopicType()))),
     m_datawriter(create_datawriter(m_resources, ec))
   {
@@ -171,12 +275,12 @@ public:
 
 private:
   const ExperimentConfiguration & m_ec;
-  ResourceManager::FastDDSGlobalResources m_resources;
+  FastDDSResourceManager::FastDDSGlobalResources m_resources;
   eprosima::fastdds::dds::DataWriter * m_datawriter;
   DataType m_data;
 
   static eprosima::fastdds::dds::DataWriter * create_datawriter(
-    const ResourceManager::FastDDSGlobalResources & resources,
+    const FastDDSResourceManager::FastDDSGlobalResources & resources,
     const ExperimentConfiguration & ec
   )
   {
@@ -255,7 +359,7 @@ public:
   using DataType = typename Topic::EprosimaType;
 
   explicit FastRTPSSubscriber(const ExperimentConfiguration & ec)
-  : m_resources(ResourceManager::get().fastdds_resources(
+  : m_resources(FastDDSResourceManager::get().fastdds_resources(
       ec, eprosima::fastdds::dds::TypeSupport(new TopicType()))),
     m_datareader(create_datareader(m_resources, ec))
   {
@@ -290,11 +394,11 @@ public:
   }
 
 private:
-  ResourceManager::FastDDSGlobalResources m_resources;
+  FastDDSResourceManager::FastDDSGlobalResources m_resources;
   eprosima::fastdds::dds::DataReader * m_datareader;
 
   static eprosima::fastdds::dds::DataReader * create_datareader(
-    const ResourceManager::FastDDSGlobalResources & resources,
+    const FastDDSResourceManager::FastDDSGlobalResources & resources,
     const ExperimentConfiguration & ec
   )
   {

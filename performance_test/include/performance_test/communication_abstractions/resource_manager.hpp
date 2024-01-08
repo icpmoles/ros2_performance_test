@@ -15,11 +15,6 @@
 #ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RESOURCE_MANAGER_HPP_
 
-#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-  #include <fastdds/dds/domain/DomainParticipant.hpp>
-  #include <fastdds/dds/topic/Topic.hpp>
-#endif
-
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
   #include <rti_me_cpp.hxx>
 #endif
@@ -85,20 +80,6 @@ public:
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   std::shared_ptr<rclcpp::Node> rclcpp_node(const ExperimentConfiguration & ec) const;
-#endif
-
-#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-  struct FastDDSGlobalResources
-  {
-    eprosima::fastdds::dds::DomainParticipant * participant;
-    eprosima::fastdds::dds::Publisher * publisher;
-    eprosima::fastdds::dds::Subscriber * subscriber;
-    eprosima::fastdds::dds::Topic * topic;
-  };
-
-  /// Returns FastDDS resources.
-  const FastDDSGlobalResources & fastdds_resources(
-    const ExperimentConfiguration & ec, eprosima::fastdds::dds::TypeSupport type) const;
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
@@ -189,9 +170,6 @@ private:
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
     , m_node(nullptr)
 #endif
-#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-    , m_fastdds_resources{nullptr, nullptr, nullptr, nullptr}
-#endif
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
     , m_connext_dds_micro_participant(nullptr)
 #endif
@@ -212,10 +190,6 @@ private:
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   mutable std::shared_ptr<rclcpp::Node> m_node;
-#endif
-
-#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-  mutable FastDDSGlobalResources m_fastdds_resources;
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
