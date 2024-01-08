@@ -238,17 +238,4 @@ void ResourceManager::connext_dds_subscriber(
 }
 #endif
 
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-dds::domain::DomainParticipant ResourceManager::cyclonedds_cxx_participant(
-  const ExperimentConfiguration & ec) const
-{
-  std::lock_guard<std::mutex> lock(m_global_mutex);
-
-  // CycloneDDS-CXX has its own reference-counting mechanism
-  if (m_cyclonedds_cxx_participant.is_nil()) {
-    m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(ec.dds_domain_id);
-  }
-  return m_cyclonedds_cxx_participant;
-}
-#endif
 }  // namespace performance_test

@@ -23,10 +23,6 @@
   #include <ndds/ndds_cpp.h>
 #endif
 
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-  #include <dds/dds.hpp>
-#endif
-
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
   #include <rclcpp/rclcpp.hpp>
 #endif
@@ -113,11 +109,6 @@ public:
     DDS_DataReaderQos & dr_qos) const;
 #endif
 
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-  dds::domain::DomainParticipant cyclonedds_cxx_participant(
-    const ExperimentConfiguration & ec) const;
-#endif
-
 private:
   ResourceManager()
   : m_unused(nullptr)
@@ -146,10 +137,6 @@ private:
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
   mutable DDSDomainParticipant * m_connext_dds_participant;
-#endif
-
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-  mutable dds::domain::DomainParticipant m_cyclonedds_cxx_participant{dds::core::null};
 #endif
 
   mutable std::mutex m_global_mutex;

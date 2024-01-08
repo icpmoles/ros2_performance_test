@@ -16,13 +16,13 @@
 #define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__CYCLONEDDS_CXX_COMMUNICATOR_HPP_
 
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 
 #include <dds/dds.hpp>
 
 #include "performance_test/communication_abstractions/communicator.hpp"
-#include "performance_test/communication_abstractions/resource_manager.hpp"
 
 namespace performance_test
 {
@@ -66,13 +66,46 @@ void apply_cylonedds_cxx_qos(
   }
 }
 
+class CycloneDDSCXXResourceManager
+{
+public:
+  static CycloneDDSCXXResourceManager & get()
+  {
+    static CycloneDDSCXXResourceManager instance;
+    return instance;
+  }
+
+  CycloneDDSCXXResourceManager(CycloneDDSCXXResourceManager const &) = delete;
+  CycloneDDSCXXResourceManager(CycloneDDSCXXResourceManager &&) = delete;
+  CycloneDDSCXXResourceManager & operator=(CycloneDDSCXXResourceManager const &) = delete;
+  CycloneDDSCXXResourceManager & operator=(CycloneDDSCXXResourceManager &&) = delete;
+
+  dds::domain::DomainParticipant cyclonedds_cxx_participant(
+    const ExperimentConfiguration & ec) const
+  {
+    std::lock_guard<std::mutex> lock(m_global_mutex);
+
+    // CycloneDDS-CXX has its own reference-counting mechanism
+    if (m_cyclonedds_cxx_participant.is_nil()) {
+      m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(ec.dds_domain_id);
+    }
+    return m_cyclonedds_cxx_participant;
+  }
+
+private:
+  CycloneDDSCXXResourceManager() {}
+
+  mutable dds::domain::DomainParticipant m_cyclonedds_cxx_participant{dds::core::null};
+  mutable std::mutex m_global_mutex;
+};
+
 template<class Msg>
 class CycloneDDSCXXPublisher : public Publisher {
 public:
   using DataType = typename Msg::CycloneDDSCXXType;
 
   explicit CycloneDDSCXXPublisher(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_cxx_participant(ec)),
+  : m_participant(CycloneDDSCXXResourceManager::get().cyclonedds_cxx_participant(ec)),
     m_publisher(m_participant),
     m_datawriter(make_cyclonedds_cxx_datawriter<DataType>(
         m_participant, m_publisher, ec))
@@ -144,7 +177,7 @@ public:
   using DataType = typename Msg::CycloneDDSCXXType;
 
   explicit CycloneDDSCXXSubscriber(const ExperimentConfiguration & ec)
-  : m_participant(ResourceManager::get().cyclonedds_cxx_participant(ec)),
+  : m_participant(CycloneDDSCXXResourceManager::get().cyclonedds_cxx_participant(ec)),
     m_subscriber(m_participant),
     m_datareader(make_cyclonedds_cxx_datareader<DataType>(
         m_participant, m_subscriber, ec)),
