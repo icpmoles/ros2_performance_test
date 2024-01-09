@@ -275,6 +275,9 @@ set(sources
     include/performance_test/outputs/output.hpp
     include/performance_test/outputs/output_factory.hpp
     include/performance_test/outputs/stdout_output.hpp
+    include/performance_test/plugin/plugin_factory.hpp
+    include/performance_test/plugin/plugin_singleton.hpp
+    include/performance_test/plugin/plugin.hpp
     include/performance_test/plugin/publisher.hpp
     include/performance_test/plugin/subscriber.hpp
     include/performance_test/utilities/cpu_usage_tracker.hpp
