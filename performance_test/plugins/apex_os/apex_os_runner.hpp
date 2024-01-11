@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__APEX_OS_RUNNER_HPP_
-#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__APEX_OS_RUNNER_HPP_
+#ifndef PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_RUNNER_HPP_
+#define PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_RUNNER_HPP_
 
 #include <algorithm>
 #include <chrono>
@@ -21,7 +21,7 @@
 #include <vector>
 #include <utility>
 
-#include "performance_test/execution_tasks/apex_os_entity_factory.hpp"
+#include "apex_os/apex_os_entity_factory.hpp"
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_execution/runner.hpp"
 
@@ -147,4 +147,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__APEX_OS_RUNNER_HPP_
+#endif  // PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_RUNNER_HPP_

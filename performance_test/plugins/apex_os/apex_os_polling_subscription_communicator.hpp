@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__APEX_OS_POLLING_SUBSCRIPTION_COMMUNICATOR_HPP_
-#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__APEX_OS_POLLING_SUBSCRIPTION_COMMUNICATOR_HPP_
+#ifndef PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_POLLING_SUBSCRIPTION_COMMUNICATOR_HPP_
+#define PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_POLLING_SUBSCRIPTION_COMMUNICATOR_HPP_
 
 #include <functional>
 #include <memory>
@@ -21,11 +21,11 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-#include "performance_test/communication_abstractions/rclcpp_resource_manager.hpp"
-#include "rclcpp_common/ros2_qos_adapter.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
 #include "performance_test/plugin/publisher.hpp"
 #include "performance_test/plugin/subscriber.hpp"
+#include "rclcpp_common/rclcpp_resource_manager.hpp"
+#include "rclcpp_common/ros2_qos_adapter.hpp"
 
 namespace performance_test
 {
@@ -91,4 +91,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__APEX_OS_POLLING_SUBSCRIPTION_COMMUNICATOR_HPP_
+#endif  // PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_POLLING_SUBSCRIPTION_COMMUNICATOR_HPP_

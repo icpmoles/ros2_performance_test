@@ -21,7 +21,7 @@
 #include "performance_test/experiment_execution/round_trip_main_runner.hpp"
 #include "performance_test/experiment_execution/round_trip_relay_runner.hpp"
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-#include "performance_test/experiment_execution/apex_os_runner.hpp"
+#include "apex_os/apex_os_runner.hpp"
 #endif
 
 namespace performance_test

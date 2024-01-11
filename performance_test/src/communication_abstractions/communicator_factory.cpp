@@ -30,7 +30,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-#include "performance_test/communication_abstractions/apex_os_polling_subscription_communicator.hpp"
+#include "apex_os/apex_os_polling_subscription_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED

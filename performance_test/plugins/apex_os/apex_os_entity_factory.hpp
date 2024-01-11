@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__EXECUTION_TASKS__APEX_OS_ENTITY_FACTORY_HPP_
-#define PERFORMANCE_TEST__EXECUTION_TASKS__APEX_OS_ENTITY_FACTORY_HPP_
+#ifndef PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_ENTITY_FACTORY_HPP_
+#define PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_ENTITY_FACTORY_HPP_
 
 #include <memory>
 #include <string>
 
-#include "performance_test/communication_abstractions/apex_os_communicator.hpp"
+#include "apex_os/apex_os_communicator.hpp"
 #include "performance_test/utilities/for_each.hpp"
 #include "performance_test/generated_messages/messages.hpp"
 
@@ -82,4 +82,4 @@ public:
 };
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__EXECUTION_TASKS__APEX_OS_ENTITY_FACTORY_HPP_
+#endif  // PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_ENTITY_FACTORY_HPP_
