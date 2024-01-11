@@ -350,7 +350,9 @@ if(PERFORMANCE_TEST_FASTRTPS_ENABLED)
 endif()
 
 if(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
-  list(APPEND sources include/performance_test/communication_abstractions/connext_dds_micro_communicator.hpp)
+  list(APPEND sources plugins/connextdds_micro/connext_dds_micro_communicator.hpp)
+  list(APPEND sources plugins/connextdds_micro/plugin_factory.cpp)
+  list(APPEND sources plugins/connextdds_micro/plugin_impl.hpp)
 endif()
 
 if(PERFORMANCE_TEST_CYCLONEDDS_ENABLED)

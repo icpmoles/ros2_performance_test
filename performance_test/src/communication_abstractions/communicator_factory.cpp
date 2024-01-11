@@ -42,7 +42,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-#include "performance_test/communication_abstractions/connext_dds_micro_communicator.hpp"
+#include "connextdds_micro/connext_dds_micro_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
