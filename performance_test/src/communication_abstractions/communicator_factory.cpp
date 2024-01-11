@@ -22,11 +22,11 @@
 
 
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-#include "performance_test/communication_abstractions/rclcpp_publisher.hpp"
+#include "rclcpp_common/rclcpp_publisher.hpp"
 #endif
 
 #if defined(PERFORMANCE_TEST_RCLCPP_STE_ENABLED) || defined(PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED)
-#include "performance_test/communication_abstractions/rclcpp_callback_communicator.hpp"
+#include "ros2/rclcpp_callback_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
@@ -34,7 +34,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-#include "performance_test/communication_abstractions/rclcpp_waitset_communicator.hpp"
+#include "ros2/rclcpp_waitset_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED

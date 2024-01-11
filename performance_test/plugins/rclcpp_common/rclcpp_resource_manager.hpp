@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_RESOURCE_MANAGER_HPP_
-#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_RESOURCE_MANAGER_HPP_
+#ifndef PERFORMANCE_TEST__PLUGINS__RCLCPP_COMMON__RCLCPP_RESOURCE_MANAGER_HPP_
+#define PERFORMANCE_TEST__PLUGINS__RCLCPP_COMMON__RCLCPP_RESOURCE_MANAGER_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -21,7 +21,7 @@
 #include <mutex>
 #include <string>
 
-#include "../experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 
 namespace performance_test
 {
@@ -83,4 +83,4 @@ private:
 };
 
 }  // namespace performance_test
-#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_RESOURCE_MANAGER_HPP_
+#endif  // PERFORMANCE_TEST__PLUGINS__RCLCPP_COMMON__RCLCPP_RESOURCE_MANAGER_HPP_

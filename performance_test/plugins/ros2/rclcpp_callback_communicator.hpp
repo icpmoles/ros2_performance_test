@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_CALLBACK_COMMUNICATOR_HPP_
-#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_CALLBACK_COMMUNICATOR_HPP_
+#ifndef PERFORMANCE_TEST__PLUGINS__ROS2__RCLCPP_CALLBACK_COMMUNICATOR_HPP_
+#define PERFORMANCE_TEST__PLUGINS__ROS2__RCLCPP_CALLBACK_COMMUNICATOR_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 
 #include <memory>
 #include <vector>
 
-#include "performance_test/communication_abstractions/rclcpp_resource_manager.hpp"
-#include "performance_test/communication_abstractions/ros2_qos_adapter.hpp"
 #include "performance_test/plugin/publisher.hpp"
 #include "performance_test/plugin/subscriber.hpp"
+#include "rclcpp_common/rclcpp_resource_manager.hpp"
+#include "rclcpp_common/ros2_qos_adapter.hpp"
 
 namespace performance_test
 {
@@ -99,4 +99,4 @@ using RclcppStaticSingleThreadedExecutorSubscriber =
   RclcppCallbackSubscriber<Msg, rclcpp::executors::StaticSingleThreadedExecutor>;
 #endif
 }  // namespace performance_test
-#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_CALLBACK_COMMUNICATOR_HPP_
+#endif  // PERFORMANCE_TEST__PLUGINS__ROS2__RCLCPP_CALLBACK_COMMUNICATOR_HPP_

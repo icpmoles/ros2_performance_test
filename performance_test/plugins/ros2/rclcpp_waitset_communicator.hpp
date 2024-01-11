@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_WAITSET_COMMUNICATOR_HPP_
-#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_WAITSET_COMMUNICATOR_HPP_
+#ifndef PERFORMANCE_TEST__PLUGINS__ROS2__RCLCPP_WAITSET_COMMUNICATOR_HPP_
+#define PERFORMANCE_TEST__PLUGINS__ROS2__RCLCPP_WAITSET_COMMUNICATOR_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 
@@ -24,8 +24,8 @@
 #include <algorithm>
 #include <vector>
 
-#include "performance_test/communication_abstractions/rclcpp_resource_manager.hpp"
-#include "performance_test/communication_abstractions/ros2_qos_adapter.hpp"
+#include "rclcpp_common/rclcpp_resource_manager.hpp"
+#include "rclcpp_common/ros2_qos_adapter.hpp"
 
 namespace performance_test
 {
@@ -92,4 +92,4 @@ private:
 
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__RCLCPP_WAITSET_COMMUNICATOR_HPP_
+#endif  // PERFORMANCE_TEST__PLUGINS__ROS2__RCLCPP_WAITSET_COMMUNICATOR_HPP_

@@ -26,7 +26,7 @@
 #include <executor/executable_item.hpp>
 #include <rclcpp/rclcpp.hpp>
 
-#include "performance_test/communication_abstractions/ros2_qos_adapter.hpp"
+#include "rclcpp_common/ros2_qos_adapter.hpp"
 #include "performance_test/experiment_metrics/publisher_stats.hpp"
 #include "performance_test/experiment_metrics/subscriber_stats.hpp"
 
