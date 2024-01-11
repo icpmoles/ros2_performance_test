@@ -38,7 +38,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-#include "performance_test/communication_abstractions/fast_rtps_communicator.hpp"
+#include "fastdds/fast_rtps_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED

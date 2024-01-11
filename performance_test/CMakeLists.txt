@@ -344,7 +344,9 @@ if(PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED)
 endif()
 
 if(PERFORMANCE_TEST_FASTRTPS_ENABLED)
-  list(APPEND sources include/performance_test/communication_abstractions/fast_rtps_communicator.hpp)
+  list(APPEND sources plugins/fastdds/fast_rtps_communicator.hpp)
+  list(APPEND sources plugins/fastdds/plugin_factory.cpp)
+  list(APPEND sources plugins/fastdds/plugin_impl.hpp)
 endif()
 
 if(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
