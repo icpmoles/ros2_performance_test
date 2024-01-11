@@ -62,7 +62,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-#include "performance_test/communication_abstractions/opendds_communicator.hpp"
+#include "opendds/opendds_communicator.hpp"
 #endif
 
 namespace performance_test

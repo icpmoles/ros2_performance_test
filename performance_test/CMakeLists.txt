@@ -370,7 +370,9 @@ if(PERFORMANCE_TEST_ICEORYX_ENABLED)
 endif()
 
 if(PERFORMANCE_TEST_OPENDDS_ENABLED)
-  list(APPEND sources include/performance_test/communication_abstractions/opendds_communicator.hpp)
+  list(APPEND sources plugins/opendds/opendds_communicator.hpp)
+  list(APPEND sources plugins/opendds/plugin_factory.cpp)
+  list(APPEND sources plugins/opendds/plugin_impl.hpp)
 endif()
 
 include(ExternalProject)
