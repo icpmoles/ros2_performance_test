@@ -58,7 +58,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-#include "performance_test/communication_abstractions/iceoryx_communicator.hpp"
+#include "iceoryx/iceoryx_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_OPENDDS_ENABLED

@@ -364,7 +364,9 @@ if(PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED)
 endif()
 
 if(PERFORMANCE_TEST_ICEORYX_ENABLED)
-  list(APPEND sources include/performance_test/communication_abstractions/iceoryx_communicator.hpp)
+  list(APPEND sources plugins/iceoryx/iceoryx_communicator.hpp)
+  list(APPEND sources plugins/iceoryx/plugin_factory.cpp)
+  list(APPEND sources plugins/iceoryx/plugin_impl.hpp)
 endif()
 
 if(PERFORMANCE_TEST_OPENDDS_ENABLED)
