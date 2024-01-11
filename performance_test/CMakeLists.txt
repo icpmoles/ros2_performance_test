@@ -355,6 +355,12 @@ if(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
   list(APPEND sources plugins/connextdds_micro/plugin_impl.hpp)
 endif()
 
+if(PERFORMANCE_TEST_CONNEXTDDS_ENABLED)
+  list(APPEND sources plugins/connextdds/connext_dds_communicator.hpp)
+  list(APPEND sources plugins/connextdds/plugin_factory.cpp)
+  list(APPEND sources plugins/connextdds/plugin_impl.hpp)
+endif()
+
 if(PERFORMANCE_TEST_CYCLONEDDS_ENABLED)
   list(APPEND sources plugins/cyclonedds/cyclonedds_communicator.hpp)
   list(APPEND sources plugins/cyclonedds/plugin_factory.cpp)

@@ -46,7 +46,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-#include "performance_test/communication_abstractions/connext_dds_communicator.hpp"
+#include "connextdds/connext_dds_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
