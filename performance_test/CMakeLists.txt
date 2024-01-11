@@ -40,7 +40,7 @@ endif()
 ament_export_include_directories(include)
 ament_export_dependencies(rosidl_default_runtime)
 
-include_directories(include ${osrf_testing_tools_cpp_INCLUDE_DIR})
+include_directories(include plugins ${osrf_testing_tools_cpp_INCLUDE_DIR})
 
 
 # plugin selection
@@ -352,7 +352,9 @@ if(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
 endif()
 
 if(PERFORMANCE_TEST_CYCLONEDDS_ENABLED)
-  list(APPEND sources include/performance_test/communication_abstractions/cyclonedds_communicator.hpp)
+  list(APPEND sources plugins/cyclonedds/cyclonedds_communicator.hpp)
+  list(APPEND sources plugins/cyclonedds/plugin_factory.cpp)
+  list(APPEND sources plugins/cyclonedds/plugin_impl.hpp)
 endif()
 
 if(PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED)
