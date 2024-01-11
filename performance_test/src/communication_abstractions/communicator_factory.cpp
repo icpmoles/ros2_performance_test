@@ -54,7 +54,7 @@
 #endif
 
 #ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-#include "performance_test/communication_abstractions/cyclonedds_cxx_communicator.hpp"
+#include "cyclonedds_cxx/cyclonedds_cxx_communicator.hpp"
 #endif
 
 #ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
