@@ -345,8 +345,7 @@ build_cyclonedds:
           --merge-install
           --cmake-args
             -DCMAKE_BUILD_TYPE=Release
-            -DPERFORMANCE_TEST_CYCLONEDDS_ENABLED=ON
-            -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            -DPERFORMANCE_TEST_PLUGIN=CYCLONEDDS
             ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
@@ -399,8 +398,7 @@ build_cyclonedds_cxx:
           --merge-install
           --cmake-args
             -DCMAKE_BUILD_TYPE=Release
-            -DPERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED=ON
-            -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            -DPERFORMANCE_TEST_PLUGIN=CYCLONEDDS_CXX
             ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
@@ -438,7 +436,7 @@ build_iceoryx:
           --merge-install
           --cmake-args
             -DCMAKE_BUILD_TYPE=Release
-            -DPERFORMANCE_TEST_ICEORYX_ENABLED=ON
+            -DPERFORMANCE_TEST_PLUGIN=ICEORYX
             ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
@@ -477,8 +475,7 @@ build_opendds:
           --cmake-args
             -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_CXX_FLAGS="-w"
-            -DPERFORMANCE_TEST_OPENDDS_ENABLED=ON
-            -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            -DPERFORMANCE_TEST_PLUGIN=OPENDDS
             ${CMAKE_ARGS_ENABLE_MSGS}
           --base-path performance_test
       '
@@ -517,8 +514,7 @@ build_fastrtps:
           --cmake-args
             -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_PREFIX_PATH=/opt/Fast-DDS
-            -DPERFORMANCE_TEST_FASTRTPS_ENABLED=ON
-            -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+            -DPERFORMANCE_TEST_PLUGIN=FASTDDS
             ${CMAKE_ARGS_ENABLE_MSGS}
       '
     - cp LICENSE /opt/performance_test

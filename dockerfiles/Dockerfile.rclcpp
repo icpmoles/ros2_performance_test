@@ -21,7 +21,7 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
       --cmake-clean-cache \
       --cmake-args \
         -DCMAKE_BUILD_TYPE=Release \
-        -DPERFORMANCE_TEST_RCLCPP_ENABLED=ON
+        -DPERFORMANCE_TEST_PLUGIN=ROS2
 
 ADD dockerfiles/roudi_config.toml /etc/iceoryx/roudi_config.toml
 

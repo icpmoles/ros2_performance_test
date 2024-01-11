@@ -26,25 +26,6 @@ set(OPTIONAL_LIBRARIES)
 set(CMAKE_CXX_STANDARD 17)
 find_package(ament_cmake REQUIRED)
 
-# Ensure we use the CMake support from ConnextDDS instead of the one provided
-# with the installed RMW package.
-# This change in the environment only affect to the CMake environment. The
-# environment variable will remain as it is outside the building process.
-if($ENV{RMW_IMPLEMENTATION})
-  string(REPLACE
-    "rmw_connext_cpp;"
-    ""
-    ENV{RMW_IMPLEMENTATION}
-    $ENV{RMW_IMPLEMENTATION}
-  )
-  string(REPLACE
-    "rmw_connext_cpp" # It can be alone, without other values
-    ""
-    ENV{RMW_IMPLEMENTATION}
-    $ENV{RMW_IMPLEMENTATION}
-  )
-endif()
-
 find_package(Threads REQUIRED)
 
 find_package(ament_cmake REQUIRED)
@@ -59,13 +40,54 @@ endif()
 ament_export_include_directories(include)
 ament_export_dependencies(rosidl_default_runtime)
 
-# This is a workaround for broken include paths on some systems.
-include_directories(${FastRTPS_INCLUDE_DIR} ${FastRTPS_INCLUDE_DIR}/fastrtps/include ${fastcdr_INCLUDE_DIR})
 include_directories(include ${osrf_testing_tools_cpp_INCLUDE_DIR})
 
 
+# plugin selection
+set(PERFORMANCE_TEST_PLUGIN "ROS2" CACHE STRING "Select a plugin")
+set_property(
+    CACHE PERFORMANCE_TEST_PLUGIN
+    PROPERTY STRINGS
+    "ROS2" "APEX_OS" "FASTDDS" "CONNEXTDDS" "CONNEXTDDSMICRO"
+    "CYCLONEDDS" "CYCLONEDDS_CXX" "ICEORYX" "OPENDDS"
+)
+if(PERFORMANCE_TEST_PLUGIN MATCHES "ROS2")
+  set(PERFORMANCE_TEST_RCLCPP_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "APEX_OS")
+  set(PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "FASTDDS")
+  set(PERFORMANCE_TEST_FASTRTPS_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "CONNEXTDDSMICRO")
+  set(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "CONNEXTDDS")
+  set(PERFORMANCE_TEST_CONNEXTDDS_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "CYCLONEDDS_CXX")
+  set(PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "CYCLONEDDS")
+  set(PERFORMANCE_TEST_CYCLONEDDS_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "ICEORYX")
+  set(PERFORMANCE_TEST_ICEORYX_ENABLED ON)
+elseif(PERFORMANCE_TEST_PLUGIN MATCHES "OPENDDS")
+  set(PERFORMANCE_TEST_OPENDDS_ENABLED ON)
+else()
+  message(
+    FATAL_ERROR
+    "Select a plugin with -DPERFORMANCE_TEST_PLUGIN=\"<plugin>\""
+    "\nOptions are:"
+    "\n- ROS2 (ROS 2 via rclcpp)"
+    "\n- APEX_OS (Apex.OS via rclcpp)"
+    "\n- FASTDDS (eProsima Fast DDS)"
+    "\n- CONNEXTDDS (RTI Connext DDS Pro)"
+    "\n- CONNEXTDDSMICRO (RTI Connext DDS Micro)"
+    "\n- CYCLONEDDS (Eclipse Cyclone DDS)"
+    "\n- CYCLONEDDS_CXX (Eclipse Cyclone DDS with C++ bindings)"
+    "\n- ICEORYX (Eclipse iceoryx)"
+    "\n- OPENDDS (Object Computing OpenDDS)"
+  )
+endif()
+
+
 # ROS2 rclcpp plugins
-option(PERFORMANCE_TEST_RCLCPP_ENABLED "" ON)
 if(PERFORMANCE_TEST_RCLCPP_ENABLED)
   find_package(rclcpp REQUIRED)
   find_package(rmw REQUIRED)
@@ -108,13 +130,8 @@ if(PERFORMANCE_TEST_RCLCPP_ENABLED)
   endif()
 endif()
 
-if(PERFORMANCE_TEST_RCLCPP_LOANED_API_2_ENABLED)
-endif()
 
 # Apex.OS Waitset and Polling Subscription
-option(PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED "Option to enable Polling Subscription Plugin.
-  The plugin can only work if ApexOS is present, otherwise it will fail." OFF)
-
 if(PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED)
   find_library(APEXCPP_LIB apexcpp)
   if(NOT APEXCPP_LIB)
@@ -138,8 +155,8 @@ if(APEX_CERT)
   add_definitions(-DAPEX_CERT)
 endif()
 
+
 # FastRTPS
-option(PERFORMANCE_TEST_FASTRTPS_ENABLED "Enable FastRTPS" OFF)
 if(PERFORMANCE_TEST_FASTRTPS_ENABLED)
   find_package(fastrtps_cmake_module QUIET REQUIRED)
   find_package(FastRTPS QUIET REQUIRED)
@@ -149,7 +166,6 @@ endif()
 
 
 # ConnextDDS
-option(PERFORMANCE_TEST_CONNEXTDDS_ENABLED "Enable Connext DDS Pro" OFF)
 if(PERFORMANCE_TEST_CONNEXTDDS_ENABLED)
     # Append the path to CMAKE_MODULE_PATH in order to find the
     # FindConnextDDS.cmake CMake script
@@ -168,7 +184,6 @@ endif()
 
 
 # RTI Connext Micro
-option(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED "Enable Connext DDS Micro" OFF)
 if(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
   find_package(connext_micro_cmake_module REQUIRED)
   find_package(ConnextMicro MODULE REQUIRED)
@@ -179,32 +194,26 @@ if(PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
 endif()
 
 
-if(PERFORMANCE_TEST_CONNEXTDDS_ENABLED AND PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED)
-  message(FATAL_ERROR
-    "ConnextDDS Pro and ConnextDDS Micro cannot be used in the same "
-    "application. Please, disable one")
-endif()
-
-
 # CycloneDDS
-option(PERFORMANCE_TEST_CYCLONEDDS_ENABLED "Enable CycloneDDS" OFF)
 if(PERFORMANCE_TEST_CYCLONEDDS_ENABLED)
   find_package(CycloneDDS REQUIRED COMPONENTS idlc)
   add_definitions(-DPERFORMANCE_TEST_CYCLONEDDS_ENABLED)
   list(APPEND PLUGIN_LIBRARIES CycloneDDS::ddsc)
 endif()
 
+
 # cyclonedds-cxx
-option(PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED "Enable C++ binding for Cyclone DDS" OFF)
 if(PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED)
   find_package(CycloneDDS-CXX REQUIRED)
   add_definitions(-DPERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED)
   list(APPEND PLUGIN_LIBRARIES cyclonedds_cxx_idl CycloneDDS-CXX::ddscxx)
 endif()
 
+
 # iceoryx
-option(PERFORMANCE_TEST_ICEORYX_ENABLED "Require iceoryx to be available, fail otherwise" OFF)
 if(PERFORMANCE_TEST_ICEORYX_ENABLED)
+  # iceoryx has no message generator, so performance_test uses ROS 2's
+  find_package(rosidl_default_generators REQUIRED)
   find_package(iceoryx_posh CONFIG REQUIRED)
   add_definitions(-DPERFORMANCE_TEST_ICEORYX_ENABLED)
   list(APPEND PLUGIN_LIBRARIES iceoryx_posh::iceoryx_posh)
@@ -212,17 +221,24 @@ endif()
 
 
 # OpenDDS
-option(PERFORMANCE_TEST_OPENDDS_ENABLED "Require Open DDS to be available, fail otherwise" OFF)
 if(PERFORMANCE_TEST_OPENDDS_ENABLED)
   add_definitions(-DPERFORMANCE_TEST_OPENDDS_ENABLED)
   set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif()
+
 
 # IDL file compilation
 add_subdirectory(msg)
 include_directories(${IDLGEN_INCLUDE_DIR})
 
 if(PERFORMANCE_TEST_RCLCPP_ENABLED OR PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED)
+  # rosidl_generate_interfaces must be invoked from this CMakeLists.txt file. Otherwise, the
+  # generated messages are placed in a directory where ros1_bridge can not find them.
+  rosidl_generate_interfaces(${PROJECT_NAME} ${ROSIDL_GEN_LIST})
+endif()
+
+# iceoryx has no message generator, so performance_test uses ROS 2's
+if(PERFORMANCE_TEST_ICEORYX_ENABLED)
   # rosidl_generate_interfaces must be invoked from this CMakeLists.txt file. Otherwise, the
   # generated messages are placed in a directory where ros1_bridge can not find them.
   rosidl_generate_interfaces(${PROJECT_NAME} ${ROSIDL_GEN_LIST})
@@ -429,7 +445,8 @@ execute_process(
 )
 add_definitions(-DPERFORMANCE_TEST_VERSION="${PERF_TEST_VERSION}")
 
-if(PERFORMANCE_TEST_RCLCPP_ENABLED)
+# iceoryx has no message generator, so performance_test uses ROS 2's
+if(PERFORMANCE_TEST_RCLCPP_ENABLED OR PERFORMANCE_TEST_ICEORYX_ENABLED)
   if($ENV{ROS_DISTRO} MATCHES "humble")
     rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
     target_link_libraries(${EXE_NAME} ${cpp_typesupport_target})
@@ -447,6 +464,9 @@ if(PERFORMANCE_TEST_RCLCPP_ENABLED)
   else()
     message(FATAL_ERROR "Unsupported ROS_DISTRO")
   endif()
+endif()
+
+if(PERFORMANCE_TEST_RCLCPP_ENABLED)
   ament_target_dependencies(${EXE_NAME} "rclcpp")
 endif()
 

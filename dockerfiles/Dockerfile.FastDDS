@@ -40,8 +40,7 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
       --cmake-clean-cache \
       --cmake-args \
         -DCMAKE_BUILD_TYPE=Release \
-        -DPERFORMANCE_TEST_FASTRTPS_ENABLED=ON \
-        -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF
+        -DPERFORMANCE_TEST_PLUGIN=FASTDDS
 
 RUN echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> /root/setup.bash
 RUN echo "source /opt/Fast-DDS/setup.bash" >> /root/setup.bash

@@ -168,15 +168,6 @@ if(PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED)
   list(APPEND IDLGEN_LIBRARIES cyclonedds_cxx_idl)
 endif()
 
-if(PERFORMANCE_TEST_ICEORYX_ENABLED)
-  if(NOT PERFORMANCE_TEST_RCLCPP_ENABLED AND NOT PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED)
-    message(FATAL_ERROR
-    "The iceoryx plugin depends on the rosidl generated messages. "
-    "ROS2 must be installed in your environment, and "
-    "PERFORMANCE_TEST_RCLCPP_ENABLED must be ON.")
-  endif()
-endif()
-
 if(PERFORMANCE_TEST_OPENDDS_ENABLED)
   add_subdirectory(opendds)
   list(APPEND IDLGEN_INCLUDE_DIR ${OPENDDS_IDL_INCLUDE_DIR} ${PARENT_DDS_ROOT_INCLUDE})
@@ -196,6 +187,12 @@ if(PERFORMANCE_TEST_OPENDDS_ENABLED)
 endif()
 
 if(PERFORMANCE_TEST_RCLCPP_ENABLED OR PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED)
+  add_subdirectory(rclcpp)
+  set(ROSIDL_GEN_LIST ${ROSIDL_GEN_LIST} PARENT_SCOPE)
+endif()
+
+# iceoryx has no message generator, so performance_test uses ROS 2's
+if(PERFORMANCE_TEST_ICEORYX_ENABLED)
   add_subdirectory(rclcpp)
   set(ROSIDL_GEN_LIST ${ROSIDL_GEN_LIST} PARENT_SCOPE)
 endif()

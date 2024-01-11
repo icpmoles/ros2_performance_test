@@ -61,7 +61,7 @@ This example shows how to test the non-functional performance of the following c
     ```shell
     source /opt/ros/rolling/setup.bash
     cd ~/perf_test_ws
-    colcon build --cmake-args -DPERFORMANCE_TEST_CYCLONEDDS_ENABLED=ON
+    colcon build --cmake-args -DPERFORMANCE_TEST_PLUGIN=CYCLONEDDS
     source ./install/setup.bash
     ```
 
@@ -102,7 +102,7 @@ cd ..
 # At this stage, you need to choose which middleware you want to use
 # The list of available flags is described in the middleware plugins section
 # Square brackets denote optional arguments, like in the Python documentation.
-colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release <cmake_enable_plugin_flag>
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release -DPERFORMANCE_TEST_PLUGIN=<plugin>
 source install/setup.bash
 ```
 
@@ -191,7 +191,7 @@ their own thread.
 ### Eclipse Cyclone DDS
 
 - [Eclipse Cyclone DDS 0.9.0b1](https://github.com/eclipse-cyclonedds/cyclonedds/tree/0.9.0b1)
-- CMake build flag: `-DPERFORMANCE_TEST_CYCLONEDDS_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=CYCLONEDDS`
 - Communication plugin: `-c CycloneDDS`
 - Docker file: [Dockerfile.CycloneDDS](dockerfiles/Dockerfile.CycloneDDS)
 - Available transports:
@@ -212,7 +212,7 @@ their own thread.
 ### Eclipse Cyclone DDS C++ binding
 
 - [Eclipse Cyclone DDS C++ bindings 0.9.0b1](https://github.com/eclipse-cyclonedds/cyclonedds-cxx/tree/0.9.0b1)
-- CMake build flag: `-DPERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=CYCLONEDDS_CXX`
 - Communication plugin: `-c CycloneDDS-CXX`
 - Docker file: [Dockerfile.CycloneDDS-CXX](dockerfiles/Dockerfile.CycloneDDS-CXX)
 - Available transports:
@@ -233,7 +233,7 @@ their own thread.
 ### Eclipse iceoryx
 
 - [iceoryx (latest master as of Feb 13)](https://github.com/eclipse-iceoryx/iceoryx/tree/5fe215eab267b0ad68bc5552aecd4b6e728e4c99)
-- CMake build flag: `-DPERFORMANCE_TEST_ICEORYX_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=ICEORYX`
 - Communication plugin: `-c iceoryx`
 - Docker file: [Dockerfile.iceoryx](dockerfiles/Dockerfile.iceoryx)
 - The iceoryx plugin is not a DDS implementation.
@@ -249,7 +249,7 @@ their own thread.
 ### eProsima Fast DDS
 
 - [FastDDS 2.6.2](https://github.com/eProsima/Fast-DDS/tree/v2.6.2)
-- CMake build flag: `-DPERFORMANCE_TEST_FASTRTPS_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=FASTDDS`
 - Communication plugin: `-c FastRTPS`
 - Docker file: [Dockerfile.FastDDS](dockerfiles/Dockerfile.FastDDS)
 - Available transports:
@@ -260,7 +260,7 @@ their own thread.
 ### OCI OpenDDS
 
 - [OpenDDS 3.13.2](https://github.com/objectcomputing/OpenDDS/tree/DDS-3.13.2)
-- CMake build flag: `-DPERFORMANCE_TEST_OPENDDS_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=OPENDDS`
 - Communication plugin: `-c OpenDDS`
 - Docker file: [Dockerfile.OpenDDS](dockerfiles/Dockerfile.OpenDDS)
 - Available transports:
@@ -271,7 +271,7 @@ their own thread.
 ### RTI Connext DDS
 
 - [RTI Connext DDS 5.3.1+](https://www.rti.com/products/connext-dds-professional)
-- CMake build flag: `-DPERFORMANCE_TEST_CONNEXTDDS_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=CONNEXTDDS`
 - Communication plugin: `-c ConnextDDS`
 - Docker file: Not available
 - A license is required
@@ -289,7 +289,7 @@ their own thread.
 ### RTI Connext DDS Micro
 
 - [Connext DDS Micro 3.0.3](https://www.rti.com/products/connext-dds-micro)
-- CMake build flag: `-DPERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=CONNEXTDDSMICRO`
 - Communication plugin: `-c ConnextDDSMicro`
 - Docker file: Not available
 - A license is required
@@ -310,7 +310,7 @@ The performance test tool can also measure the performance of a variety of RMW i
 through the ROS 2 `rclcpp::publisher` and `rclcpp::subscriber` API.
 
 - [ROS 2 `rclcpp::publisher` and `rclcpp::subscriber`](https://docs.ros.org/en/rolling/Tutorials/Writing-A-Simple-Cpp-Publisher-And-Subscriber.html)
-- CMake build flag: `-DPERFORMANCE_TEST_RCLCPP_ENABLED=ON` (on by default)
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=ROS2` (default)
 - Communication plugin:
   - Callback with Single Threaded Executor: `-c rclcpp-single-threaded-executor`
   - Callback with Static Single Threaded Executor: `-c rclcpp-static-single-threaded-executor`
@@ -326,7 +326,7 @@ through the ROS 2 `rclcpp::publisher` and `rclcpp::subscriber` API.
 ### Apex.OS
 
 - Apex.OS
-- CMake build flag: `-DPERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED=ON`
+- CMake build flag: `-DPERFORMANCE_TEST_PLUGIN=APEX_OS`
    - It is also required to `source /opt/ApexOS/setup.bash` instead of a ROS 2 distribution
 - Communication plugin: `-c ApexOSPollingSubscription`
 - Docker file: Not available
@@ -461,9 +461,6 @@ When building this tool, the compiler must perform a lot of template expansion. 
 overwhelming for a system with a low-power CPU or limited RAM. There are some additional CMake
 options which can reduce the system load during compilation:
 
-1. The [ROS 2 Middleware plugins](#ros-2-middleware-plugins) are enabled by default. If only a
-[native plugin](#native-plugins) is needed, then the ROS 2 plugins can be disabled by adding
-`-DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF` to the `--cmake-args`.
 1. This tool includes many different message types, each with many different sizes. Reduce the number of
 messages, and thus the compilation load, by disabling one or more message types. For example, to build
 without `PointCloud` messages, add `-DENABLE_MSGS_POINDCLOUD=OFF` to the `--cmake-args`. The message types,

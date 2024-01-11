@@ -2,6 +2,10 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Changed
+- Instead of enabling/disabling each plugin, you select exactly one
+  with a CMake string option, for example:
+   - `colcon build --cmake-args -DPERFORMANCE_TEST_PLUGIN=ROS2`
 ### Removed
 - Removed the deprecated CLI flags for QOS settings:
   - Instead of `--reliable`, use `--reliability RELIABLE`

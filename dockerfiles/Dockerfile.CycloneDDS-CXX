@@ -59,8 +59,7 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
       --cmake-clean-cache \
       --cmake-args \
         -DCMAKE_BUILD_TYPE=Release \
-        -DPERFORMANCE_TEST_RCLCPP_ENABLED=OFF \
-        -DPERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED=ON
+        -DPERFORMANCE_TEST_PLUGIN=CYCLONEDDS_CXX
 
 ADD dockerfiles/cyclonedds.xml /
 ENV CYCLONEDDS_URI=/cyclonedds.xml
