@@ -27,10 +27,9 @@ foreach(idl ${IDL_FILES})
   string(REGEX REPLACE "\\.idl" "" basename ${filename})
 
   file(READ ${idl} filedata)
-  string(REGEX REPLACE "__plugin__" "CycloneDDSGen" filedata "${filedata}")
   file(WRITE ${IDL_GEN_ROOT}/${filename} "${filedata}")
   file(APPEND ${IDL_GEN_ROOT}/${filename}
-    "#pragma keylist performance_test::msg::CycloneDDSGen::${basename}\n")
+    "#pragma keylist performance_test::msg::${basename}\n")
 
 
   set(IDL_GEN_C ${IDL_GEN_ROOT}/${basename}.c)

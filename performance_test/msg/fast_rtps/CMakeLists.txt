@@ -41,7 +41,6 @@ foreach(idl ${IDL_FILES})
   string(REGEX REPLACE "\\.idl" "" basename ${filename})
 
   file(READ ${idl} filedata)
-  string(REGEX REPLACE "__plugin__" "FastDDSGen" filedata "${filedata}")
   file(WRITE ${IDL_GEN_ROOT}/${filename} "${filedata}")
 
   set(IDL_GEN_C ${IDL_GEN_ROOT}/${basename}.${SOURCE_EXTENSION}

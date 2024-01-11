@@ -21,7 +21,6 @@ foreach(idl ${IDL_FILES})
   string(REGEX REPLACE "\\.idl" "" basename ${filename})
 
   file(READ ${idl} filedata)
-  string(REGEX REPLACE "__plugin__" "CycloneDDSCXXGen" filedata "${filedata}")
   file(WRITE ${IDL_GEN_ROOT}/${filename} "${filedata}")
 
 

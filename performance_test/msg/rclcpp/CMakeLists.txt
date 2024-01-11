@@ -6,10 +6,6 @@ foreach(idl ${IDL_FILES})
   set(output_file "${IDL_GEN_ROOT}/msg/${filename}")
 
   file(READ ${idl} filedata)
-  string(REGEX REPLACE "module __plugin__ {" "" filedata "${filedata}")
-  string(REGEX REPLACE "}; // __plugin__" "" filedata "${filedata}")
-  string(REGEX REPLACE "__plugin__::" "" filedata "${filedata}")
-  string(REGEX REPLACE "#include \"" "#include \"performance_test/msg/" filedata "${filedata}")
   file(WRITE ${output_file} "${filedata}")
 
   list(APPEND ROSIDL_GEN_LIST "${IDL_GEN_ROOT}:msg/${filename}")

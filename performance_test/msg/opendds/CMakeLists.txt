@@ -49,10 +49,9 @@ foreach(idl ${IDL_FILES})
   string(REGEX REPLACE "\\.idl" "" basename ${filename})
 
   file(READ ${idl} filedata)
-  string(REGEX REPLACE "__plugin__" "OpenDDSGen" filedata "${filedata}")
   file(WRITE ${IDL_GEN_ROOT}/${filename} "${filedata}")
   file(APPEND ${IDL_GEN_ROOT}/${filename}
-    "#pragma DCPS_DATA_TYPE \"performance_test::msg::OpenDDSGen::${basename}\"\n")
+    "#pragma DCPS_DATA_TYPE \"performance_test::msg::${basename}\"\n")
 
   set(TAO_IDL_GEN_CPP ${IDL_GEN_ROOT}/${basename}C.${SOURCE_EXTENSION}
           ${IDL_GEN_ROOT}/${basename}S.${SOURCE_EXTENSION}
