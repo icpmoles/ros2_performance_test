@@ -252,7 +252,6 @@ endif()
 
 set(sources
     include/performance_test/cli/cli_parser.hpp
-    include/performance_test/communication_abstractions/communicator_factory.hpp
     include/performance_test/execution_tasks/publisher_task.hpp
     include/performance_test/execution_tasks/round_trip_relay_task.hpp
     include/performance_test/execution_tasks/subscriber_task.hpp
@@ -299,7 +298,6 @@ set(sources
     include/performance_test/utilities/spin_lock.hpp
     include/performance_test/utilities/version.hpp
     src/cli/cli_parser.cpp
-    src/communication_abstractions/communicator_factory.cpp
     src/execution_tasks/publisher_task.cpp
     src/execution_tasks/round_trip_relay_task.cpp
     src/execution_tasks/subscriber_task.cpp
