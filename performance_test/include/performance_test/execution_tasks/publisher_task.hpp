@@ -20,6 +20,7 @@
 #include <functional>
 
 #include "performance_test/experiment_metrics/publisher_stats.hpp"
+#include "performance_test/plugin/publisher.hpp"
 #include "performance_test/utilities/memory_checker.hpp"
 #include "performance_test/utilities/perf_clock.hpp"
 #include "performance_test/utilities/spin_lock.hpp"

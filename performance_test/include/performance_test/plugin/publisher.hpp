@@ -1,4 +1,4 @@
-// Copyright 2017 Apex.AI, Inc.
+// Copyright 2023 Apex.AI, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
-#define PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
+#ifndef PERFORMANCE_TEST__PLUGIN__PUBLISHER_HPP_
+#define PERFORMANCE_TEST__PLUGIN__PUBLISHER_HPP_
 
 #include <cstdint>
-#include <stdexcept>
 
-#include "performance_test/experiment_metrics/message_received_listener.hpp"
 #include "performance_test/utilities/msg_traits.hpp"
 #include "performance_test/utilities/timestamp_provider.hpp"
 
@@ -28,6 +26,8 @@ namespace performance_test
 class Publisher
 {
 public:
+  virtual ~Publisher() = default;
+
   virtual void publish_copy(
     const TimestampProvider & timestamp_provider,
     std::uint64_t sample_id) = 0;
@@ -49,17 +49,6 @@ protected:
   }
 };
 
-class Subscriber
-{
-public:
-  virtual void update_subscription(MessageReceivedListener & listener) = 0;
-
-  virtual void take(MessageReceivedListener &)
-  {
-    throw std::runtime_error("This communicator does not support take!");
-  }
-};
-
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__COMMUNICATION_ABSTRACTIONS__COMMUNICATOR_HPP_
+#endif  // PERFORMANCE_TEST__PLUGIN__PUBLISHER_HPP_

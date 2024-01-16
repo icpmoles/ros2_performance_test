@@ -25,7 +25,8 @@
 #include <iceoryx_posh/runtime/posh_runtime.hpp>
 #include <iceoryx_dust/cxx/std_string_support.hpp>
 
-#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/plugin/publisher.hpp"
+#include "performance_test/plugin/subscriber.hpp"
 
 namespace performance_test
 {

@@ -31,7 +31,8 @@
 #include <dds/DCPS/WaitSet.h>
 #include <dds/DCPS/StaticIncludes.h>
 
-#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/plugin/publisher.hpp"
+#include "performance_test/plugin/subscriber.hpp"
 
 #ifdef LENGTH_UNLIMITED
 #undef LENGTH_UNLIMITED

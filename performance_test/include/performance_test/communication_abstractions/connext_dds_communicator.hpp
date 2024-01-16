@@ -20,7 +20,8 @@
 
 #include <ndds/ndds_cpp.h>
 
-#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/plugin/publisher.hpp"
+#include "performance_test/plugin/subscriber.hpp"
 
 namespace performance_test
 {

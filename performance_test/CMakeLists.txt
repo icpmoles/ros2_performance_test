@@ -241,7 +241,6 @@ endif()
 
 set(sources
     include/performance_test/cli/cli_parser.hpp
-    include/performance_test/communication_abstractions/communicator.hpp
     include/performance_test/communication_abstractions/communicator_factory.hpp
     include/performance_test/execution_tasks/publisher_task.hpp
     include/performance_test/execution_tasks/round_trip_relay_task.hpp
@@ -264,6 +263,8 @@ set(sources
     include/performance_test/outputs/output.hpp
     include/performance_test/outputs/output_factory.hpp
     include/performance_test/outputs/stdout_output.hpp
+    include/performance_test/plugin/publisher.hpp
+    include/performance_test/plugin/subscriber.hpp
     include/performance_test/utilities/cpu_usage_tracker.hpp
     include/performance_test/utilities/exit_request_handler.hpp
     include/performance_test/utilities/external_info.hpp

@@ -24,7 +24,8 @@
 #include <dds_cpp/dds_cpp_rh_sm.hxx>
 #include <dds_cpp/dds_cpp_netio.hxx>
 
-#include "performance_test/communication_abstractions/communicator.hpp"
+#include "performance_test/plugin/publisher.hpp"
+#include "performance_test/plugin/subscriber.hpp"
 
 
 namespace performance_test
