@@ -279,6 +279,9 @@ set(sources
     include/performance_test/utilities/version.hpp
     src/cli/cli_parser.cpp
     src/communication_abstractions/communicator_factory.cpp
+    src/execution_tasks/publisher_task.cpp
+    src/execution_tasks/round_trip_relay_task.cpp
+    src/execution_tasks/subscriber_task.cpp
     src/experiment_configuration/communication_mean.cpp
     src/experiment_configuration/execution_strategy.cpp
     src/experiment_configuration/experiment_configuration.cpp

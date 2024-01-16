@@ -12,39 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__EXECUTION_TASKS__SUBSCRIBER_TASK_HPP_
-#define PERFORMANCE_TEST__EXECUTION_TASKS__SUBSCRIBER_TASK_HPP_
+#include "performance_test/execution_tasks/round_trip_relay_task.hpp"
 
 #include <memory>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
-#include "performance_test/experiment_metrics/subscriber_stats.hpp"
+#include "performance_test/plugin/publisher.hpp"
 #include "performance_test/plugin/subscriber.hpp"
-#include "performance_test/utilities/memory_checker.hpp"
+#include "performance_test/utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {
-class SubscriberTask
+
+RoundTripRelayTask::RoundTripRelayTask(
+  const ExperimentConfiguration & ec,
+  std::shared_ptr<Publisher> pub,
+  std::shared_ptr<Subscriber> sub)
+: m_pub(pub),
+  m_sub(sub),
+  m_memory_checker(ec) {}
+
+void RoundTripRelayTask::run()
 {
-public:
-  SubscriberTask(
-    const ExperimentConfiguration & ec,
-    SubscriberStats & stats,
-    std::shared_ptr<Subscriber> sub);
+  m_sub->update_subscription(*this);
+  m_memory_checker.enable_memory_tools_checker();
+}
 
-  SubscriberTask & operator=(const SubscriberTask &) = delete;
-  SubscriberTask(const SubscriberTask &) = delete;
-
-  void run();
-
-  void take();
-
-private:
-  SubscriberStats & m_stats;
-  std::shared_ptr<Subscriber> m_sub;
-  MemoryChecker m_memory_checker;
-};
+void RoundTripRelayTask::on_message_received(
+  const std::int64_t time_msg_sent_ns,
+  const std::int64_t,
+  const std::uint64_t sample_id,
+  const std::size_t
+)
+{
+  RoundtripTimestampProvider ts(time_msg_sent_ns);
+  m_pub->publish_copy(ts, sample_id);
+}
 
 }  // namespace performance_test
-
-#endif  // PERFORMANCE_TEST__EXECUTION_TASKS__SUBSCRIBER_TASK_HPP_

@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_metrics/analysis_result.hpp"
 #include "performance_test/experiment_metrics/message_received_listener.hpp"
 #include "performance_test/utilities/perf_clock.hpp"
 #include "performance_test/utilities/sample_statistics.hpp"

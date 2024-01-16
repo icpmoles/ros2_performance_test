@@ -16,14 +16,12 @@
 #define PERFORMANCE_TEST__EXECUTION_TASKS__PUBLISHER_TASK_HPP_
 
 #include <memory>
-#include <thread>
-#include <functional>
 
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/publisher_stats.hpp"
 #include "performance_test/plugin/publisher.hpp"
 #include "performance_test/utilities/memory_checker.hpp"
 #include "performance_test/utilities/perf_clock.hpp"
-#include "performance_test/utilities/spin_lock.hpp"
 #include "performance_test/utilities/timestamp_provider.hpp"
 
 namespace performance_test
@@ -34,45 +32,14 @@ public:
   PublisherTask(
     const ExperimentConfiguration & ec,
     PublisherStats & stats,
-    std::shared_ptr<Publisher> pub)
-  : m_ec(ec),
-    m_stats(stats),
-    m_pub(pub),
-    m_time_between_publish(ec.period()),
-    m_first_run(perf_clock::now()),
-    m_next_run(perf_clock::now() + ec.period_ns()),
-    m_memory_checker(ec) {}
+    std::shared_ptr<Publisher> pub);
 
   PublisherTask & operator=(const PublisherTask &) = delete;
   PublisherTask(const PublisherTask &) = delete;
 
-  void run()
-  {
-    // We track here how much time (can also be negative) was left for the
-    // loop iteration given the desired loop rate.
-    const std::chrono::nanoseconds reserve = m_next_run - perf_clock::now();
+  void run();
 
-    if (reserve.count() > 0 &&
-      m_ec.roundtrip_mode != RoundTripMode::RELAY)
-    {
-      std::this_thread::sleep_until(m_next_run);
-    }
-
-    if (m_ec.is_zero_copy_transfer) {
-      m_pub->publish_loaned(m_timestamp_provider, m_stats.next_sample_id());
-    } else {
-      m_pub->publish_copy(m_timestamp_provider, m_stats.next_sample_id());
-    }
-    m_stats.on_message_sent();
-
-    m_next_run =
-      m_first_run +
-      m_loop_counter * std::chrono::duration_cast<std::chrono::nanoseconds>(
-      m_time_between_publish);
-    ++m_loop_counter;
-    m_memory_checker.enable_memory_tools_checker();
-  }
-
+private:
   const ExperimentConfiguration & m_ec;
   PublisherStats & m_stats;
   std::shared_ptr<Publisher> m_pub;

@@ -17,11 +17,11 @@
 
 #include <memory>
 
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/message_received_listener.hpp"
 #include "performance_test/plugin/publisher.hpp"
 #include "performance_test/plugin/subscriber.hpp"
 #include "performance_test/utilities/memory_checker.hpp"
-#include "performance_test/utilities/timestamp_provider.hpp"
 
 namespace performance_test
 {
@@ -31,30 +31,19 @@ public:
   RoundTripRelayTask(
     const ExperimentConfiguration & ec,
     std::shared_ptr<Publisher> pub,
-    std::shared_ptr<Subscriber> sub)
-  : m_pub(pub),
-    m_sub(sub),
-    m_memory_checker(ec) {}
+    std::shared_ptr<Subscriber> sub);
 
   RoundTripRelayTask & operator=(const RoundTripRelayTask &) = delete;
   RoundTripRelayTask(const RoundTripRelayTask &) = delete;
 
-  void run()
-  {
-    m_sub->update_subscription(*this);
-    m_memory_checker.enable_memory_tools_checker();
-  }
+  void run();
 
   void on_message_received(
     const std::int64_t time_msg_sent_ns,
     const std::int64_t,
     const std::uint64_t sample_id,
     const std::size_t
-  ) override
-  {
-    RoundtripTimestampProvider ts(time_msg_sent_ns);
-    m_pub->publish_copy(ts, sample_id);
-  }
+  ) override;
 
 private:
   std::shared_ptr<Publisher> m_pub;
