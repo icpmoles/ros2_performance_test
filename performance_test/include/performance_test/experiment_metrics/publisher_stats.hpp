@@ -16,7 +16,6 @@
 #define PERFORMANCE_TEST__EXPERIMENT_METRICS__PUBLISHER_STATS_HPP_
 
 #include <chrono>
-#include <memory>
 
 #include "performance_test/experiment_metrics/analysis_result.hpp"
 #include "performance_test/utilities/spin_lock.hpp"
@@ -25,53 +24,15 @@ namespace performance_test
 {
 struct PublisherStats
 {
-  std::uint64_t next_sample_id()
-  {
-    // Pre-increment, so the first sample ID is 1.
-    // If a sample ID is ever 0, then the sample has not been initialized.
-    return ++m_prev_sample_id;
-  }
-
-  void on_message_sent()
-  {
-    lock();
-    increment_sent();
-    unlock();
-  }
-
-  void update_stats(std::chrono::duration<double> iteration_duration)
-  {
-    lock();
-    m_sent_samples_per_iteration =
-      static_cast<decltype(m_sent_samples_per_iteration)>(
-      static_cast<double>(m_sent_sample_counter) /
-      iteration_duration.count());
-    m_sent_sample_counter = 0;
-    unlock();
-  }
-
-  void populate_stats(AnalysisResult & results)
-  {
-    lock();
-    results.m_num_samples_sent += m_sent_samples_per_iteration;
-    unlock();
-  }
+  std::uint64_t next_sample_id();
+  void on_message_sent();
+  void update_stats(std::chrono::duration<double> iteration_duration);
+  void populate_stats(AnalysisResult & results);
 
 private:
-  void lock()
-  {
-    m_lock.lock();
-  }
-
-  void unlock()
-  {
-    m_lock.unlock();
-  }
-
-  void increment_sent()
-  {
-    m_sent_sample_counter++;
-  }
+  void lock();
+  void unlock();
+  void increment_sent();
 
   std::uint64_t m_sent_sample_counter{};
   std::uint64_t m_sent_samples_per_iteration{};

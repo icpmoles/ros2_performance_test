@@ -298,6 +298,8 @@ set(sources
     src/experiment_execution/round_trip_relay_runner.cpp
     src/experiment_execution/runner_factory.cpp
     src/experiment_metrics/analysis_result.cpp
+    src/experiment_metrics/publisher_stats.cpp
+    src/experiment_metrics/subscriber_stats.cpp
     src/main.cpp
     src/outputs/csv_output.cpp
     src/outputs/json_output.cpp
