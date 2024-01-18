@@ -13,6 +13,8 @@
   - Instead of `--transient`, use `--durability TRANSIENT_LOCAL`
   - Instead of `--keep-last`, use `--history KEEP_LAST`
 - Removed the obsolete `BoundedSequenceFlat` messages
+- Removed the superfluous `--msg-list` CLI flag. The `--help` message
+  already lists the available messages.
 ### Fixed
 - Update the Apex.OS Runner to use `executor_runner::deferred` instead of `executor_runner::deferred_tag()`
 - Ensure that the first few published samples are sent at the expected rate

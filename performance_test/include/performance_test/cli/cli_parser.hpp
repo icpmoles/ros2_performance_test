@@ -26,7 +26,6 @@ class CLIParser
 public:
   CLIParser(int argc, char ** argv);
 
-  mutable bool print_msg_list;
   mutable ExperimentConfiguration experiment_configuration;
 };
 }  // namespace performance_test

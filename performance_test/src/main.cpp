@@ -17,7 +17,6 @@
 #include "performance_test/cli/cli_parser.hpp"
 #include "performance_test/experiment_execution/pub_sub_factory.hpp"
 #include "performance_test/experiment_execution/runner_factory_old.hpp"
-#include "performance_test/generated_messages/messages.hpp"
 #include "performance_test/plugin/plugin_singleton.hpp"
 #include "performance_test/utilities/exit_request_handler.hpp"
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
@@ -30,13 +29,6 @@ int main(int argc, char ** argv)
   pt::PluginSingleton::get()->register_pub_sub(pt::PubSubFactory::get());
 
   pt::CLIParser parser(argc, argv);
-
-  if (parser.print_msg_list) {
-    for (const auto & s : pt::messages::supported_msg_names()) {
-      std::cout << s << std::endl;
-    }
-    return 0;
-  }
 
   auto ec = parser.experiment_configuration;
 

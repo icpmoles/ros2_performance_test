@@ -117,8 +117,8 @@ To find the available settings, run with `--help` (note the required and default
 
 - The `-c` argument should match the selected [middleware plugin](#middleware-plugins)
   from the build phase.
-- The `--msg` argument should be one of the supported message types, which can be listed
-  by running with `--msg-list`.
+- The `--msg` argument should be one of the supported message types, which are shown
+  in the `--help` output.
 
 ### Single machine or distributed system?
 

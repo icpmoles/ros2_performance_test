@@ -20,7 +20,6 @@
 #include <tclap/CmdLine.h>
 
 #include "performance_test/experiment_execution/pub_sub_factory.hpp"
-#include "performance_test/generated_messages/messages.hpp"
 
 namespace performance_test
 {
@@ -67,12 +66,8 @@ CLIParser::CLIParser(int argc, char ** argv)
 
     std::vector<std::string> allowedMsgs = PubSubFactory::get().supported_messages();
     TCLAP::ValuesConstraint<std::string> allowedMsgVals(allowedMsgs);
-    TCLAP::ValueArg<std::string> msgArg("m", "msg",
-      "The message type. Use --msg-list to list the options. "
+    TCLAP::ValueArg<std::string> msgArg("m", "msg", "The message type. "
       "Default is " + allowedMsgs[0] + ".", false, allowedMsgs[0], &allowedMsgVals, cmd);
-
-    TCLAP::SwitchArg msgListArg("", "msg-list",
-      "Print the list of available msg types and exit.", cmd, false);
 
     TCLAP::ValueArg<uint32_t> ddsDomainIdArg("", "dds-domain_id",
       "The DDS domain id. Default is 0.", false, 0, "id", cmd);
@@ -163,8 +158,6 @@ CLIParser::CLIParser(int argc, char ** argv)
       "Prevent CPU from entering idle states.", cmd, false);
 
     cmd.parse(argc, argv);
-
-    print_msg_list = msgListArg.getValue();
 
     QOSAbstraction qos;
     qos.reliability = qos_reliability_from_string(reliabilityArg.getValue());
