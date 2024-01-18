@@ -179,9 +179,8 @@ Notes:
 ## Middleware plugins
 
 The performance test tool can measure the performance of a variety of communication solutions
-from different vendors. In this case there is no [rclcpp or rmw
-layer](http://docs.ros2.org/beta2/developer_overview.html#internal-api-architecture-overview)
-overhead over the publisher and subscriber routines.
+from different vendors. In this case there is no rclcpp or rmw layer overhead over the publisher
+and subscriber routines.
 
 The performance_test tool implements an executor that runs the publisher(s) and/or the subscriber(s) in
 their own thread.
@@ -428,6 +427,16 @@ Apex.AI's _Performance Testing in ROS 2_ white paper
 ([available here](https://drive.google.com/file/d/15nX80RK6aS8abZvQAOnMNUEgh7px9V5S/view))
 describes how to design a fair and unbiased performance test, and is the basis for this project.
 <center><img src="architecture.png"></center>
+
+Each middleware has a different API. Thanks to the `Plugin` abstraction, the core logic of
+setting up and running an experiment is completely decoupled from the implementation details
+of sending and receiving individual messages.
+
+Exactly one `Plugin` implementation is selected at build time. The design is similar to the
+[Abstract Factory pattern](https://refactoring.guru/design-patterns/abstract-factory).
+`performance_test` declares, but does not define, a static factory method in the `PluginFactory`
+class. Each middleware provides a definition for this factory method to create a concrete `Plugin`
+implementation, and `perf_test` calls this factory method directly.
 
 ## Performance optimizations
 
