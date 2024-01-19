@@ -16,11 +16,11 @@ import os
 
 from bokeh.io import export_png
 
-import yaml
+from performance_report.figures import generateFigure
+from performance_report.logs import getDatasets
+from performance_report.utils import PerfArgParser
 
-from .figures import generateFigure
-from .logs import getDatasets
-from .utils import PerfArgParser
+import yaml
 
 
 def generatePlots(plot_cfg_file, log_dir):

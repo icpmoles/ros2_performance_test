@@ -18,14 +18,9 @@ import sys
 
 import pandas as pd
 
+from performance_report.qos import DURABILITY, HISTORY, RELIABILITY
+
 import yaml
-
-from .qos import DURABILITY, HISTORY, RELIABILITY
-
-try:
-    from rclpy.utilities import get_rmw_implementation_identifier
-except ImportError:
-    print('WARNING: rclpy could not be found. Running with shared memory is unavailable.')
 
 
 class ExperimentConfig:
@@ -160,14 +155,18 @@ class ExperimentConfig:
 
         if self.sample_transport == 'SHARED_MEMORY' or self.sample_transport == 'LOANED_SAMPLES':
             if is_ros2_plugin(self.com_mean):
-                if get_rmw_implementation_identifier() == 'rmw_apex_middleware':
-                    commands.extend(generate_commands_yml(output_dir))
-                    cleanup_commands.append('unset APEX_MIDDLEWARE_SETTINGS')
-                elif get_rmw_implementation_identifier() == 'rmw_cyclonedds_cpp':
-                    commands.extend(generate_commands_xml(output_dir))
-                    cleanup_commands.append('unset CYCLONEDDS_URI')
-                else:
-                    print('Unsupported Middleware: ', get_rmw_implementation_identifier())
+                try:
+                    from rclpy.utilities import get_rmw_implementation_identifier
+                    if get_rmw_implementation_identifier() == 'rmw_cyclonedds_cpp':
+                        commands.extend(generate_commands_xml(output_dir))
+                        cleanup_commands.append('unset CYCLONEDDS_URI')
+                    else:
+                        print('Unsupported Middleware: ', get_rmw_implementation_identifier())
+                except ImportError:
+                    print('WARNING: rclpy not found. Running with shared memory is unavailable.')
+            elif self.com_mean == 'ApexOSPollingSubscription':
+                commands.extend(generate_commands_yml(output_dir))
+                cleanup_commands.append('unset APEX_MIDDLEWARE_SETTINGS')
             elif self.com_mean == 'CycloneDDS' or self.com_mean == 'CycloneDDS-CXX':
                 commands.extend(generate_commands_xml(output_dir))
                 cleanup_commands.append('unset CYCLONEDDS_URI')
@@ -408,8 +407,7 @@ def generate_shmem_file_xml(dir_path) -> str:
 
 
 def is_ros2_plugin(com_mean) -> bool:
-    if (com_mean == 'ApexOSPollingSubscription' or
-            com_mean == 'rclcpp-single-threaded-executor' or
+    if (com_mean == 'rclcpp-single-threaded-executor' or
             com_mean == 'rclcpp-static-single-threaded-executor' or
             com_mean == 'rclcpp-waitset'):
         return True

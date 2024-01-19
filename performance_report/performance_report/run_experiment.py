@@ -15,20 +15,17 @@
 import os
 import time
 
-from rclpy.utilities import get_rmw_implementation_identifier
+from performance_report.logs import getExperiments
+from performance_report.utils import (cliColors,
+                                      colorPrint,
+                                      create_dir,
+                                      ExperimentConfig,
+                                      generate_shmem_file_xml,
+                                      generate_shmem_file_yml,
+                                      is_ros2_plugin,
+                                      PerfArgParser)
 
 import yaml
-
-from .logs import getExperiments
-
-from .utils import (cliColors,
-                    colorPrint,
-                    create_dir,
-                    ExperimentConfig,
-                    generate_shmem_file_xml,
-                    generate_shmem_file_yml,
-                    is_ros2_plugin,
-                    PerfArgParser)
 
 
 def prepare_for_shmem(cfg: ExperimentConfig, output_dir):
@@ -37,14 +34,18 @@ def prepare_for_shmem(cfg: ExperimentConfig, output_dir):
         colorPrint('[Warning] RouDi is expected to already be running', cliColors.WARN)
 
         if is_ros2_plugin(cfg.com_mean):
-            if get_rmw_implementation_identifier() == 'rmw_apex_middleware':
-                shmem_config_file = generate_shmem_file_yml(output_dir)
-                os.environ['APEX_MIDDLEWARE_SETTINGS'] = shmem_config_file
-            elif get_rmw_implementation_identifier() == 'rmw_cyclonedds_cpp':
-                shmem_config_file = generate_shmem_file_xml(output_dir)
-                os.environ['CYCLONEDDS_URI'] = shmem_config_file
-            else:
-                print('Unsupported Middleware: ', get_rmw_implementation_identifier())
+            try:
+                from rclpy.utilities import get_rmw_implementation_identifier
+                if get_rmw_implementation_identifier() == 'rmw_cyclonedds_cpp':
+                    shmem_config_file = generate_shmem_file_xml(output_dir)
+                    os.environ['CYCLONEDDS_URI'] = shmem_config_file
+                else:
+                    print('Unsupported Middleware: ', get_rmw_implementation_identifier())
+            except ImportError:
+                print('WARNING: rclpy not found. Running with shared memory is unavailable.')
+        elif cfg.com_mean == 'ApexOSPollingSubscription':
+            shmem_config_file = generate_shmem_file_yml(output_dir)
+            os.environ['APEX_MIDDLEWARE_SETTINGS'] = shmem_config_file
         elif cfg.com_mean == 'CycloneDDS' or cfg.com_mean == 'CycloneDDS-CXX':
             shmem_config_file = generate_shmem_file_xml(output_dir)
             os.environ['CYCLONEDDS_URI'] = shmem_config_file

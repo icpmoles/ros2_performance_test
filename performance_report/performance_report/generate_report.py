@@ -19,11 +19,11 @@ from bokeh.embed import components
 import bokeh.util.version
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-import yaml
+from performance_report.figures import generateFigure
+from performance_report.logs import coerce_to_list, getDatasets
+from performance_report.utils import PerfArgParser
 
-from .figures import generateFigure
-from .logs import coerce_to_list, getDatasets
-from .utils import PerfArgParser
+import yaml
 
 
 def generateReports(report_cfg_file, log_dir):

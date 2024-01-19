@@ -20,7 +20,7 @@ from bokeh.plotting import figure
 
 import pandas as pd
 
-from .utils import DatasetConfig
+from performance_report.utils import DatasetConfig
 
 result = {
     'x': [],

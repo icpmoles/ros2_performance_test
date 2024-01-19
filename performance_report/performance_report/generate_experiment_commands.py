@@ -14,11 +14,10 @@
 
 import os
 
+from performance_report.logs import getExperiments
+from performance_report.utils import PerfArgParser
+
 import yaml
-
-from .logs import getExperiments
-
-from .utils import PerfArgParser
 
 
 def generate_commands(files: 'list[str]', perf_test_exe_cmd, output_dir):

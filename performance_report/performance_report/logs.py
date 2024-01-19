@@ -19,7 +19,10 @@ import os
 
 import pandas as pd
 
-from .utils import DatasetConfig, DEFAULT_TEST_NAME, ExperimentConfig, ThemeConfig
+from performance_report.utils import (DatasetConfig,
+                                      DEFAULT_TEST_NAME,
+                                      ExperimentConfig,
+                                      ThemeConfig)
 
 
 def parseLog(log_dir: str, test_name: str, experiment: ExperimentConfig):
