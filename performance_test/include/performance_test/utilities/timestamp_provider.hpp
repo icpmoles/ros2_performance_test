@@ -22,6 +22,8 @@ namespace performance_test
 class TimestampProvider
 {
 public:
+  virtual ~TimestampProvider() = default;
+
   virtual std::int64_t get() const = 0;
 };
 

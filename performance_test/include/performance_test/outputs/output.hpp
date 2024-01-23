@@ -29,7 +29,6 @@ namespace performance_test
 class Output
 {
 public:
-  Output() = default;
   virtual ~Output() = default;
 
   /// @brief initialize the output

@@ -22,6 +22,8 @@ namespace performance_test
 class MessageReceivedListener
 {
 public:
+  virtual ~MessageReceivedListener() = default;
+
   virtual void on_message_received(
     const std::int64_t time_msg_sent_ns,
     const std::int64_t time_msg_received_ns,
