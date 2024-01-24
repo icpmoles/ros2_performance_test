@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 1.5.2 (YYYY/MM/DD)
+
 ### Added
 - `--prevent-cpu-idle` is available on QNX
 ### Changed

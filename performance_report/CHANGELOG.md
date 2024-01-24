@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 1.5.2 (YYYY/MM/DD)
+
 ### Fixed
 - Elegantly handle a failure to parse JSON log files
 
