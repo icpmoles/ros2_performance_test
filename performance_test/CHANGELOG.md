@@ -5,6 +5,8 @@
 ### Added
 - Add experimental bazel support
    - `bazel build //performance_test --//:plugin_implementation=//path/to/a/plugin`
+- Add a rudimentary socket-based plugin for testing the bazel support
+   - `bazel run //performance_test --//:plugin_implementation=//performance_test/plugins/demo:demo_plugin -- --help`
 ### Changed
 - Instead of enabling/disabling each plugin, you select exactly one
   with a CMake string option, for example:

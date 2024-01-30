@@ -15,6 +15,8 @@
 #ifndef PERFORMANCE_TEST__UTILITIES__MSG_TRAITS_HPP_
 #define PERFORMANCE_TEST__UTILITIES__MSG_TRAITS_HPP_
 
+#include <type_traits>
+
 namespace performance_test
 {
 struct MsgTraits

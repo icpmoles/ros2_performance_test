@@ -438,6 +438,8 @@ Exactly one `Plugin` implementation is selected at build time. The design is sim
 class. Each middleware provides a definition for this factory method to create a concrete `Plugin`
 implementation, and `perf_test` calls this factory method directly.
 
+An example plugin is available [here](plugins/demo).
+
 ## Performance optimizations
 
 - On linux-based platforms, `perf_test` writes `0` to `/dev/cpu_dma_latency`

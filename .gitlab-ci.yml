@@ -540,6 +540,14 @@ build_ros1:
     - rm performance_test_ros1_publisher/COLCON_IGNORE  # ROS1 packages are ignored by default
     - colcon build  # Should build msgs and publisher
 
+build_demo_plugin:
+  stage: build
+  image:
+    name: gcr.io/bazel-public/bazel:latest
+    entrypoint: [""]
+  script:
+    - bazel build //performance_test --//:plugin_implementation=//performance_test/plugins/demo:demo_plugin
+
 test:
   stage: test
   image: osrf/ros:rolling-desktop
