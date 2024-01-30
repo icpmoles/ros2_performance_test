@@ -9,6 +9,7 @@
   - Instead of `--keep-last`, use `--history KEEP_LAST`
 ### Fixed
 - Update the Apex.OS Runner to use `executor_runner::deferred` instead of `executor_runner::deferred_tag()`
+- Ensure that the first few published samples are sent at the expected rate
 
 ## 1.5.2 (YYYY/MM/DD)
 

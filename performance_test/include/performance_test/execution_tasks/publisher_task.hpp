@@ -43,10 +43,9 @@ private:
   const ExperimentConfiguration & m_ec;
   PublisherStats & m_stats;
   std::shared_ptr<Publisher> m_pub;
-  const std::chrono::duration<double> m_time_between_publish;
-  const perf_clock::time_point m_first_run;
-  perf_clock::time_point m_next_run;
-  std::size_t m_loop_counter{1};
+  const std::chrono::nanoseconds m_time_between_publish;
+  perf_clock::time_point m_first_run;
+  std::size_t m_loop_counter;
   MemoryChecker m_memory_checker;
   PublisherTimestampProvider m_timestamp_provider;
 };

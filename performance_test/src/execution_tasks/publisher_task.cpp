@@ -33,20 +33,17 @@ PublisherTask::PublisherTask(
 : m_ec(ec),
   m_stats(stats),
   m_pub(pub),
-  m_time_between_publish(ec.period()),
-  m_first_run(perf_clock::now()),
-  m_next_run(perf_clock::now() + ec.period_ns()),
+  m_time_between_publish(ec.period_ns()),
+  m_loop_counter(0),
   m_memory_checker(ec) {}
 
 void PublisherTask::run()
 {
-  // We track here how much time (can also be negative) was left for the
-  // loop iteration given the desired loop rate.
-  const std::chrono::nanoseconds reserve = m_next_run - perf_clock::now();
-
-  if (reserve.count() > 0) {
-    std::this_thread::sleep_until(m_next_run);
+  if (m_first_run.time_since_epoch().count() == 0) {
+    m_first_run = perf_clock::now();
   }
+
+  std::this_thread::sleep_until(m_first_run + m_time_between_publish * m_loop_counter++);
 
   if (m_ec.is_zero_copy_transfer) {
     m_pub->publish_loaned(m_timestamp_provider, m_stats.next_sample_id());
@@ -54,12 +51,6 @@ void PublisherTask::run()
     m_pub->publish_copy(m_timestamp_provider, m_stats.next_sample_id());
   }
   m_stats.on_message_sent();
-
-  m_next_run =
-    m_first_run +
-    m_loop_counter * std::chrono::duration_cast<std::chrono::nanoseconds>(
-    m_time_between_publish);
-  ++m_loop_counter;
 
   m_memory_checker.enable_memory_tools_checker();
 }
