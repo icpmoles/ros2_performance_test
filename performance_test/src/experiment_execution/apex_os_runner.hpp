@@ -57,7 +57,7 @@ public:
   explicit ApexOsSingleExecutorRunner(const ExperimentConfiguration & ec)
   : ApexOsRunner(ec),
     m_executor(apex::executor::executor_factory::create()),
-    m_runner(apex::executor::executor_runner::deferred_tag(), *m_executor) {}
+    m_runner(apex::executor::executor_runner::deferred, *m_executor) {}
 
 protected:
   virtual void run_pubs_and_subs()
@@ -106,7 +106,7 @@ public:
   explicit ApexOsSingleExecutorChainRunner(const ExperimentConfiguration & ec)
   : ApexOsRunner(ec),
     m_executor(apex::executor::executor_factory::create()),
-    m_runner(apex::executor::executor_runner::deferred_tag(), *m_executor)
+    m_runner(apex::executor::executor_runner::deferred, *m_executor)
   {
     if (ec.number_of_publishers() != 1) {
       throw std::invalid_argument(

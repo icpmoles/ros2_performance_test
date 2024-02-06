@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Fixed
+- Update the Apex.OS Runner to use `executor_runner::deferred` instead of `executor_runner::deferred_tag()`
+
 ## 1.5.2 (YYYY/MM/DD)
 
 ### Added
