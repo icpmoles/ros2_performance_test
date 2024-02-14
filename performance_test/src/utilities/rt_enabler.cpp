@@ -20,11 +20,11 @@
 #include <sched.h>
 #include <sys/types.h>
 
-#if defined(PERFORMANCE_TEST_LINUX)
+#if defined(__linux__)
 #include <sys/syscall.h>
 #endif
 
-#if defined(QNX)
+#if defined(__QNX__)
 #include <sys/neutrino.h>
 #include <sys/syspage.h>
 #endif
@@ -38,9 +38,9 @@ namespace performance_test
 {
 void pre_proc_rt_init(const uint32_t cpu_bit_mask, const int32_t prio)
 {
-#ifndef PERFORMANCE_TEST_RT_ENABLED
+#if !defined(__linux__) && !defined(__QNX__)
   throw std::invalid_argument("Built with RT optimizations disabled");
-#endif  // PERFORMANCE_TEST_RT_ENABLED
+#endif
 
   //
   // Set prio for all the tasks of the process
@@ -59,7 +59,7 @@ void pre_proc_rt_init(const uint32_t cpu_bit_mask, const int32_t prio)
   //
   // Set thread-cpu affinity
   //
-#ifdef PERFORMANCE_TEST_LINUX
+#if defined(__linux__)
   if (cpu_bit_mask > 0U) {
     uint32_t bit_mask_shifter = cpu_bit_mask;
     cpu_set_t set;
@@ -78,7 +78,7 @@ void pre_proc_rt_init(const uint32_t cpu_bit_mask, const int32_t prio)
       throw std::runtime_error("proc rt init affinity setting failed");
     }
   }
-#elif defined(QNX)
+#elif defined(__QNX__)
   if (cpu_bit_mask > 0U) {
     uint32_t num_elements = 0u;
     int32_t * rsizep, * rmaskp, * imaskp;
@@ -135,16 +135,14 @@ void pre_proc_rt_init(const uint32_t cpu_bit_mask, const int32_t prio)
       throw std::runtime_error("proc rt init affinity setting failed");
     }
   }
-#else
-  throw std::runtime_error("proc rt init affinity setting not supported on this platform");
-#endif  // PERFORMANCE_TEST_LINUX
+#endif
 }
 
 void post_proc_rt_init()
 {
-#ifndef PERFORMANCE_TEST_RT_ENABLED
+#if !defined(__linux__) && !defined(__QNX__)
   throw std::invalid_argument("Built with RT optimizations disabled");
-#endif  // PERFORMANCE_TEST_RT_ENABLED
+#endif
   int32_t res = 0;
 
   const int64_t pg_sz = sysconf(_SC_PAGESIZE);
@@ -163,7 +161,7 @@ void post_proc_rt_init()
     std::cerr << "proc rt init mem locking failed" << strerror(errno) << std::endl;
     throw std::runtime_error("proc rt init mem locking failed");
   }
-#ifdef PERFORMANCE_TEST_LINUX
+#if defined(__linux__)
   //
   // Disable all the heap trimming operation using the following option.
   // This avoid releasing of free mem back to the system
@@ -185,6 +183,6 @@ void post_proc_rt_init()
     std::cerr << "proc rt mmap disabling failed" << strerror(errno) << std::endl;
     throw std::runtime_error("proc rt mmap disabling failed");
   }
-#endif  // PERFORMANCE_TEST_LINUX
+#endif
 }
 }  // namespace performance_test

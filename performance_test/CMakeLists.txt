@@ -26,16 +26,6 @@ set(OPTIONAL_LIBRARIES)
 set(CMAKE_CXX_STANDARD 17)
 find_package(ament_cmake REQUIRED)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  set(PERFORMANCE_TEST_RT_ENABLED_DEFAULT ON)
-  add_definitions(-DPERFORMANCE_TEST_LINUX)
-else()
-  set(PERFORMANCE_TEST_RT_ENABLED_DEFAULT OFF)
-endif()
-option(PERFORMANCE_TEST_RT_ENABLED
-  "Enable options for thread and memory optimization. This may not build on all platforms"
-  ${PERFORMANCE_TEST_RT_ENABLED_DEFAULT})
-
 # Ensure we use the CMake support from ConnextDDS instead of the one provided
 # with the installed RMW package.
 # This change in the environment only affect to the CMake environment. The
@@ -278,6 +268,7 @@ set(sources
     include/performance_test/utilities/perf_clock.hpp
     include/performance_test/utilities/qnx_res_usage.hpp
     include/performance_test/utilities/prevent_cpu_idle.hpp
+    include/performance_test/utilities/rt_enabler.hpp
     include/performance_test/utilities/sample_statistics.hpp
     include/performance_test/utilities/spin_lock.hpp
     include/performance_test/utilities/version.hpp
@@ -309,13 +300,8 @@ set(sources
     src/utilities/external_info.cpp
     src/utilities/memory_checker.cpp
     src/utilities/prevent_cpu_idle.cpp
+    src/utilities/rt_enabler.cpp
 )
-
-if(PERFORMANCE_TEST_RT_ENABLED)
-  add_definitions(-DPERFORMANCE_TEST_RT_ENABLED)
-  list(APPEND sources include/performance_test/utilities/rt_enabler.hpp)
-  list(APPEND sources src/utilities/rt_enabler.cpp)
-endif()
 
 if(PERFORMANCE_TEST_RCLCPP_ENABLED)
   list(APPEND sources include/performance_test/communication_abstractions/rclcpp_publisher.hpp)

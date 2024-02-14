@@ -2,7 +2,7 @@ diff --git a/sole.hpp b/sole.hpp
 index cd132aa..c584be8 100644
 --- a/sole.hpp
 +++ b/sole.hpp
-@@ -169,6 +169,11 @@ namespace std {
+@@ -169,6 +169,12 @@ namespace std {
  #   include <sys/time.h>
  #   include <unistd.h>
  #   define $linux $yes
@@ -10,6 +10,7 @@ index cd132aa..c584be8 100644
 +#   include <sys/socket.h>
 +#   include <net/if_dl.h>
 +#   include <ifaddrs.h>
++#   include <unistd.h>
 +#   define $qnx $yes
  #else //elif defined(__unix__)
  #   if defined(__VMS)

@@ -28,7 +28,7 @@ namespace performance_test
 {
 void prevent_cpu_idle()
 {
-#if defined(PERFORMANCE_TEST_LINUX)
+#if defined(__linux__)
   static std::unique_ptr<FILE, int (*)(FILE *)> cpu_dma_latency
   {
     ::fopen("/dev/cpu_dma_latency", "wb"),
@@ -48,7 +48,7 @@ void prevent_cpu_idle()
   if (::fwrite(&latency_i32, sizeof(latency_i32), 1, cpu_dma_latency.get()) != 1) {
     throw std::runtime_error("Failed to write latency specification to /dev/cpu_dma_latency");
   }
-#elif defined(QNX)
+#elif defined(__QNX__)
   int e1 = procmgr_ability(
     0,
     PROCMGR_ADN_ROOT | PROCMGR_ADN_NONROOT | PROCMGR_AID_RUNSTATE_BURST | PROCMGR_AOP_ALLOW,
