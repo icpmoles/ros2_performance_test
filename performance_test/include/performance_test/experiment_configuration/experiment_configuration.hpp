@@ -38,36 +38,11 @@ namespace performance_test
  * This experiment configuration could be created from various sources. At the
  * moment, only configuration by command line arguments are supported.
  */
-class ExperimentConfiguration
+struct ExperimentConfiguration
 {
-public:
-  ExperimentConfiguration() = default;
-  ExperimentConfiguration(
-    CommunicationMean com_mean,
-    ExecutionStrategy execution_strategy,
-    uint32_t dds_domain_id,
-    const QOSAbstraction & qos,
-    uint32_t rate,
-    const std::string & topic_name,
-    const std::string & msg_name,
-    size_t unbounded_msg_size,
-    uint64_t max_runtime,
-    uint32_t rows_to_ignore,
-    uint32_t number_of_publishers,
-    uint32_t number_of_subscribers,
-    uint32_t expected_num_pubs,
-    uint32_t expected_num_subs,
-    uint32_t wait_for_matched_timeout,
-    bool check_memory,
-    RealTimeConfiguration rt_config,
-    bool with_security,
-    bool is_zero_copy_transfer,
-    bool prevent_cpu_idle,
-    RoundTripMode roundtrip_mode,
-    const OutputConfiguration & output_configuration
-  );
+  ExperimentConfiguration();
 
-  std::string id;
+  const std::string id;
   CommunicationMean com_mean;
   ExecutionStrategy execution_strategy;
   uint32_t dds_domain_id;

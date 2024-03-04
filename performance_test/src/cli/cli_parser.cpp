@@ -134,8 +134,11 @@ CLIParser::CLIParser(int argc, char ** argv)
     TCLAP::ValueArg<uint64_t> maxRuntimeArg("", "max-runtime",
       "Run N seconds, then exit. 0 means run forever. Default is 0.", false, 0, "N", cmd);
 
+    std::vector<uint32_t> allowedNumPubsArgs{0, 1};
+    TCLAP::ValuesConstraint<uint32_t> allowedNumPubsArgsVals(allowedNumPubsArgs);
     TCLAP::ValueArg<uint32_t> numPubsArg("p", "num-pub-threads",
-      "Number of publisher threads. Default is 1.", false, 1, "N", cmd);
+      "Number of publisher threads. Default is 1.", false, 1,
+      &allowedNumPubsArgsVals, cmd);
 
     TCLAP::ValueArg<uint32_t> numSubsArg("s", "num-sub-threads",
       "Number of subscriber threads. Default is 1.", false, 1, "N", cmd);
@@ -169,8 +172,11 @@ CLIParser::CLIParser(int argc, char ** argv)
     TCLAP::ValueArg<uint32_t> ignoreArg("", "ignore",
       "Ignore the first N seconds of the experiment. Default is 0.", false, 0, "N", cmd);
 
+    std::vector<uint32_t> allowedExpectedNumPubsArgs{0, 1};
+    TCLAP::ValuesConstraint<uint32_t> allowedExpectedNumPubsArgsVals(allowedExpectedNumPubsArgs);
     TCLAP::ValueArg<uint32_t> expectedNumPubsArg("", "expected-num-pubs",
-      "Expected number of publishers for wait-for-matched. Default is 0.", false, 0, "N", cmd);
+      "Expected number of publishers for wait-for-matched. Default is 0.", false, 0,
+      &allowedExpectedNumPubsArgsVals, cmd);
 
     TCLAP::ValueArg<uint32_t> expectedNumSubsArg("", "expected-num-subs",
       "Expected number of subscribers for wait-for-matched. Default is 0.", false, 0, "N", cmd);
@@ -207,30 +213,31 @@ CLIParser::CLIParser(int argc, char ** argv)
     output_config.print_to_console = printToConsoleArg.getValue();
     output_config.logfile_path = LogfileArg.getValue();
 
-    experiment_configuration = ExperimentConfiguration(
-      communication_mean_from_string(communicationArg.getValue()),
-      execution_strategy_from_string(executionStrategyArg.getValue()),
-      ddsDomainIdArg.getValue(),
-      qos,
-      rateArg.getValue(),
-      topicArg.getValue(),
-      msgArg.getValue(),
-      unboundedMsgSizeArg.getValue(),
-      maxRuntimeArg.getValue(),
-      ignoreArg.getValue(),
-      numPubsArg.getValue(),
-      numSubsArg.getValue(),
-      expectedNumPubsArg.getValue(),
-      expectedNumSubsArg.getValue(),
-      waitForMatchedTimeoutArg.getValue(),
-      checkMemoryArg.getValue(),
-      rt_config,
-      withSecurityArg.getValue(),
-      zeroCopyArg.getValue(),
-      preventCpuIdleArg.getValue(),
-      round_trip_mode_from_string(roundTripModeArg.getValue()),
-      output_config
-    );
+    experiment_configuration.com_mean = communication_mean_from_string(communicationArg.getValue());
+    experiment_configuration.execution_strategy =
+      execution_strategy_from_string(executionStrategyArg.getValue());
+    experiment_configuration.dds_domain_id = ddsDomainIdArg.getValue();
+    experiment_configuration.qos = qos;
+    experiment_configuration.rate = rateArg.getValue();
+    experiment_configuration.topic_name = topicArg.getValue();
+    experiment_configuration.msg_name = msgArg.getValue();
+    experiment_configuration.unbounded_msg_size = unboundedMsgSizeArg.getValue();
+    experiment_configuration.max_runtime = maxRuntimeArg.getValue();
+    experiment_configuration.rows_to_ignore = ignoreArg.getValue();
+    experiment_configuration.number_of_publishers = numPubsArg.getValue();
+    experiment_configuration.number_of_subscribers = numSubsArg.getValue();
+    experiment_configuration.expected_num_pubs = expectedNumPubsArg.getValue();
+    experiment_configuration.expected_num_subs = expectedNumSubsArg.getValue();
+    experiment_configuration.wait_for_matched_timeout =
+      std::chrono::seconds(waitForMatchedTimeoutArg.getValue());
+    experiment_configuration.check_memory = checkMemoryArg.getValue();
+    experiment_configuration.rt_config = rt_config;
+    experiment_configuration.with_security = withSecurityArg.getValue();
+    experiment_configuration.is_zero_copy_transfer = zeroCopyArg.getValue();
+    experiment_configuration.prevent_cpu_idle = preventCpuIdleArg.getValue();
+    experiment_configuration.roundtrip_mode =
+      round_trip_mode_from_string(roundTripModeArg.getValue());
+    experiment_configuration.output_configuration = output_config;
   } catch (TCLAP::ArgException & e) {
     std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
   }
