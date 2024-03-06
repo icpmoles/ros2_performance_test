@@ -314,6 +314,7 @@ set(sources
 if(PERFORMANCE_TEST_RT_ENABLED)
   add_definitions(-DPERFORMANCE_TEST_RT_ENABLED)
   list(APPEND sources include/performance_test/utilities/rt_enabler.hpp)
+  list(APPEND sources src/utilities/rt_enabler.cpp)
 endif()
 
 if(PERFORMANCE_TEST_RCLCPP_ENABLED)
