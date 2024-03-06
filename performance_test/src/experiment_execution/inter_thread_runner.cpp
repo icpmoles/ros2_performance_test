@@ -12,29 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "performance_test/experiment_execution/round_trip_main_runner.hpp"
-
-#include <exception>
+#include "performance_test/experiment_execution/inter_thread_runner.hpp"
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
-#include "performance_test/experiment_execution/inter_thread_runner.hpp"
+#include "performance_test/experiment_execution/threaded_runner.hpp"
 
 namespace performance_test
 {
-RoundTripMainRunner::RoundTripMainRunner(const ExperimentConfiguration & ec)
-: InterThreadRunner(ec)
+InterThreadRunner::InterThreadRunner(const ExperimentConfiguration & ec)
+: DataEntityRunner(ec)
+{}
+
+InterThreadRunner::~InterThreadRunner()
 {
-  if (ec.number_of_publishers != 1) {
-    throw std::invalid_argument(
-            "Round-trip main requires exactly one publisher.");
+  for (auto & thread : m_thread_pool) {
+    thread.join();
   }
-  if (ec.number_of_subscribers != 1) {
-    throw std::invalid_argument(
-            "Round-trip main requires exactly one subscriber.");
+}
+
+void InterThreadRunner::run_pubs_and_subs()
+{
+  m_thread_pool.reserve(m_pubs.size() + m_subs.size());
+
+  for (auto & sub : m_subs) {
+    m_thread_pool.emplace_back(
+      [&sub, this]() {
+        while (m_running) {
+          sub->run();
+        }
+      });
   }
-  if (ec.is_zero_copy_transfer) {
-    throw std::invalid_argument(
-            "Round-trip main can not use loaned messages (zero copy).");
+
+  for (auto & pub : m_pubs) {
+    m_thread_pool.emplace_back(
+      [&pub, this]() {
+        while (m_running) {
+          pub->run();
+        }
+      });
   }
 }
 

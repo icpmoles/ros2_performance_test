@@ -16,7 +16,7 @@
 #define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__ROUND_TRIP_MAIN_RUNNER_HPP_
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
-#include "performance_test/experiment_execution/threaded_runner.hpp"
+#include "performance_test/experiment_execution/inter_thread_runner.hpp"
 
 namespace performance_test
 {

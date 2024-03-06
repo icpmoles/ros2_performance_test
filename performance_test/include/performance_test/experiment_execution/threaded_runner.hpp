@@ -58,48 +58,6 @@ protected:
   std::vector<std::shared_ptr<SubscriberTask>> m_subs;
 };
 
-class InterThreadRunner : public DataEntityRunner
-{
-public:
-  explicit InterThreadRunner(const ExperimentConfiguration & ec)
-  : DataEntityRunner(ec)
-  {}
-
-  ~InterThreadRunner()
-  {
-    for (auto & thread : m_thread_pool) {
-      thread.join();
-    }
-  }
-
-protected:
-  virtual void run_pubs_and_subs()
-  {
-    m_thread_pool.reserve(m_pubs.size() + m_subs.size());
-
-    for (auto & sub : m_subs) {
-      m_thread_pool.emplace_back(
-        [&sub, this]() {
-          while (m_running) {
-            sub->run();
-          }
-        });
-    }
-
-    for (auto & pub : m_pubs) {
-      m_thread_pool.emplace_back(
-        [&pub, this]() {
-          while (m_running) {
-            pub->run();
-          }
-        });
-    }
-  }
-
-private:
-  std::vector<std::thread> m_thread_pool;
-};
-
 }  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__THREADED_RUNNER_HPP_

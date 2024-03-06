@@ -16,6 +16,7 @@
 
 #include "performance_test/experiment_execution/runner_factory.hpp"
 
+#include "performance_test/experiment_execution/inter_thread_runner.hpp"
 #include "performance_test/experiment_execution/intra_thread_runner.hpp"
 #include "performance_test/experiment_execution/round_trip_main_runner.hpp"
 #include "performance_test/experiment_execution/round_trip_relay_runner.hpp"

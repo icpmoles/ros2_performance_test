@@ -12,30 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "performance_test/experiment_execution/round_trip_main_runner.hpp"
+#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__INTER_THREAD_RUNNER_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__INTER_THREAD_RUNNER_HPP_
 
-#include <exception>
+#include <memory>
+#include <vector>
+#include <thread>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
-#include "performance_test/experiment_execution/inter_thread_runner.hpp"
+#include "performance_test/experiment_execution/threaded_runner.hpp"
 
 namespace performance_test
 {
-RoundTripMainRunner::RoundTripMainRunner(const ExperimentConfiguration & ec)
-: InterThreadRunner(ec)
+class InterThreadRunner : public DataEntityRunner
 {
-  if (ec.number_of_publishers != 1) {
-    throw std::invalid_argument(
-            "Round-trip main requires exactly one publisher.");
-  }
-  if (ec.number_of_subscribers != 1) {
-    throw std::invalid_argument(
-            "Round-trip main requires exactly one subscriber.");
-  }
-  if (ec.is_zero_copy_transfer) {
-    throw std::invalid_argument(
-            "Round-trip main can not use loaned messages (zero copy).");
-  }
-}
+public:
+  explicit InterThreadRunner(const ExperimentConfiguration & ec);
+  virtual ~InterThreadRunner();
+
+protected:
+  virtual void run_pubs_and_subs();
+
+private:
+  std::vector<std::thread> m_thread_pool;
+};
 
 }  // namespace performance_test
+
+#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__INTER_THREAD_RUNNER_HPP_
