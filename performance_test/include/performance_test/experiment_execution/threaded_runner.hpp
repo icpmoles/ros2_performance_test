@@ -150,27 +150,6 @@ private:
   std::unique_ptr<std::thread> m_thread;
 };
 
-class RoundTripMainRunner : public InterThreadRunner
-{
-public:
-  explicit RoundTripMainRunner(const ExperimentConfiguration & ec)
-  : InterThreadRunner(ec)
-  {
-    if (ec.number_of_publishers != 1) {
-      throw std::invalid_argument(
-              "Round-trip main requires exactly one publisher.");
-    }
-    if (ec.number_of_subscribers != 1) {
-      throw std::invalid_argument(
-              "Round-trip main requires exactly one subscriber.");
-    }
-    if (ec.is_zero_copy_transfer) {
-      throw std::invalid_argument(
-              "Round-trip main can not use loaned messages (zero copy).");
-    }
-  }
-};
-
 }  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__THREADED_RUNNER_HPP_
