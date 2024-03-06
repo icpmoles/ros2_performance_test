@@ -100,56 +100,6 @@ private:
   std::vector<std::thread> m_thread_pool;
 };
 
-class IntraThreadRunner : public DataEntityRunner
-{
-public:
-  explicit IntraThreadRunner(const ExperimentConfiguration & ec)
-  : DataEntityRunner(ec)
-  {
-    if (ec.number_of_publishers != 1) {
-      throw std::invalid_argument(
-              "Intra-thread execution requires exactly one publisher.");
-    }
-    if (ec.number_of_subscribers < 1) {
-      throw std::invalid_argument(
-              "Intra-thread execution requires at least one subscriber.");
-    }
-    if (!ec.is_zero_copy_transfer) {
-      throw std::invalid_argument(
-              "Intra-thread execution only works with loaned messages (zero copy).");
-    }
-    if (ec.roundtrip_mode != RoundTripMode::NONE) {
-      throw std::invalid_argument(
-              "Intra-thread execution only works with RoundTripMode NONE.");
-    }
-  }
-
-  ~IntraThreadRunner()
-  {
-    m_thread->join();
-  }
-
-protected:
-  virtual void run_pubs_and_subs()
-  {
-    m_thread = std::make_unique<std::thread>(
-      [this]() {
-        while (m_running) {
-          for (auto & pub : m_pubs) {
-            pub->run();
-          }
-          for (auto & sub : m_subs) {
-            sub->take();
-          }
-        }
-      }
-    );
-  }
-
-private:
-  std::unique_ptr<std::thread> m_thread;
-};
-
 }  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__THREADED_RUNNER_HPP_

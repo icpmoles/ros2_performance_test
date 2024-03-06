@@ -251,6 +251,7 @@ set(sources
     include/performance_test/experiment_configuration/output_configuration.hpp
     include/performance_test/experiment_configuration/qos_abstraction.hpp
     include/performance_test/experiment_configuration/round_trip_mode.hpp
+    include/performance_test/experiment_execution/intra_thread_runner.hpp
     include/performance_test/experiment_execution/round_trip_main_runner.hpp
     include/performance_test/experiment_execution/round_trip_relay_runner.hpp
     include/performance_test/experiment_execution/runner_factory.hpp
@@ -289,6 +290,7 @@ set(sources
     src/experiment_configuration/experiment_configuration.cpp
     src/experiment_configuration/qos_abstraction.cpp
     src/experiment_configuration/round_trip_mode.cpp
+    src/experiment_execution/intra_thread_runner.cpp
     src/experiment_execution/round_trip_main_runner.cpp
     src/experiment_execution/round_trip_relay_runner.cpp
     src/experiment_execution/runner_factory.cpp
