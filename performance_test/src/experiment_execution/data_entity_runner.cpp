@@ -12,23 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__THREADED_RUNNER_HPP_
-#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__THREADED_RUNNER_HPP_
+#include "performance_test/experiment_execution/data_entity_runner.hpp"
 
-#include <algorithm>
-#include <chrono>
 #include <memory>
-#include <vector>
 
 #include "performance_test/communication_abstractions/communicator_factory.hpp"
 #include "performance_test/execution_tasks/publisher_task.hpp"
 #include "performance_test/execution_tasks/subscriber_task.hpp"
-#include "performance_test/execution_tasks/round_trip_relay_task.hpp"
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_execution/runner.hpp"
 
 namespace performance_test
 {
-}  // namespace performance_test
+DataEntityRunner::DataEntityRunner(const ExperimentConfiguration & ec)
+: Runner(ec)
+{
+  for (uint32_t i = 0; i < m_ec.number_of_publishers; ++i) {
+    m_pubs.push_back(
+      std::make_shared<PublisherTask>(
+        ec,
+        m_pub_stats.at(i),
+        CommunicatorFactory::get_publisher(ec)));
+  }
+  for (uint32_t i = 0; i < m_ec.number_of_subscribers; ++i) {
+    m_subs.push_back(
+      std::make_shared<SubscriberTask>(
+        ec,
+        m_sub_stats.at(i),
+        CommunicatorFactory::get_subscriber(ec)));
+  }
+}
 
-#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__THREADED_RUNNER_HPP_
+DataEntityRunner::~DataEntityRunner() {}
+
+}  // namespace performance_test

@@ -12,31 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__INTER_THREAD_RUNNER_HPP_
-#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__INTER_THREAD_RUNNER_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__DATA_ENTITY_RUNNER_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__DATA_ENTITY_RUNNER_HPP_
 
 #include <memory>
 #include <vector>
-#include <thread>
 
+#include "performance_test/execution_tasks/publisher_task.hpp"
+#include "performance_test/execution_tasks/subscriber_task.hpp"
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
-#include "performance_test/experiment_execution/data_entity_runner.hpp"
+#include "performance_test/experiment_execution/runner.hpp"
 
 namespace performance_test
 {
-class InterThreadRunner : public DataEntityRunner
+class DataEntityRunner : public Runner
 {
 public:
-  explicit InterThreadRunner(const ExperimentConfiguration & ec);
-  virtual ~InterThreadRunner();
+  explicit DataEntityRunner(const ExperimentConfiguration & ec);
+  virtual ~DataEntityRunner();
 
 protected:
-  virtual void run_pubs_and_subs();
-
-private:
-  std::vector<std::thread> m_thread_pool;
+  std::vector<std::shared_ptr<PublisherTask>> m_pubs;
+  std::vector<std::shared_ptr<SubscriberTask>> m_subs;
 };
 
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__INTER_THREAD_RUNNER_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__DATA_ENTITY_RUNNER_HPP_

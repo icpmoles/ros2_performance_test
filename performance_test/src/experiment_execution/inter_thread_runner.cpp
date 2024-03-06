@@ -15,7 +15,7 @@
 #include "performance_test/experiment_execution/inter_thread_runner.hpp"
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
-#include "performance_test/experiment_execution/threaded_runner.hpp"
+#include "performance_test/experiment_execution/data_entity_runner.hpp"
 
 namespace performance_test
 {
