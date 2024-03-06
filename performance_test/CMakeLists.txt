@@ -258,7 +258,6 @@ set(sources
     include/performance_test/experiment_execution/round_trip_relay_runner.hpp
     include/performance_test/experiment_execution/runner_factory.hpp
     include/performance_test/experiment_execution/runner.hpp
-    include/performance_test/experiment_execution/threaded_runner.hpp
     include/performance_test/experiment_metrics/analysis_result.hpp
     include/performance_test/experiment_metrics/message_received_listener.hpp
     include/performance_test/experiment_metrics/publisher_stats.hpp

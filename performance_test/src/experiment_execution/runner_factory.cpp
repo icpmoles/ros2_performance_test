@@ -20,7 +20,6 @@
 #include "performance_test/experiment_execution/intra_thread_runner.hpp"
 #include "performance_test/experiment_execution/round_trip_main_runner.hpp"
 #include "performance_test/experiment_execution/round_trip_relay_runner.hpp"
-#include "performance_test/experiment_execution/threaded_runner.hpp"
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
 #include "performance_test/experiment_configuration/communication_mean.hpp"
 #include "performance_test/experiment_execution/apex_os_runner.hpp"
