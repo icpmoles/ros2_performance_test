@@ -171,52 +171,6 @@ public:
   }
 };
 
-class RoundTripRelayRunner : public Runner
-{
-public:
-  explicit RoundTripRelayRunner(const ExperimentConfiguration & ec)
-  : Runner(ec),
-    m_relay(std::make_shared<RoundTripRelayTask>(
-        ec,
-        CommunicatorFactory::get_publisher(ec),
-        CommunicatorFactory::get_subscriber(ec)))
-  {
-    if (ec.number_of_publishers != 1) {
-      throw std::invalid_argument(
-              "Round-trip relay requires exactly one publisher.");
-    }
-    if (ec.number_of_subscribers != 1) {
-      throw std::invalid_argument(
-              "Round-trip relay requires exactly one subscriber.");
-    }
-    if (ec.is_zero_copy_transfer) {
-      throw std::invalid_argument(
-              "Round-trip relay can not use loaned messages (zero copy).");
-    }
-  }
-
-  virtual ~RoundTripRelayRunner()
-  {
-    m_thread->join();
-  }
-
-protected:
-  virtual void run_pubs_and_subs()
-  {
-    m_thread = std::make_unique<std::thread>(
-      [this]() {
-        while (m_running) {
-          m_relay->run();
-        }
-      }
-    );
-  }
-
-private:
-  std::shared_ptr<RoundTripRelayTask> m_relay;
-  std::unique_ptr<std::thread> m_thread;
-};
-
 }  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__THREADED_RUNNER_HPP_
