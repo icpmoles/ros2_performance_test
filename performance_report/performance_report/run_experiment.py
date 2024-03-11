@@ -52,7 +52,7 @@ def prepare_for_shmem(cfg: ExperimentConfig, output_dir):
         elif cfg.com_mean == 'iceoryx':
             pass
         else:
-            print('Unsupported com_mean: ', cfg.com_mean)
+            pass
 
 
 def teardown_from_shmem(cfg: ExperimentConfig):

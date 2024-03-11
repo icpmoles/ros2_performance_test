@@ -173,7 +173,7 @@ class ExperimentConfig:
             elif self.com_mean == 'iceoryx':
                 pass
             else:
-                print('Unsupported com_mean: ', self.com_mean)
+                pass
 
         if len(args) == 1:
             commands.append(perf_test_exe_cmd + args[0])
