@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <iostream>
+
 #ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
 #include <rclcpp/rclcpp.hpp>
 #endif
