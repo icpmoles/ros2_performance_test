@@ -27,19 +27,19 @@ namespace performance_test
 DataEntityRunner::DataEntityRunner(const ExperimentConfiguration & ec)
 : Runner(ec)
 {
-  for (uint32_t i = 0; i < m_ec.number_of_publishers; ++i) {
-    m_pubs.push_back(
-      std::make_shared<PublisherTask>(
-        ec,
-        m_pub_stats.at(i),
-        CommunicatorFactory::get_publisher(ec)));
-  }
   for (uint32_t i = 0; i < m_ec.number_of_subscribers; ++i) {
     m_subs.push_back(
       std::make_shared<SubscriberTask>(
         ec,
         m_sub_stats.at(i),
         CommunicatorFactory::get_subscriber(ec)));
+  }
+  for (uint32_t i = 0; i < m_ec.number_of_publishers; ++i) {
+    m_pubs.push_back(
+      std::make_shared<PublisherTask>(
+        ec,
+        m_pub_stats.at(i),
+        CommunicatorFactory::get_publisher(ec)));
   }
 }
 
