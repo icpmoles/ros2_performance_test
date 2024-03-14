@@ -2,6 +2,10 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Removed
+- Removed the special handling for the `BoundedSequenceFlat` messages, because
+  the messages are removed in performance_test
+
 ## 1.5.2 (YYYY/MM/DD)
 
 ### Fixed

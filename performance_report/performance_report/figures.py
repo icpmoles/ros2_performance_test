@@ -83,7 +83,6 @@ def generateFigure(figConfig, datasets: 'list[DatasetConfig]'):
         line_name = dataset.name
         scatter_name = line_name + ' ' + dataset.theme.marker.shape
         if is_categorical:
-            df['msg'] = df['msg'].str.replace('BoundedSequenceFlat', 'BoundedSequence')
             fig.x_range.factors = list(df[figConfig['x_range']])
             source = ColumnDataSource(df)
             fig.scatter(

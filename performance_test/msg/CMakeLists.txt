@@ -96,26 +96,6 @@ if(ENABLE_MSGS_BOUNDED_SEQUENCE)
 endif()
 
 option(
-  ENABLE_MSGS_BOUNDED_SEQUENCE_FLAT
-  "Enable messages that contain a bounded sequence with the @flat annotation"
-  ${ENABLE_MSGS_DEFAULT}
-)
-if(ENABLE_MSGS_BOUNDED_SEQUENCE_FLAT)
-  list(APPEND SUPPORTED_IDL_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat1k.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat4k.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat16k.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat32k.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat64k.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat256k.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat1m.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat2m.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat4m.idl
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundedSequenceFlat8m.idl
-  )
-endif()
-
-option(
   ENABLE_MSGS_UNBOUNDED_SEQUENCE
   "Enable messages that contain an unbounded sequence or string"
   ${ENABLE_MSGS_DEFAULT}
