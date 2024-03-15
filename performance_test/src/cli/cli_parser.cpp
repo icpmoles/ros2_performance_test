@@ -214,8 +214,7 @@ CLIParser::CLIParser(int argc, char ** argv)
     output_config.logfile_path = LogfileArg.getValue();
 
     experiment_configuration.com_mean = communication_mean_from_string(communicationArg.getValue());
-    experiment_configuration.execution_strategy =
-      execution_strategy_from_string(executionStrategyArg.getValue());
+    experiment_configuration.execution_strategy = executionStrategyArg.getValue();
     experiment_configuration.dds_domain_id = ddsDomainIdArg.getValue();
     experiment_configuration.qos = qos;
     experiment_configuration.rate = rateArg.getValue();

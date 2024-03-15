@@ -81,7 +81,7 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
   write("qos_durability", to_string(ec.qos.durability));
   write("qos_history_kind", to_string(ec.qos.history_kind));
   write("qos_history_depth", ec.qos.history_depth);
-  write("execution_strategy", to_string(ec.execution_strategy));
+  write("execution_strategy", ec.execution_strategy);
   write("rate", ec.rate);
   write("topic_name", ec.topic_name);
   write("msg_name", ec.msg_name);

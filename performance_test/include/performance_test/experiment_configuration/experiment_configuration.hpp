@@ -23,7 +23,6 @@
 #include <chrono>
 
 #include "performance_test/experiment_configuration/communication_mean.hpp"
-#include "performance_test/experiment_configuration/execution_strategy.hpp"
 #include "performance_test/experiment_configuration/output_configuration.hpp"
 #include "performance_test/experiment_configuration/qos_abstraction.hpp"
 #include "performance_test/experiment_configuration/real_time_configuration.hpp"
@@ -44,7 +43,7 @@ struct ExperimentConfiguration
 
   const std::string id;
   CommunicationMean com_mean;
-  ExecutionStrategy execution_strategy;
+  std::string execution_strategy;
   uint32_t dds_domain_id;
   QOSAbstraction qos;
   uint32_t rate;
