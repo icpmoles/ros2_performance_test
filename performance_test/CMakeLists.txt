@@ -258,6 +258,8 @@ set(sources
     include/performance_test/experiment_execution/data_entity_runner.hpp
     include/performance_test/experiment_execution/inter_thread_runner.hpp
     include/performance_test/experiment_execution/intra_thread_runner.hpp
+    include/performance_test/experiment_execution/pub_sub_factory.hpp
+    include/performance_test/experiment_execution/pub_sub_registry.hpp
     include/performance_test/experiment_execution/round_trip_main_runner.hpp
     include/performance_test/experiment_execution/round_trip_relay_runner.hpp
     include/performance_test/experiment_execution/runner.hpp
@@ -299,6 +301,7 @@ set(sources
     src/experiment_execution/data_entity_runner.cpp
     src/experiment_execution/inter_thread_runner.cpp
     src/experiment_execution/intra_thread_runner.cpp
+    src/experiment_execution/pub_sub_factory.cpp
     src/experiment_execution/round_trip_main_runner.cpp
     src/experiment_execution/round_trip_relay_runner.cpp
     src/experiment_execution/runner.cpp
