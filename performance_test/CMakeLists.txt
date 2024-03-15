@@ -235,7 +235,6 @@ set(sources
     include/performance_test/execution_tasks/publisher_task.hpp
     include/performance_test/execution_tasks/round_trip_relay_task.hpp
     include/performance_test/execution_tasks/subscriber_task.hpp
-    include/performance_test/experiment_configuration/communication_mean.hpp
     include/performance_test/experiment_configuration/experiment_configuration.hpp
     include/performance_test/experiment_configuration/output_configuration.hpp
     include/performance_test/experiment_configuration/qos_abstraction.hpp
@@ -276,7 +275,6 @@ set(sources
     src/execution_tasks/publisher_task.cpp
     src/execution_tasks/round_trip_relay_task.cpp
     src/execution_tasks/subscriber_task.cpp
-    src/experiment_configuration/communication_mean.cpp
     src/experiment_configuration/experiment_configuration.cpp
     src/experiment_configuration/qos_abstraction.cpp
     src/experiment_configuration/round_trip_mode.cpp

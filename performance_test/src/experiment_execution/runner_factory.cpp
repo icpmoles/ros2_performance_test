@@ -21,7 +21,6 @@
 #include "performance_test/experiment_execution/round_trip_main_runner.hpp"
 #include "performance_test/experiment_execution/round_trip_relay_runner.hpp"
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-#include "performance_test/experiment_configuration/communication_mean.hpp"
 #include "performance_test/experiment_execution/apex_os_runner.hpp"
 #endif
 
@@ -45,17 +44,17 @@ std::unique_ptr<Runner> RunnerFactory::get(const ExperimentConfiguration & ec)
   }
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
   if (ec.execution_strategy == "APEX_SINGLE_EXECUTOR") {
-    if (ec.com_mean == CommunicationMean::ApexOSPollingSubscription) {
+    if (ec.communicator == "ApexOSPollingSubscription") {
       return std::make_unique<ApexOsSingleExecutorRunner>(ec);
     }
   }
   if (ec.execution_strategy == "APEX_EXECUTOR_PER_COMMUNICATOR") {
-    if (ec.com_mean == CommunicationMean::ApexOSPollingSubscription) {
+    if (ec.communicator == "ApexOSPollingSubscription") {
       return std::make_unique<ApexOsExecutorPerCommunicatorRunner>(ec);
     }
   }
   if (ec.execution_strategy == "APEX_CHAIN") {
-    if (ec.com_mean == CommunicationMean::ApexOSPollingSubscription) {
+    if (ec.communicator == "ApexOSPollingSubscription") {
       return std::make_unique<ApexOsSingleExecutorChainRunner>(ec);
     }
   }

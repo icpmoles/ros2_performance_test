@@ -46,22 +46,22 @@ ExperimentConfiguration::ExperimentConfiguration()
 bool ExperimentConfiguration::use_ros2_layers() const
 {
 #ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
-  if (com_mean == CommunicationMean::RCLCPP_SINGLE_THREADED_EXECUTOR) {
+  if (communicator == "rclcpp-single-threaded-executor") {
     return true;
   }
 #endif
 #ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
-  if (com_mean == CommunicationMean::RCLCPP_STATIC_SINGLE_THREADED_EXECUTOR) {
+  if (communicator == "rclcpp-static-single-threaded-executor") {
     return true;
   }
 #endif
 #ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-  if (com_mean == CommunicationMean::RCLCPP_WAITSET) {
+  if (communicator == "rclcpp-waitset") {
     return true;
   }
 #endif
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-  if (com_mean == CommunicationMean::ApexOSPollingSubscription) {
+  if (communicator == "ApexOSPollingSubscription") {
     return true;
   }
 #endif
@@ -129,7 +129,7 @@ std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration &
          "Experiment id: " << e.id <<
          "\nPerformance Test Version: " << version() <<
          "\nLogfile name: " << e.output_configuration.logfile_path <<
-         "\nCommunication mean: " << e.com_mean <<
+         "\nCommunication mean: " << e.communicator <<
          "\nRMW Implementation: " << e.rmw_implementation() <<
          "\nDDS domain id: " << e.dds_domain_id <<
          "\nQOS: " << e.qos <<

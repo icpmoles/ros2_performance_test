@@ -74,7 +74,7 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
 {
   write("id", ec.id);
   write("perf_test_version", version());
-  write("com_mean_str", to_string(ec.com_mean));
+  write("com_mean_str", ec.communicator);
   write("rmw_implementation", ec.rmw_implementation());
   write("dds_domain_id", ec.dds_domain_id);
   write("qos_reliability", to_string(ec.qos.reliability));

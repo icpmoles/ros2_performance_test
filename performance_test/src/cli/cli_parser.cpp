@@ -213,7 +213,7 @@ CLIParser::CLIParser(int argc, char ** argv)
     output_config.print_to_console = printToConsoleArg.getValue();
     output_config.logfile_path = LogfileArg.getValue();
 
-    experiment_configuration.com_mean = communication_mean_from_string(communicationArg.getValue());
+    experiment_configuration.communicator = communicationArg.getValue();
     experiment_configuration.execution_strategy = executionStrategyArg.getValue();
     experiment_configuration.dds_domain_id = ddsDomainIdArg.getValue();
     experiment_configuration.qos = qos;
