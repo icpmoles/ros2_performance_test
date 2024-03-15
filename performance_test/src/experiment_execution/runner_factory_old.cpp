@@ -14,7 +14,7 @@
 
 #include <memory>
 
-#include "performance_test/experiment_execution/runner_factory.hpp"
+#include "performance_test/experiment_execution/runner_factory_old.hpp"
 
 #include "performance_test/experiment_execution/inter_thread_runner.hpp"
 #include "performance_test/experiment_execution/intra_thread_runner.hpp"
@@ -27,7 +27,7 @@
 namespace performance_test
 {
 
-std::unique_ptr<Runner> RunnerFactory::get(const ExperimentConfiguration & ec)
+std::unique_ptr<Runner> RunnerFactoryOld::get(const ExperimentConfiguration & ec)
 {
   if (ec.execution_strategy == "INTER_THREAD") {
     switch (ec.roundtrip_mode) {

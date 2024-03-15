@@ -260,7 +260,7 @@ set(sources
     include/performance_test/experiment_execution/intra_thread_runner.hpp
     include/performance_test/experiment_execution/round_trip_main_runner.hpp
     include/performance_test/experiment_execution/round_trip_relay_runner.hpp
-    include/performance_test/experiment_execution/runner_factory.hpp
+    include/performance_test/experiment_execution/runner_factory_old.hpp
     include/performance_test/experiment_execution/runner.hpp
     include/performance_test/experiment_metrics/analysis_result.hpp
     include/performance_test/experiment_metrics/message_received_listener.hpp
@@ -300,7 +300,7 @@ set(sources
     src/experiment_execution/round_trip_main_runner.cpp
     src/experiment_execution/round_trip_relay_runner.cpp
     src/experiment_execution/runner.cpp
-    src/experiment_execution/runner_factory.cpp
+    src/experiment_execution/runner_factory_old.cpp
     src/experiment_metrics/analysis_result.cpp
     src/experiment_metrics/publisher_stats.cpp
     src/experiment_metrics/subscriber_stats.cpp

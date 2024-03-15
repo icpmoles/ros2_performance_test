@@ -19,7 +19,7 @@
 #endif
 
 #include "performance_test/cli/cli_parser.hpp"
-#include "performance_test/experiment_execution/runner_factory.hpp"
+#include "performance_test/experiment_execution/runner_factory_old.hpp"
 #include "performance_test/generated_messages/messages.hpp"
 #include "performance_test/utilities/exit_request_handler.hpp"
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
@@ -59,7 +59,7 @@ int main(int argc, char ** argv)
   }
 #endif
 
-  auto r = performance_test::RunnerFactory::get(ec);
+  auto r = performance_test::RunnerFactoryOld::get(ec);
 
   if (ec.rt_config.is_rt_init_required()) {
     performance_test::post_proc_rt_init();

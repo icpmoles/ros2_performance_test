@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_FACTORY_HPP_
-#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_FACTORY_HPP_
+#ifndef PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_FACTORY_OLD_HPP_
+#define PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_FACTORY_OLD_HPP_
 
 #include <memory>
 
@@ -23,7 +23,7 @@
 namespace performance_test
 {
 
-class RunnerFactory
+class RunnerFactoryOld
 {
 public:
   static std::unique_ptr<Runner> get(const ExperimentConfiguration & ec);
@@ -31,4 +31,4 @@ public:
 
 }  // namespace performance_test
 
-#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_FACTORY_HPP_
+#endif  // PERFORMANCE_TEST__EXPERIMENT_EXECUTION__RUNNER_FACTORY_OLD_HPP_
