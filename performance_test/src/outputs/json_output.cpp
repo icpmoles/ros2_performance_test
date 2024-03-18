@@ -20,6 +20,7 @@
 #include <cmath>
 
 #include "performance_test/experiment_metrics/analysis_result.hpp"
+#include "performance_test/plugin/plugin_singleton.hpp"
 #include "performance_test/utilities/external_info.hpp"
 #include "performance_test/utilities/version.hpp"
 
@@ -75,7 +76,6 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
   write("id", ec.id);
   write("perf_test_version", version());
   write("com_mean_str", ec.communicator);
-  write("rmw_implementation", ec.rmw_implementation());
   write("dds_domain_id", ec.dds_domain_id);
   write("qos_reliability", to_string(ec.qos.reliability));
   write("qos_durability", to_string(ec.qos.durability));
@@ -91,9 +91,11 @@ void JsonOutput::write(const ExperimentConfiguration & ec)
   write("check_memory", ec.check_memory);
   write("with_security", ec.with_security);
   write("is_zero_copy_transfer", ec.is_zero_copy_transfer);
-  write("is_shared_memory_transfer", ec.is_shared_memory_transfer());
   write("roundtrip_mode", to_string(ec.roundtrip_mode));
   write("is_rt_init_required", ec.rt_config.is_rt_init_required());
+  for (const auto & kvp : PluginSingleton::get()->extra_log_info()) {
+    write(kvp.first.c_str(), kvp.second);
+  }
   for (const auto & kvp : ExternalInfo::as_map()) {
     write(("external_info_" + kvp.first).c_str(), kvp.second);
   }

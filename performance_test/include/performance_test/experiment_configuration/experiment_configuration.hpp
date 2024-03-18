@@ -76,10 +76,6 @@ struct ExperimentConfiguration
   std::chrono::duration<double> period() const;
   /// \returns Returns the inverse of the configured publishing rate, in nanoseconds.
   std::chrono::nanoseconds period_ns() const;
-  /// \returns Returns whether shared memory transfer is enabled.
-  /// Only implemented for Apex.OS.
-  bool is_shared_memory_transfer() const;
-  std::string rmw_implementation() const;
   std::string pub_topic_postfix() const;
   std::string sub_topic_postfix() const;
 };
