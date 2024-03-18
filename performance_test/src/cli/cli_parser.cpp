@@ -237,6 +237,8 @@ CLIParser::CLIParser(int argc, char ** argv)
     experiment_configuration.roundtrip_mode =
       round_trip_mode_from_string(roundTripModeArg.getValue());
     experiment_configuration.output_configuration = output_config;
+    experiment_configuration.argc = argc;
+    experiment_configuration.argv = argv;
   } catch (TCLAP::ArgException & e) {
     std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
   }

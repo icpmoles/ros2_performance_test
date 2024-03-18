@@ -66,6 +66,10 @@ struct ExperimentConfiguration
   RoundTripMode roundtrip_mode;
   OutputConfiguration output_configuration;
 
+  /// @brief In case any plugins need extra CLI args
+  int argc;
+  char ** argv;
+
   /// \returns Returns whether the ROS 2 layers are used by the communication mean.
   bool use_ros2_layers() const;
   /// \returns Returns the inverse of the configured publishing rate.
