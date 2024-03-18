@@ -20,6 +20,7 @@
 #include <tclap/CmdLine.h>
 
 #include "performance_test/experiment_execution/pub_sub_factory.hpp"
+#include "performance_test/experiment_execution/runner_factory.hpp"
 
 namespace performance_test
 {
@@ -47,18 +48,12 @@ CLIParser::CLIParser(int argc, char ** argv)
       "Default is " + allowedCommunicators[0] + ".", false, allowedCommunicators[0],
       &allowedCommunicatorVals, cmd);
 
-    std::vector<std::string> allowedExecStrats;
-    allowedExecStrats.push_back("INTER_THREAD");
-    allowedExecStrats.push_back("INTRA_THREAD");
-#ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-    allowedExecStrats.push_back("APEX_SINGLE_EXECUTOR");
-    allowedExecStrats.push_back("APEX_EXECUTOR_PER_COMMUNICATOR");
-    allowedExecStrats.push_back("APEX_CHAIN");
-#endif
+    std::vector<std::string> allowedExecStrats =
+      RunnerFactory::get().supported_execution_strategies();
     TCLAP::ValuesConstraint<std::string> allowedExecStratVals(allowedExecStrats);
     TCLAP::ValueArg<std::string> executionStrategyArg("e", "execution-strategy",
       "The execution strategy to use. "
-      "Default is " + allowedExecStrats[0] + ".", false, allowedExecStrats[0],
+      "Default is INTER_THREAD.", false, "INTER_THREAD",
       &allowedExecStratVals, cmd);
 
     TCLAP::ValueArg<std::string> topicArg("t", "topic", "The topic name. Default is test_topic.",

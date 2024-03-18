@@ -16,7 +16,7 @@
 
 #include "performance_test/cli/cli_parser.hpp"
 #include "performance_test/experiment_execution/pub_sub_factory.hpp"
-#include "performance_test/experiment_execution/runner_factory_old.hpp"
+#include "performance_test/experiment_execution/runner_factory.hpp"
 #include "performance_test/plugin/plugin_singleton.hpp"
 #include "performance_test/utilities/exit_request_handler.hpp"
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
@@ -27,6 +27,7 @@ namespace pt = ::performance_test;
 int main(int argc, char ** argv)
 {
   pt::PluginSingleton::get()->register_pub_sub(pt::PubSubFactory::get());
+  pt::PluginSingleton::get()->register_custom_runners(pt::RunnerFactory::get());
 
   pt::CLIParser parser(argc, argv);
 
@@ -44,7 +45,7 @@ int main(int argc, char ** argv)
 
   pt::ExitRequestHandler::get().setup();
 
-  auto r = pt::RunnerFactoryOld::get(ec);
+  auto r = pt::RunnerFactory::get().create_runner(ec);
 
   if (ec.rt_config.is_rt_init_required()) {
     pt::post_proc_rt_init();
