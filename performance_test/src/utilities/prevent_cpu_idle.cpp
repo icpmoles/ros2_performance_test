@@ -14,6 +14,7 @@
 
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
 
+#include <cstdint>
 #include <memory>
 #include <stdexcept>
 #include <iostream>
