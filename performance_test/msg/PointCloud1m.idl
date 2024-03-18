@@ -1,5 +1,5 @@
-#include "FixedPointField.idl"
-#include "FixedHeader.idl"
+#include "performance_test/msg/FixedPointField.idl"
+#include "performance_test/msg/FixedHeader.idl"
 
 module performance_test {
   module msg {

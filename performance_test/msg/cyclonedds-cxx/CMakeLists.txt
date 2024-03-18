@@ -21,6 +21,7 @@ foreach(idl ${IDL_FILES})
   string(REGEX REPLACE "\\.idl" "" basename ${filename})
 
   file(READ ${idl} filedata)
+  string(REGEX REPLACE "performance_test/msg/" "" filedata "${filedata}")
   file(WRITE ${IDL_GEN_ROOT}/${filename} "${filedata}")
 
 

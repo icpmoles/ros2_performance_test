@@ -1,4 +1,4 @@
-#include "Struct16.idl"
+#include "performance_test/msg/Struct16.idl"
 
 module performance_test {
   module msg {
