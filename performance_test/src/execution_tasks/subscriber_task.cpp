@@ -15,6 +15,7 @@
 #include "performance_test/execution_tasks/subscriber_task.hpp"
 
 #include <memory>
+#include <utility>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/subscriber_stats.hpp"
@@ -26,9 +27,9 @@ namespace performance_test
 SubscriberTask::SubscriberTask(
   const ExperimentConfiguration & ec,
   SubscriberStats & stats,
-  std::shared_ptr<Subscriber> sub)
+  std::unique_ptr<Subscriber> && sub)
 : m_stats(stats),
-  m_sub(sub),
+  m_sub(std::move(sub)),
   m_memory_checker(ec) {}
 
 void SubscriberTask::run()

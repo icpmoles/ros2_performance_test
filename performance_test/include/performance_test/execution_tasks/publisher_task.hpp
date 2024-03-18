@@ -32,7 +32,7 @@ public:
   PublisherTask(
     const ExperimentConfiguration & ec,
     PublisherStats & stats,
-    std::shared_ptr<Publisher> pub);
+    std::unique_ptr<Publisher> && pub);
 
   PublisherTask & operator=(const PublisherTask &) = delete;
   PublisherTask(const PublisherTask &) = delete;
@@ -42,7 +42,7 @@ public:
 private:
   const ExperimentConfiguration & m_ec;
   PublisherStats & m_stats;
-  std::shared_ptr<Publisher> m_pub;
+  std::unique_ptr<Publisher> m_pub;
   const std::chrono::nanoseconds m_time_between_publish;
   perf_clock::time_point m_first_run;
   std::size_t m_loop_counter;

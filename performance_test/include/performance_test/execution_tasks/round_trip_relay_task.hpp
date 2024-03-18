@@ -30,8 +30,8 @@ class RoundTripRelayTask : public MessageReceivedListener
 public:
   RoundTripRelayTask(
     const ExperimentConfiguration & ec,
-    std::shared_ptr<Publisher> pub,
-    std::shared_ptr<Subscriber> sub);
+    std::unique_ptr<Publisher> && pub,
+    std::unique_ptr<Subscriber> && sub);
 
   RoundTripRelayTask & operator=(const RoundTripRelayTask &) = delete;
   RoundTripRelayTask(const RoundTripRelayTask &) = delete;
@@ -46,8 +46,8 @@ public:
   ) override;
 
 private:
-  std::shared_ptr<Publisher> m_pub;
-  std::shared_ptr<Subscriber> m_sub;
+  std::unique_ptr<Publisher> m_pub;
+  std::unique_ptr<Subscriber> m_sub;
   MemoryChecker m_memory_checker;
 };
 

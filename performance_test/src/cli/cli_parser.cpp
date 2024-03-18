@@ -19,6 +19,7 @@
 
 #include <tclap/CmdLine.h>
 
+#include "performance_test/experiment_execution/pub_sub_factory.hpp"
 #include "performance_test/generated_messages/messages.hpp"
 
 namespace performance_test
@@ -40,46 +41,12 @@ CLIParser::CLIParser(int argc, char ** argv)
       "The publishing rate. 0 means publish as fast as possible. "
       "Default is 1000.", false, 1000, "N", cmd);
 
-    std::vector<std::string> allowedCommunications;
-
-#ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
-    allowedCommunications.push_back("rclcpp-single-threaded-executor");
-#endif
-#ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
-    allowedCommunications.push_back("rclcpp-static-single-threaded-executor");
-#endif
-#ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-    allowedCommunications.push_back("rclcpp-waitset");
-#endif
-#ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-    allowedCommunications.push_back("ApexOSPollingSubscription");
-#endif
-#ifdef PERFORMANCE_TEST_FASTRTPS_ENABLED
-    allowedCommunications.push_back("FastRTPS");
-#endif
-#ifdef PERFORMANCE_TEST_CONNEXTDDSMICRO_ENABLED
-    allowedCommunications.push_back("ConnextDDSMicro");
-#endif
-#ifdef PERFORMANCE_TEST_CONNEXTDDS_ENABLED
-    allowedCommunications.push_back("ConnextDDS");
-#endif
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_ENABLED
-    allowedCommunications.push_back("CycloneDDS");
-#endif
-#ifdef PERFORMANCE_TEST_CYCLONEDDS_CXX_ENABLED
-    allowedCommunications.push_back("CycloneDDS-CXX");
-#endif
-#ifdef PERFORMANCE_TEST_ICEORYX_ENABLED
-    allowedCommunications.push_back("iceoryx");
-#endif
-#ifdef PERFORMANCE_TEST_OPENDDS_ENABLED
-    allowedCommunications.push_back("OpenDDS");
-#endif
-    TCLAP::ValuesConstraint<std::string> allowedCommunicationVals(allowedCommunications);
-    TCLAP::ValueArg<std::string> communicationArg("c", "communication",
-      "The communication plugin to use. "
-      "Default is " + allowedCommunications[0] + ".", false, allowedCommunications[0],
-      &allowedCommunicationVals, cmd);
+    std::vector<std::string> allowedCommunicators = PubSubFactory::get().supported_communicators();
+    TCLAP::ValuesConstraint<std::string> allowedCommunicatorVals(allowedCommunicators);
+    TCLAP::ValueArg<std::string> communicatorArg("c", "communicator",
+      "The Plugin's communicator. "
+      "Default is " + allowedCommunicators[0] + ".", false, allowedCommunicators[0],
+      &allowedCommunicatorVals, cmd);
 
     std::vector<std::string> allowedExecStrats;
     allowedExecStrats.push_back("INTER_THREAD");
@@ -98,7 +65,7 @@ CLIParser::CLIParser(int argc, char ** argv)
     TCLAP::ValueArg<std::string> topicArg("t", "topic", "The topic name. Default is test_topic.",
       false, "test_topic", "topic", cmd);
 
-    std::vector<std::string> allowedMsgs = messages::supported_msg_names();
+    std::vector<std::string> allowedMsgs = PubSubFactory::get().supported_messages();
     TCLAP::ValuesConstraint<std::string> allowedMsgVals(allowedMsgs);
     TCLAP::ValueArg<std::string> msgArg("m", "msg",
       "The message type. Use --msg-list to list the options. "
@@ -213,7 +180,7 @@ CLIParser::CLIParser(int argc, char ** argv)
     output_config.print_to_console = printToConsoleArg.getValue();
     output_config.logfile_path = LogfileArg.getValue();
 
-    experiment_configuration.communicator = communicationArg.getValue();
+    experiment_configuration.communicator = communicatorArg.getValue();
     experiment_configuration.execution_strategy = executionStrategyArg.getValue();
     experiment_configuration.dds_domain_id = ddsDomainIdArg.getValue();
     experiment_configuration.qos = qos;

@@ -30,7 +30,7 @@ public:
   SubscriberTask(
     const ExperimentConfiguration & ec,
     SubscriberStats & stats,
-    std::shared_ptr<Subscriber> sub);
+    std::unique_ptr<Subscriber> && sub);
 
   SubscriberTask & operator=(const SubscriberTask &) = delete;
   SubscriberTask(const SubscriberTask &) = delete;
@@ -41,7 +41,7 @@ public:
 
 private:
   SubscriberStats & m_stats;
-  std::shared_ptr<Subscriber> m_sub;
+  std::unique_ptr<Subscriber> m_sub;
   MemoryChecker m_memory_checker;
 };
 

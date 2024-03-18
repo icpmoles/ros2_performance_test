@@ -6,6 +6,7 @@
 - Instead of enabling/disabling each plugin, you select exactly one
   with a CMake string option, for example:
    - `colcon build --cmake-args -DPERFORMANCE_TEST_PLUGIN=ROS2`
+- Renamed the `--communication` CLI arg to `--communicator`. The short `-c` is unchanged.
 ### Removed
 - Removed the deprecated CLI flags for QOS settings:
   - Instead of `--reliable`, use `--reliability RELIABLE`

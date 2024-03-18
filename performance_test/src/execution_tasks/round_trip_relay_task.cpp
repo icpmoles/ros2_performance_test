@@ -15,6 +15,7 @@
 #include "performance_test/execution_tasks/round_trip_relay_task.hpp"
 
 #include <memory>
+#include <utility>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/plugin/publisher.hpp"
@@ -26,10 +27,10 @@ namespace performance_test
 
 RoundTripRelayTask::RoundTripRelayTask(
   const ExperimentConfiguration & ec,
-  std::shared_ptr<Publisher> pub,
-  std::shared_ptr<Subscriber> sub)
-: m_pub(pub),
-  m_sub(sub),
+  std::unique_ptr<Publisher> && pub,
+  std::unique_ptr<Subscriber> && sub)
+: m_pub(std::move(pub)),
+  m_sub(std::move(sub)),
   m_memory_checker(ec) {}
 
 void RoundTripRelayTask::run()

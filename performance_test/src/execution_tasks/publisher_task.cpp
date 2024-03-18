@@ -16,6 +16,7 @@
 
 #include <memory>
 #include <thread>
+#include <utility>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/publisher_stats.hpp"
@@ -29,10 +30,10 @@ namespace performance_test
 PublisherTask::PublisherTask(
   const ExperimentConfiguration & ec,
   PublisherStats & stats,
-  std::shared_ptr<Publisher> pub)
+  std::unique_ptr<Publisher> && pub)
 : m_ec(ec),
   m_stats(stats),
-  m_pub(pub),
+  m_pub(std::move(pub)),
   m_time_between_publish(ec.period_ns()),
   m_loop_counter(0),
   m_memory_checker(ec) {}

@@ -14,23 +14,25 @@
 
 #include <iostream>
 
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-#include <rclcpp/rclcpp.hpp>
-#endif
-
 #include "performance_test/cli/cli_parser.hpp"
+#include "performance_test/experiment_execution/pub_sub_factory.hpp"
 #include "performance_test/experiment_execution/runner_factory_old.hpp"
 #include "performance_test/generated_messages/messages.hpp"
+#include "performance_test/plugin/plugin_singleton.hpp"
 #include "performance_test/utilities/exit_request_handler.hpp"
 #include "performance_test/utilities/prevent_cpu_idle.hpp"
 #include "performance_test/utilities/rt_enabler.hpp"
 
+namespace pt = ::performance_test;
+
 int main(int argc, char ** argv)
 {
-  performance_test::CLIParser parser(argc, argv);
+  pt::PluginSingleton::get()->register_pub_sub(pt::PubSubFactory::get());
+
+  pt::CLIParser parser(argc, argv);
 
   if (parser.print_msg_list) {
-    for (const auto & s : performance_test::messages::supported_msg_names()) {
+    for (const auto & s : pt::messages::supported_msg_names()) {
       std::cout << s << std::endl;
     }
     return 0;
@@ -39,31 +41,24 @@ int main(int argc, char ** argv)
   auto ec = parser.experiment_configuration;
 
   if (ec.rt_config.is_rt_init_required()) {
-    performance_test::pre_proc_rt_init(ec.rt_config.cpus, ec.rt_config.prio);
+    pt::pre_proc_rt_init(ec.rt_config.cpus, ec.rt_config.prio);
   }
 
   if (ec.prevent_cpu_idle) {
-    performance_test::prevent_cpu_idle();
+    pt::prevent_cpu_idle();
   }
 
-  performance_test::ExitRequestHandler::get().setup(ec.use_ros2_layers());
+  pt::PluginSingleton::get()->global_setup(ec);
 
-#if defined(PERFORMANCE_TEST_RCLCPP_ENABLED)
-  // initialize ros
-  if (ec.use_ros2_layers()) {
-#ifdef APEX_CERT
-    rclcpp::init(argc, argv, rclcpp::InitOptions{}, false);
-#else
-    rclcpp::init(argc, argv);
-#endif
-  }
-#endif
+  pt::ExitRequestHandler::get().setup(ec.use_ros2_layers());
 
-  auto r = performance_test::RunnerFactoryOld::get(ec);
+  auto r = pt::RunnerFactoryOld::get(ec);
 
   if (ec.rt_config.is_rt_init_required()) {
-    performance_test::post_proc_rt_init();
+    pt::post_proc_rt_init();
   }
 
   r->run();
+
+  pt::PluginSingleton::get()->global_teardown(ec);
 }

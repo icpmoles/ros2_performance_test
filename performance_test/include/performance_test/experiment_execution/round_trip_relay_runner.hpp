@@ -35,7 +35,7 @@ protected:
   virtual void run_pubs_and_subs();
 
 private:
-  std::shared_ptr<RoundTripRelayTask> m_relay;
+  RoundTripRelayTask m_relay;
   std::unique_ptr<std::thread> m_thread;
 };
 

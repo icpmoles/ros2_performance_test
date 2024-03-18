@@ -129,7 +129,7 @@ std::ostream & operator<<(std::ostream & stream, const ExperimentConfiguration &
          "Experiment id: " << e.id <<
          "\nPerformance Test Version: " << version() <<
          "\nLogfile name: " << e.output_configuration.logfile_path <<
-         "\nCommunication mean: " << e.communicator <<
+         "\nCommunicator: " << e.communicator <<
          "\nRMW Implementation: " << e.rmw_implementation() <<
          "\nDDS domain id: " << e.dds_domain_id <<
          "\nQOS: " << e.qos <<

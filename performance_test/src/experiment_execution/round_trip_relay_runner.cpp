@@ -17,18 +17,18 @@
 #include <exception>
 #include <memory>
 
-#include "performance_test/communication_abstractions/communicator_factory.hpp"
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_execution/pub_sub_factory.hpp"
 #include "performance_test/experiment_execution/runner.hpp"
 
 namespace performance_test
 {
 RoundTripRelayRunner::RoundTripRelayRunner(const ExperimentConfiguration & ec)
 : Runner(ec),
-  m_relay(std::make_shared<RoundTripRelayTask>(
-      ec,
-      CommunicatorFactory::get_publisher(ec),
-      CommunicatorFactory::get_subscriber(ec)))
+  m_relay(
+    ec,
+    PubSubFactory::get().create_publisher(ec),
+    PubSubFactory::get().create_subscriber(ec))
 {
   if (ec.number_of_publishers != 1) {
     throw std::invalid_argument(
@@ -54,7 +54,7 @@ void RoundTripRelayRunner::run_pubs_and_subs()
   m_thread = std::make_unique<std::thread>(
     [this]() {
       while (m_running) {
-        m_relay->run();
+        m_relay.run();
       }
     }
   );
