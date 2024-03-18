@@ -34,31 +34,6 @@ namespace performance_test
 ExperimentConfiguration::ExperimentConfiguration()
 : id(sole::uuid4().str()) {}
 
-bool ExperimentConfiguration::use_ros2_layers() const
-{
-#ifdef PERFORMANCE_TEST_RCLCPP_STE_ENABLED
-  if (communicator == "rclcpp-single-threaded-executor") {
-    return true;
-  }
-#endif
-#ifdef PERFORMANCE_TEST_RCLCPP_SSTE_ENABLED
-  if (communicator == "rclcpp-static-single-threaded-executor") {
-    return true;
-  }
-#endif
-#ifdef PERFORMANCE_TEST_RCLCPP_WAITSET_ENABLED
-  if (communicator == "rclcpp-waitset") {
-    return true;
-  }
-#endif
-#ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-  if (communicator == "ApexOSPollingSubscription") {
-    return true;
-  }
-#endif
-  return false;
-}
-
 std::chrono::duration<double> ExperimentConfiguration::period() const
 {
   return std::chrono::duration<double>(1.0 / rate);

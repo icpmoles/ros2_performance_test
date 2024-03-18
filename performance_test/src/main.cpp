@@ -42,7 +42,7 @@ int main(int argc, char ** argv)
 
   pt::PluginSingleton::get()->global_setup(ec);
 
-  pt::ExitRequestHandler::get().setup(ec.use_ros2_layers());
+  pt::ExitRequestHandler::get().setup();
 
   auto r = pt::RunnerFactoryOld::get(ec);
 

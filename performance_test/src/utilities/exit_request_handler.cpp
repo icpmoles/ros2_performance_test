@@ -16,10 +16,6 @@
 
 #include <csignal>
 
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-#include <rclcpp/rclcpp.hpp>
-#endif
-
 static void handle_sigint(int sig)
 {
   std::signal(sig, SIG_DFL);
@@ -30,23 +26,16 @@ namespace performance_test
 {
 
 ExitRequestHandler::ExitRequestHandler()
-: m_exit_requested(false), m_use_ros2_layers(false) {}
+: m_exit_requested(false) {}
 
-void ExitRequestHandler::setup(bool use_ros2_layers)
+void ExitRequestHandler::setup()
 {
-  m_use_ros2_layers = use_ros2_layers;
-  if (!use_ros2_layers) {
-    std::signal(SIGINT, handle_sigint);
-  }
+  std::signal(SIGINT, handle_sigint);
 }
 
 bool ExitRequestHandler::exit_requested() const
 {
-  bool ret_val = m_exit_requested;
-#ifdef PERFORMANCE_TEST_RCLCPP_ENABLED
-  ret_val |= m_use_ros2_layers && !rclcpp::ok();
-#endif
-  return ret_val;
+  return m_exit_requested;
 }
 
 void ExitRequestHandler::request_exit()

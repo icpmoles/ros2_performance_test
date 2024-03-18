@@ -70,8 +70,6 @@ struct ExperimentConfiguration
   int argc;
   char ** argv;
 
-  /// \returns Returns whether the ROS 2 layers are used by the communication mean.
-  bool use_ros2_layers() const;
   /// \returns Returns the inverse of the configured publishing rate.
   std::chrono::duration<double> period() const;
   /// \returns Returns the inverse of the configured publishing rate, in nanoseconds.

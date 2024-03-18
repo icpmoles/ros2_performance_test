@@ -21,6 +21,7 @@
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_metrics/analysis_result.hpp"
 #include "performance_test/outputs/output_factory.hpp"
+#include "performance_test/plugin/plugin_singleton.hpp"
 #include "performance_test/utilities/exit_request_handler.hpp"
 
 namespace performance_test
@@ -102,7 +103,7 @@ bool Runner::ignore_first_seconds_of_experiment(
 
 bool Runner::check_exit(perf_clock::time_point experiment_start)
 {
-  if (ExitRequestHandler::get().exit_requested()) {
+  if (ExitRequestHandler::get().exit_requested() || PluginSingleton::get()->exit_requested()) {
     std::cout << "Caught signal. Exiting." << std::endl;
     return true;
   }

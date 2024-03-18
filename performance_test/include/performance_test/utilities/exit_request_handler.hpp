@@ -35,7 +35,7 @@ public:
   ExitRequestHandler & operator=(ExitRequestHandler const &) = delete;
   ExitRequestHandler & operator=(ExitRequestHandler &&) = delete;
 
-  void setup(bool use_ros2_layers);
+  void setup();
   bool exit_requested() const;
   void request_exit();
 
@@ -43,7 +43,6 @@ private:
   ExitRequestHandler();
 
   std::atomic_bool m_exit_requested;
-  bool m_use_ros2_layers;
 };
 }  // namespace performance_test
 
