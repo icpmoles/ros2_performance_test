@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 2.0.0 (2024/03/19)
+
 ### Added
 - Add experimental bazel support
    - `bazel build //performance_test --//:plugin_implementation=//path/to/a/plugin`

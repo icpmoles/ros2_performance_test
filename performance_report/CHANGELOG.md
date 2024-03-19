@@ -2,11 +2,13 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 2.0.0 (2024/03/19)
+
 ### Removed
 - Removed the special handling for the `BoundedSequenceFlat` messages, because
   the messages are removed in performance_test
 
-## 1.5.2 (YYYY/MM/DD)
+## 1.5.2 (2024/01/24)
 
 ### Fixed
 - Elegantly handle a failure to parse JSON log files
