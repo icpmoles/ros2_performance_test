@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Changed
+- Change the default `--history` arg from `KEEP_ALL` to `KEEP_LAST`
 ### Fixed
 - Removed an unused variable to fix a Clang build
 - Remove unused variable names in the `Plugin` abstract class

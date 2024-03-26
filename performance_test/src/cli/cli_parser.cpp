@@ -82,7 +82,7 @@ CLIParser::CLIParser(int argc, char ** argv)
     std::vector<std::string> allowedHistoryArgs{"KEEP_LAST", "KEEP_ALL"};
     TCLAP::ValuesConstraint<std::string> allowedHistoryArgsVals(allowedHistoryArgs);
     TCLAP::ValueArg<std::string> historyArg("", "history",
-      "The QOS History type. Default is KEEP_ALL.", false, "KEEP_ALL",
+      "The QOS History type. Default is KEEP_LAST.", false, "KEEP_LAST",
       &allowedHistoryArgsVals, cmd);
 
     TCLAP::ValueArg<uint32_t> historyDepthArg("", "history-depth",
