@@ -47,7 +47,8 @@ void PublisherTask::run()
     m_first_run = perf_clock::now();
   }
 
-  std::this_thread::sleep_until(m_first_run + m_time_between_publish * m_loop_counter++);
+  perf_clock::time_point next_run = m_first_run + m_time_between_publish * m_loop_counter++;
+  std::this_thread::sleep_until(next_run);
 
   if (m_ec.is_zero_copy_transfer) {
     m_pub->publish_loaned(m_timestamp_provider, m_stats.next_sample_id());

@@ -11,6 +11,7 @@
 ### Fixed
 - Removed an unused variable to fix a Clang build
 - Remove unused variable names in the `Plugin` abstract class
+- Fix a potential lockup in PublisherTask on QNX
 
 ## 2.0.0 (2024/03/19)
 
