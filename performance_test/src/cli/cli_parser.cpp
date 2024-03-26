@@ -86,7 +86,7 @@ CLIParser::CLIParser(int argc, char ** argv)
       &allowedHistoryArgsVals, cmd);
 
     TCLAP::ValueArg<uint32_t> historyDepthArg("", "history-depth",
-      "The history depth QOS. Default is 1000.", false, 1000, "N", cmd);
+      "The history depth QOS. Default is 16.", false, 16, "N", cmd);
 
     TCLAP::ValueArg<uint64_t> maxRuntimeArg("", "max-runtime",
       "Run N seconds, then exit. 0 means run forever. Default is 0.", false, 0, "N", cmd);

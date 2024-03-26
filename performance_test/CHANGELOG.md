@@ -4,6 +4,7 @@
 
 ### Changed
 - Change the default `--history` arg from `KEEP_ALL` to `KEEP_LAST`
+- Change the default `--history-depth` arg from `1000` to `16`
 ### Fixed
 - Removed an unused variable to fix a Clang build
 - Remove unused variable names in the `Plugin` abstract class
