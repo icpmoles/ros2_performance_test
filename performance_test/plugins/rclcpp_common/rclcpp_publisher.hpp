@@ -44,11 +44,15 @@ public:
         ec.topic_name + ec.pub_topic_postfix(),
         m_ROS2QOSAdapter))
   {
+  }
+
+  void prepare() override
+  {
 #ifdef PERFORMANCE_TEST_APEX_OS_POLLING_SUBSCRIPTION_ENABLED
-    if (ec.expected_num_subs > 0) {
+    if (m_ec.expected_num_subs > 0) {
       m_publisher->wait_for_matched(
-        ec.expected_num_subs,
-        ec.wait_for_matched_timeout);
+        m_ec.expected_num_subs,
+        m_ec.wait_for_matched_timeout);
     }
 #endif
   }

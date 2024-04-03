@@ -44,6 +44,9 @@ public:
         m_publisher(node.create_publisher<MsgType>(
             ec.topic_name + ec.pub_topic_postfix(),
             ROS2QOSAdapter(ec.qos).get()))
+  {}
+
+  void prepare()
   {
     if (m_ec.expected_num_subs > 0) {
       m_publisher->wait_for_matched(m_ec.expected_num_subs,
@@ -156,7 +159,10 @@ public:
           m_ec.topic_name + m_ec.pub_topic_postfix(),
           ROS2QOSAdapter(m_ec.qos).get()));
     }
+  }
 
+  void prepare()
+  {
     if (this->m_ec.expected_num_pubs > 0) {
       m_subscription->wait_for_matched(
           this->m_ec.expected_num_pubs,
@@ -211,6 +217,7 @@ public:
   get_publisher_item() {
     return nullptr;
   }
+  virtual void prepare() {}
 };
 
 class ApexOsSubscriberEntity {
@@ -219,6 +226,7 @@ public:
   get_subscriber_item() {
     return nullptr;
   }
+  virtual void prepare() {}
 };
 
 template <typename MsgType> class ApexOsPublisher : public ApexOsPublisherEntity
@@ -234,6 +242,11 @@ public:
   get_publisher_item() override
   {
     return m_publisher_item;
+  }
+
+  void prepare() override
+  {
+    m_publisher_item->prepare();
   }
 
 private:
@@ -255,6 +268,11 @@ public:
   get_subscriber_item() override
   {
     return m_subscriber_item;
+  }
+
+  void prepare() override
+  {
+    m_subscriber_item->prepare();
   }
 
 private:
