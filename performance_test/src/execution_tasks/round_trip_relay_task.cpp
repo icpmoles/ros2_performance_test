@@ -29,6 +29,12 @@ RoundTripRelayTask::RoundTripRelayTask(
   m_sub(PubSubFactory::get().create_subscriber(ec)),
   m_memory_checker(ec) {}
 
+void RoundTripRelayTask::prepare()
+{
+  m_pub->prepare();
+  m_sub->prepare();
+}
+
 void RoundTripRelayTask::run()
 {
   m_sub->update_subscription(*this);

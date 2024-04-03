@@ -53,6 +53,12 @@ void IntraThreadRunner::run_pubs_and_subs()
 {
   m_thread = std::make_unique<std::thread>(
     [this]() {
+      for (auto & pub : m_pubs) {
+        pub->prepare();
+      }
+      for (auto & sub : m_subs) {
+        sub->prepare();
+      }
       while (m_running) {
         for (auto & pub : m_pubs) {
           pub->run();

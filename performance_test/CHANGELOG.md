@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Added
+- Add new function `prepare()` to the Publisher and Subscriber API, intended
+  to allow participant discovery without blocking the main thread
 ### Changed
 - Change the default `--history` arg from `KEEP_ALL` to `KEEP_LAST`
 - Change the default `--history-depth` arg from `1000` to `16`

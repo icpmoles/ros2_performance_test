@@ -29,6 +29,11 @@ SubscriberTask::SubscriberTask(
   m_sub(PubSubFactory::get().create_subscriber(ec)),
   m_memory_checker(ec) {}
 
+void SubscriberTask::prepare()
+{
+  m_sub->prepare();
+}
+
 void SubscriberTask::run()
 {
   m_sub->update_subscription(m_stats);

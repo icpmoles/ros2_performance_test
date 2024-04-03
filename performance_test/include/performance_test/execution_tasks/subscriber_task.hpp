@@ -34,6 +34,8 @@ public:
   SubscriberTask & operator=(const SubscriberTask &) = delete;
   SubscriberTask(const SubscriberTask &) = delete;
 
+  void prepare();
+
   void run();
 
   void take();

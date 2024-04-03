@@ -36,6 +36,8 @@ public:
   PublisherTask & operator=(const PublisherTask &) = delete;
   PublisherTask(const PublisherTask &) = delete;
 
+  void prepare();
+
   void run();
 
 private:

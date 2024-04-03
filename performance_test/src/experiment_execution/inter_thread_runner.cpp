@@ -37,6 +37,7 @@ void InterThreadRunner::run_pubs_and_subs()
   for (auto & sub : m_subs) {
     m_thread_pool.emplace_back(
       [&sub, this]() {
+        sub->prepare();
         while (m_running) {
           sub->run();
         }
@@ -46,6 +47,7 @@ void InterThreadRunner::run_pubs_and_subs()
   for (auto & pub : m_pubs) {
     m_thread_pool.emplace_back(
       [&pub, this]() {
+        pub->prepare();
         while (m_running) {
           pub->run();
         }

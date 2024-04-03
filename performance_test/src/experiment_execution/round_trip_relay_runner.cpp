@@ -49,6 +49,7 @@ void RoundTripRelayRunner::run_pubs_and_subs()
 {
   m_thread = std::make_unique<std::thread>(
     [this]() {
+      m_relay.prepare();
       while (m_running) {
         m_relay.run();
       }

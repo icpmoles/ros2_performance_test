@@ -34,6 +34,8 @@ public:
   RoundTripRelayTask & operator=(const RoundTripRelayTask &) = delete;
   RoundTripRelayTask(const RoundTripRelayTask &) = delete;
 
+  void prepare();
+
   void run();
 
   void on_message_received(

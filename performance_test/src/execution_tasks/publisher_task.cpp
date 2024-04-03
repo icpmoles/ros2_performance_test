@@ -36,6 +36,11 @@ PublisherTask::PublisherTask(
   m_loop_counter(0),
   m_memory_checker(ec) {}
 
+void PublisherTask::prepare()
+{
+  m_pub->prepare();
+}
+
 void PublisherTask::run()
 {
   if (m_first_run.time_since_epoch().count() == 0) {
