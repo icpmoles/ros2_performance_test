@@ -132,11 +132,12 @@ CLIParser::CLIParser(int argc, char ** argv)
     std::vector<uint32_t> allowedExpectedNumPubsArgs{0, 1};
     TCLAP::ValuesConstraint<uint32_t> allowedExpectedNumPubsArgsVals(allowedExpectedNumPubsArgs);
     TCLAP::ValueArg<uint32_t> expectedNumPubsArg("", "expected-num-pubs",
-      "Expected number of publishers for wait-for-matched. Default is 0.", false, 0,
-      &allowedExpectedNumPubsArgsVals, cmd);
+      "Expected number of publishers for wait-for-matched. Default is the same as the -p arg.",
+      false, 0, &allowedExpectedNumPubsArgsVals, cmd);
 
     TCLAP::ValueArg<uint32_t> expectedNumSubsArg("", "expected-num-subs",
-      "Expected number of subscribers for wait-for-matched. Default is 0.", false, 0, "N", cmd);
+      "Expected number of subscribers for wait-for-matched. Default is the same as the -s arg.",
+      false, 0, "N", cmd);
 
     TCLAP::ValueArg<uint32_t> waitForMatchedTimeoutArg("", "wait-for-matched-timeout",
       "Maximum time in seconds to wait for matched pubs/subs. Default is 30.", false, 30, "N", cmd);
@@ -194,6 +195,17 @@ CLIParser::CLIParser(int argc, char ** argv)
     experiment_configuration.output_configuration = output_config;
     experiment_configuration.argc = argc;
     experiment_configuration.argv = argv;
+
+    if (experiment_configuration.number_of_publishers > 0 &&
+      experiment_configuration.expected_num_pubs == 0)
+    {
+      experiment_configuration.expected_num_pubs = experiment_configuration.number_of_publishers;
+    }
+    if (experiment_configuration.number_of_subscribers > 0 &&
+      experiment_configuration.expected_num_subs == 0)
+    {
+      experiment_configuration.expected_num_subs = experiment_configuration.number_of_subscribers;
+    }
   } catch (TCLAP::ArgException & e) {
     std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
   }
