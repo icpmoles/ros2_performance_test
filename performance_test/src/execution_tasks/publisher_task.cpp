@@ -14,11 +14,10 @@
 
 #include "performance_test/execution_tasks/publisher_task.hpp"
 
-#include <memory>
 #include <thread>
-#include <utility>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/experiment_execution/pub_sub_factory.hpp"
 #include "performance_test/experiment_metrics/publisher_stats.hpp"
 #include "performance_test/plugin/publisher.hpp"
 #include "performance_test/utilities/memory_checker.hpp"
@@ -29,11 +28,10 @@ namespace performance_test
 
 PublisherTask::PublisherTask(
   const ExperimentConfiguration & ec,
-  PublisherStats & stats,
-  std::unique_ptr<Publisher> && pub)
+  PublisherStats & stats)
 : m_ec(ec),
   m_stats(stats),
-  m_pub(std::move(pub)),
+  m_pub(PubSubFactory::get().create_publisher(ec)),
   m_time_between_publish(ec.period_ns()),
   m_loop_counter(0),
   m_memory_checker(ec) {}
