@@ -37,7 +37,7 @@ public:
   using DataType = typename Msg::RosType;
 
   explicit RclcppPublisher(const ExperimentConfiguration & ec)
-  : m_ec(ec),
+  : Publisher(ec),
     m_node(RclcppResourceManager::get().rclcpp_node(ec)),
     m_ROS2QOSAdapter(ROS2QOSAdapter(ec.qos).get()),
     m_publisher(m_node->create_publisher<DataType>(
@@ -82,7 +82,6 @@ public:
   }
 
 private:
-  const ExperimentConfiguration & m_ec;
   std::shared_ptr<rclcpp::Node> m_node;
   rclcpp::QoS m_ROS2QOSAdapter;
   std::shared_ptr<::rclcpp::Publisher<DataType>> m_publisher;

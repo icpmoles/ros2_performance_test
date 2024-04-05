@@ -148,7 +148,8 @@ public:
   using DataType = typename Msg::CycloneDDSType;
 
   explicit CycloneDDSPublisher(const ExperimentConfiguration & ec)
-  : m_participant(CycloneDDSResourceManager::get().cyclonedds_participant(ec)),
+  : Publisher(ec),
+    m_participant(CycloneDDSResourceManager::get().cyclonedds_participant(ec)),
     m_datawriter(create_datawriter(ec, m_participant)) {}
 
   void publish_copy(

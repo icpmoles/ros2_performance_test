@@ -222,10 +222,10 @@ public:
   using DataTypeSeq = typename DataType::Seq;
 
   explicit RTIDDSPublisher(const ExperimentConfiguration & ec)
-  : m_ec(ec),
+  : Publisher(ec),
     m_participant(RTIDDSResourceManager::get().connext_dds_participant(ec)),
     m_datawriter(nullptr),
-    m_topic(RTIDDSTopicManager::register_topic(m_participant, m_ec))
+    m_topic(RTIDDSTopicManager::register_topic(m_participant, ec))
   {
     DDSPublisher * publisher;
     DDS_DataWriterQos dw_qos;
@@ -270,8 +270,6 @@ public:
   }
 
 private:
-  const ExperimentConfiguration & m_ec;
-
   DDSDomainParticipant * m_participant;
 
   DDSDataWriter * m_datawriter;

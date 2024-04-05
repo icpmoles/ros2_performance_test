@@ -31,6 +31,7 @@ class PublisherImpl : public Publisher
 {
 public:
   explicit PublisherImpl(const ExperimentConfiguration & ec)
+  : Publisher(ec)
   {
     // Create and configure the data writer, QoS settings, etc
 

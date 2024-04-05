@@ -240,7 +240,7 @@ public:
   using DataType = typename Topic::EprosimaType;
 
   explicit FastRTPSPublisher(const ExperimentConfiguration & ec)
-  : m_ec(ec),
+  : Publisher(ec),
     m_resources(FastDDSResourceManager::get().fastdds_resources(
       ec, eprosima::fastdds::dds::TypeSupport(new TopicType()))),
     m_datawriter(create_datawriter(m_resources, ec))
@@ -275,7 +275,6 @@ public:
   }
 
 private:
-  const ExperimentConfiguration & m_ec;
   FastDDSResourceManager::FastDDSGlobalResources m_resources;
   eprosima::fastdds::dds::DataWriter * m_datawriter;
   DataType m_data;

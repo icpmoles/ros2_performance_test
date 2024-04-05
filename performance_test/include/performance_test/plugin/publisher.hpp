@@ -17,6 +17,7 @@
 
 #include <cstdint>
 
+#include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/utilities/msg_traits.hpp"
 #include "performance_test/utilities/timestamp_provider.hpp"
 
@@ -26,6 +27,9 @@ namespace performance_test
 class Publisher
 {
 public:
+  explicit Publisher(const ExperimentConfiguration & ec)
+  : m_ec(ec) {}
+
   virtual ~Publisher() = default;
 
   /// @brief Prepare for communication
@@ -44,6 +48,8 @@ public:
     std::uint64_t sample_id) = 0;
 
 protected:
+  const ExperimentConfiguration & m_ec;
+
   template<typename T>
   inline void init_msg(
     T & msg,
@@ -55,7 +61,6 @@ protected:
     msg.time = timestamp_provider.get();
   }
 };
-
 }  // namespace performance_test
 
 #endif  // PERFORMANCE_TEST__PLUGIN__PUBLISHER_HPP_

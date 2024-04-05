@@ -59,6 +59,7 @@ public:
 
   explicit IceoryxPublisher(const ExperimentConfiguration & ec)
   : IceoryxCommunicator(ec),
+    Publisher(ec),
     m_publisher(
       iox::capro::ServiceDescription{
         iox::into<iox::lossy<iox::capro::IdString_t>>(Msg::msg_name()),

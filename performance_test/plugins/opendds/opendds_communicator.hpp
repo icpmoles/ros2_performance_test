@@ -299,7 +299,8 @@ public:
   using DataWriterType = typename Topic::OpenDDSDataWriterType;
 
   explicit OpenDDSPublisher(const ExperimentConfiguration & ec)
-  : m_participant(OpenDDSResourceManager::get().opendds_participant(ec)),
+  : Publisher(ec),
+    m_participant(OpenDDSResourceManager::get().opendds_participant(ec)),
     m_datawriter(make_opendds_datawriter(ec, m_participant))
   {
   }
