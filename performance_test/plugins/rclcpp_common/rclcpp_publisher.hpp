@@ -131,42 +131,30 @@ private:
 
   template<typename T>
   inline
-  std::enable_if_t<MsgTraits::has_bounded_sequence<T>::value, void>
-  init_bounded_sequence(T & msg)
+  void init_bounded_sequence(T & msg)
   {
-    msg.bounded_sequence.resize(msg.bounded_sequence.capacity());
+    if constexpr (MsgTraits::has_bounded_sequence<T>::value) {
+      msg.bounded_sequence.resize(msg.bounded_sequence.capacity());
+    }
   }
 
   template<typename T>
   inline
-  std::enable_if_t<!MsgTraits::has_bounded_sequence<T>::value, void>
-  init_bounded_sequence(T &) {}
-
-  template<typename T>
-  inline
-  std::enable_if_t<MsgTraits::has_unbounded_sequence<T>::value, void>
-  init_unbounded_sequence(T & msg)
+  void init_unbounded_sequence(T & msg)
   {
-    msg.unbounded_sequence.resize(m_ec.unbounded_msg_size);
+    if constexpr (MsgTraits::has_unbounded_sequence<T>::value) {
+      msg.unbounded_sequence.resize(m_ec.unbounded_msg_size);
+    }
   }
 
   template<typename T>
   inline
-  std::enable_if_t<!MsgTraits::has_unbounded_sequence<T>::value, void>
-  init_unbounded_sequence(T &) {}
-
-  template<typename T>
-  inline
-  std::enable_if_t<MsgTraits::has_unbounded_string<T>::value, void>
-  init_unbounded_string(T & msg)
+  void init_unbounded_string(T & msg)
   {
-    msg.unbounded_string.resize(m_ec.unbounded_msg_size);
+    if constexpr (MsgTraits::has_unbounded_string<T>::value) {
+      msg.unbounded_string.resize(m_ec.unbounded_msg_size);
+    }
   }
-
-  template<typename T>
-  inline
-  std::enable_if_t<!MsgTraits::has_unbounded_string<T>::value, void>
-  init_unbounded_string(T &) {}
 };
 
 }  // namespace performance_test
