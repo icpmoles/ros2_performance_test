@@ -18,6 +18,7 @@
 #include <cstdint>
 
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
+#include "performance_test/utilities/message_initializer.hpp"
 #include "performance_test/utilities/msg_traits.hpp"
 #include "performance_test/utilities/timestamp_provider.hpp"
 
@@ -28,7 +29,7 @@ class Publisher
 {
 public:
   explicit Publisher(const ExperimentConfiguration & ec)
-  : m_ec(ec) {}
+  : m_ec(ec), m_message_initializer(ec) {}
 
   virtual ~Publisher() = default;
 
@@ -56,10 +57,11 @@ protected:
     const TimestampProvider & timestamp_provider,
     std::uint64_t sample_id)
   {
-    MsgTraits::ensure_fixed_size(msg);
-    msg.id = sample_id;
-    msg.time = timestamp_provider.get();
+    m_message_initializer.init_msg(msg, timestamp_provider, sample_id);
   }
+
+private:
+  MessageInitializer m_message_initializer;
 };
 }  // namespace performance_test
 

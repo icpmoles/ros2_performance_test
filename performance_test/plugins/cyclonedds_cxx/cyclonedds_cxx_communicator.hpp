@@ -161,16 +161,6 @@ private:
 
     return dds::pub::DataWriter<DataType>(publisher, topic, dw_qos);
   }
-
-  void init_msg(
-    DataType & msg,
-    const TimestampProvider & timestamp_provider,
-    std::uint64_t sample_id)
-  {
-    MsgTraits::ensure_fixed_size(msg);
-    msg.id(sample_id);
-    msg.time(timestamp_provider.get());
-  }
 };
 
 template<class Msg>

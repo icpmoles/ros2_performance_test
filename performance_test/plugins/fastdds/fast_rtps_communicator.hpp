@@ -298,45 +298,6 @@ private:
 
     return writer;
   }
-
-  void init_msg(
-    DataType & msg,
-    const TimestampProvider & timestamp_provider,
-    std::uint64_t sample_id)
-  {
-    init_bounded_sequence(msg);
-    init_unbounded_sequence(msg);
-    init_unbounded_string(msg);
-    msg.id(sample_id);
-    msg.time(timestamp_provider.get());
-  }
-
-  template<typename T>
-  inline
-  void init_bounded_sequence(T & msg)
-  {
-    if constexpr (MsgTraits::has_bounded_sequence_func<T>::value) {
-      msg.bounded_sequence().resize(msg.bounded_sequence.capacity());
-    }
-  }
-
-  template<typename T>
-  inline
-  void init_unbounded_sequence(T & msg)
-  {
-    if constexpr (MsgTraits::has_unbounded_sequence_func<T>::value) {
-      msg.unbounded_sequence().resize(m_ec.unbounded_msg_size);
-    }
-  }
-
-  template<typename T>
-  inline
-  void init_unbounded_string(T & msg)
-  {
-    if constexpr (MsgTraits::has_unbounded_string_func<T>::value) {
-      msg.unbounded_string().resize(m_ec.unbounded_msg_size);
-    }
-  }
 };
 
 template<class Topic>

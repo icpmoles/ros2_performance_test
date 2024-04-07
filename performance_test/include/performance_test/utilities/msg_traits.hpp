@@ -24,6 +24,38 @@ struct MsgTraits
   // TODO(erik.snider) use concepts when upgrading to C++20
 
   template<typename T, typename = void>
+  struct has_id_object : std::false_type {};
+
+  template<typename T>
+  struct has_id_object<
+    T, std::void_t<decltype(std::declval<T>().id)>>
+    : std::true_type {};
+
+  template<typename T, typename = void>
+  struct has_id_function : std::false_type {};
+
+  template<typename T>
+  struct has_id_function<
+    T, std::void_t<decltype(std::declval<T>().id())>>
+    : std::true_type {};
+
+  template<typename T, typename = void>
+  struct has_time_object : std::false_type {};
+
+  template<typename T>
+  struct has_time_object<
+    T, std::void_t<decltype(std::declval<T>().time)>>
+    : std::true_type {};
+
+  template<typename T, typename = void>
+  struct has_time_function : std::false_type {};
+
+  template<typename T>
+  struct has_time_function<
+    T, std::void_t<decltype(std::declval<T>().time())>>
+    : std::true_type {};
+
+  template<typename T, typename = void>
   struct has_bounded_sequence : std::false_type {};
 
   template<typename T>
@@ -70,30 +102,6 @@ struct MsgTraits
   struct has_unbounded_string_func<
     T, std::void_t<decltype(std::declval<T>().unbounded_string())>>
     : std::true_type {};
-
-  template<typename T>
-  static inline std::enable_if_t<has_bounded_sequence<T>::value ||
-    has_bounded_sequence_func<T>::value ||
-    has_unbounded_sequence<T>::value ||
-    has_unbounded_sequence_func<T>::value ||
-    has_unbounded_string<T>::value ||
-    has_unbounded_string_func<T>::value,
-    void>
-  ensure_fixed_size(T &)
-  {
-    throw std::runtime_error(
-            "This plugin only supports messages with a fixed size");
-  }
-
-  template<typename T>
-  static inline std::enable_if_t<!has_bounded_sequence<T>::value &&
-    !has_bounded_sequence_func<T>::value &&
-    !has_unbounded_sequence<T>::value &&
-    !has_unbounded_sequence_func<T>::value &&
-    !has_unbounded_string<T>::value &&
-    !has_unbounded_string_func<T>::value,
-    void>
-  ensure_fixed_size(T &) {}
 };
 
 }  // namespace performance_test

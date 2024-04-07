@@ -288,6 +288,7 @@ set(sources
     include/performance_test/utilities/external_info.hpp
     include/performance_test/utilities/for_each.hpp
     include/performance_test/utilities/memory_checker.hpp
+    include/performance_test/utilities/message_initializer.hpp
     include/performance_test/utilities/msg_traits.hpp
     include/performance_test/utilities/perf_clock.hpp
     include/performance_test/utilities/qnx_res_usage.hpp
