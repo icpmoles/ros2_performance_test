@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Fixed
+- Removed an unused variable to fix a Clang build
+
 ## 2.0.0 (2024/03/19)
 
 ### Added
