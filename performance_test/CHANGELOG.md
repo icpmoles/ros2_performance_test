@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 2.1.0 (2024/04/17)
+
 ### Added
 - Add new function `prepare()` to the Publisher and Subscriber API, intended
   to allow participant discovery without blocking the main thread
