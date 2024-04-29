@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Fixed
+- For categorical plots, coerce the `x_range` to a string
+
 ## 2.1.0 (2024/04/17)
 
 ## 2.0.0 (2024/03/19)
