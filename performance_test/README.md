@@ -20,6 +20,7 @@ are automatically recorded when the application is running:
 
 This `master` branch is compatible with the following ROS 2 versions
 - rolling
+- iron
 - humble
 - galactic
 - foxy
