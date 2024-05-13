@@ -17,6 +17,8 @@
     - `-c CycloneDDS`
     - `-c CycloneDDS-CXX`
     - `-c ApexOSPollingSubscription`
+    - `-c rclcpp-*` with `RMW_IMPLEMENTATION=rmw_cyclonedds_cpp`
+    - `-c rclcpp-*` with `RMW_IMPLEMENTATION=rmw_fastrtps_cpp`
 
 ## 2.1.0 (2024/04/17)
 
