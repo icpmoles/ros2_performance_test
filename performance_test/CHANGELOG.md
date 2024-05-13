@@ -6,6 +6,7 @@
 - performance_test can be built with ROS 2 Iron and Jazzy
 ### Changed
 - Renamed the `--dds-domain_id` CLI arg to `--dds-domain-id`
+- When `--dds-domain-id` is unspecified, fall back to the `ROS_DOMAIN_ID` environment variable
 
 ## 2.1.0 (2024/04/17)
 

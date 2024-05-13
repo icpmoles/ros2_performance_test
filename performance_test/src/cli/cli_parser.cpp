@@ -14,6 +14,7 @@
 
 #include "performance_test/cli/cli_parser.hpp"
 
+#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -65,7 +66,8 @@ CLIParser::CLIParser(int argc, char ** argv)
       "Default is " + allowedMsgs[0] + ".", false, allowedMsgs[0], &allowedMsgVals, cmd);
 
     TCLAP::ValueArg<uint32_t> ddsDomainIdArg("", "dds-domain-id",
-      "The DDS domain id. Default is 0.", false, 0, "id", cmd);
+      "The DDS domain id. If unspecified, fall back to the ROS_DOMAIN_ID environment variable. "
+      "Default is 0.", false, 0, "id", cmd);
 
     std::vector<std::string> allowedReliabilityArgs{"RELIABLE", "BEST_EFFORT"};
     TCLAP::ValuesConstraint<std::string> allowedReliabilityArgsVals(allowedReliabilityArgs);
@@ -172,6 +174,13 @@ CLIParser::CLIParser(int argc, char ** argv)
     experiment_configuration.communicator = communicatorArg.getValue();
     experiment_configuration.execution_strategy = executionStrategyArg.getValue();
     experiment_configuration.dds_domain_id = ddsDomainIdArg.getValue();
+    if (experiment_configuration.dds_domain_id == 0) {
+      const char * domain_id_str = std::getenv("ROS_DOMAIN_ID");
+      if (domain_id_str != nullptr) {
+        experiment_configuration.dds_domain_id =
+          static_cast<std::uint32_t>(std::stoi(domain_id_str));
+      }
+    }
     experiment_configuration.qos = qos;
     experiment_configuration.rate = rateArg.getValue();
     experiment_configuration.topic_name = topicArg.getValue();
