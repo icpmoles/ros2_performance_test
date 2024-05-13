@@ -13,6 +13,8 @@
   - `--loaned-samples`: When publishing messages in the plugin, borrow loaned samples instead
     of publishing by copy
   - `--zero-copy` is now an alias for `--shared-memory --loaned-samples`
+  - Supported plugins include:
+    - `-c CycloneDDS`
 
 ## 2.1.0 (2024/04/17)
 

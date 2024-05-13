@@ -17,6 +17,7 @@
 
 #include <dds/dds.h>
 #include <dds/ddsc/dds_loan_api.h>
+#include <dds/ddsi/ddsi_config.h>
 
 #include <iostream>
 #include <mutex>
@@ -128,6 +129,11 @@ public:
   {
     std::lock_guard<std::mutex> lock(m_global_mutex);
     if (!m_cyclonedds_participant) {
+      if (ec.use_shared_memory) {
+        ddsi_config config;
+        config.enable_shm = true;
+        dds_create_domain_with_rawconfig(ec.dds_domain_id, &config);
+      }
       m_cyclonedds_participant = dds_create_participant(ec.dds_domain_id, nullptr, nullptr);
     }
     return m_cyclonedds_participant;
