@@ -323,7 +323,7 @@ through the ROS 2 `rclcpp::publisher` and `rclcpp::subscriber` API.
 - Available transports:
   | Pub/sub in same process | Pub/sub in different processes on same machine | Pub/sub in different machines |
   |-------|---------------------|--------------------|
-  | UDP (default), LoanedSamples (`--zero_copy`), SHMEM (configurable with Apex.OS)  | UDP (default), LoanedSamples (`--zero_copy`), SHMEM (configurable with Apex.OS)                | UDP                |
+  | UDP (default), SHMEM (`--shared-memory`), LoanedSamples (`--zero_copy`) | UDP (default), SHMEM (`--shared-memory`), LoanedSamples (`--zero_copy`) | UDP |
 
 ## Analyze the results
 

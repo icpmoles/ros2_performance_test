@@ -23,6 +23,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <rmw/rmw.h>
+#include <settings/construct.hpp>
 #include <settings/inspect.hpp>
 #include <settings/repository.hpp>
 
@@ -69,6 +70,10 @@ public:
 
   void global_setup(const ExperimentConfiguration & ec) override
   {
+    if (ec.use_shared_memory) {
+      enable_shared_memory();
+    }
+
     rclcpp::init(ec.argc, ec.argv, rclcpp::InitOptions{}, false);
   }
 
@@ -114,6 +119,16 @@ private:
            {
              return std::make_unique<ApexOSPollingSubscriptionSubscriber<DataType>>(ec);
            };
+  }
+
+  static void enable_shared_memory()
+  {
+    using apex::settings::construct::dictionary;
+    using apex::settings::construct::entry;
+    using apex::settings::construct::make_dictionary;
+    dictionary d{entry(
+      "domain", make_dictionary(entry("shared_memory", make_dictionary(entry("enable", true)))))};
+    apex::settings::repository::set(d);
   }
 };
 }  // namespace performance_test

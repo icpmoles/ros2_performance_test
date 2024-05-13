@@ -16,6 +16,7 @@
   - Supported plugins include:
     - `-c CycloneDDS`
     - `-c CycloneDDS-CXX`
+    - `-c ApexOSPollingSubscription`
 
 ## 2.1.0 (2024/04/17)
 
