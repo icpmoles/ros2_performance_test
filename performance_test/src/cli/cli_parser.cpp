@@ -64,7 +64,7 @@ CLIParser::CLIParser(int argc, char ** argv)
     TCLAP::ValueArg<std::string> msgArg("m", "msg", "The message type. "
       "Default is " + allowedMsgs[0] + ".", false, allowedMsgs[0], &allowedMsgVals, cmd);
 
-    TCLAP::ValueArg<uint32_t> ddsDomainIdArg("", "dds-domain_id",
+    TCLAP::ValueArg<uint32_t> ddsDomainIdArg("", "dds-domain-id",
       "The DDS domain id. Default is 0.", false, 0, "id", cmd);
 
     std::vector<std::string> allowedReliabilityArgs{"RELIABLE", "BEST_EFFORT"};

@@ -4,6 +4,8 @@
 
 ### Added
 - performance_test can be built with ROS 2 Iron and Jazzy
+### Changed
+- Renamed the `--dds-domain_id` CLI arg to `--dds-domain-id`
 
 ## 2.1.0 (2024/04/17)
 
