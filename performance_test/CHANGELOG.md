@@ -15,6 +15,7 @@
   - `--zero-copy` is now an alias for `--shared-memory --loaned-samples`
   - Supported plugins include:
     - `-c CycloneDDS`
+    - `-c CycloneDDS-CXX`
 
 ## 2.1.0 (2024/04/17)
 

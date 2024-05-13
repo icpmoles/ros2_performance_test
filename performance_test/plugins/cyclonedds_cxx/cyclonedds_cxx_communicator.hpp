@@ -88,7 +88,17 @@ public:
 
     // CycloneDDS-CXX has its own reference-counting mechanism
     if (m_cyclonedds_cxx_participant.is_nil()) {
-      m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(ec.dds_domain_id);
+      ddsi_config config;
+      if (ec.use_shared_memory) {
+        config.enable_shm = true;
+      }
+      m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(
+          ec.dds_domain_id,
+          dds::domain::qos::DomainParticipantQos(),
+          nullptr,
+          dds::core::status::StatusMask::none(),
+          config
+      );
     }
     return m_cyclonedds_cxx_participant;
   }

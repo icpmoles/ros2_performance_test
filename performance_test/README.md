@@ -212,18 +212,12 @@ their own thread.
 - Docker file: [Dockerfile.CycloneDDS-CXX](dockerfiles/Dockerfile.CycloneDDS-CXX)
 - Available transports:
   - Cyclone DDS zero copy requires the
-    [runtime switch](https://github.com/eclipse-cyclonedds/cyclonedds/blob/iceoryx/docs/manual/shared_memory.rst)
-    to be enabled.
-  - When the runtime switch is enabled,
     [RouDi](https://github.com/eclipse-iceoryx/iceoryx/blob/master/doc/website/getting-started/overview.md#roudi)
-    must be running.
-  - If the runtime switch is enabled, but `--zero-copy` is not added, then the plugin will not use
-    the loaned sample API, but iceoryx will still transport the samples.
-  - See [Dockerfile.mashup](dockerfiles/Dockerfile.mashup)
+    to be running.
   -
     | Pub/sub in same process | Pub/sub in different processes on same machine | Pub/sub in different machines |
     |-------|---------------------|--------------------|
-    | INTRA (default), LoanedSamples (`--zero-copy`), SHMEM (enable runtime switch) | UDP (default), LoanedSamples (`--zero-copy`), SHMEM (enable runtime switch)                 | UDP                |
+    | INTRA (default), SHMEM (`--shared-memory`), LoanedSamples (`--zero-copy`) | UDP (default), SHMEM (`--shared-memory`), LoanedSamples (`--zero-copy`) | UDP |
 
 ### Eclipse iceoryx
 
