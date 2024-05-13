@@ -2,6 +2,9 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+### Changed
+- Plugins are now responsible for enabling shared memory transfer, so `runner` and
+  `commander` will no longer set the related runtime flags (e.g. `CYCLONEDDS_URI`)
 ### Fixed
 - For categorical plots, coerce the `x_range` to a string
 
