@@ -112,7 +112,7 @@ public:
     m_datawriter(make_cyclonedds_cxx_datawriter<DataType>(
         m_participant, m_publisher, ec))
   {
-    if (ec.is_zero_copy_transfer && !m_datawriter.delegate()->is_loan_supported()) {
+    if (ec.use_loaned_samples && !m_datawriter.delegate()->is_loan_supported()) {
       throw std::runtime_error("Zero-copy transfer is not supported.");
     }
   }

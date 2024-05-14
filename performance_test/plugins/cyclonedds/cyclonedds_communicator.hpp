@@ -192,7 +192,7 @@ private:
   )
   {
     dds_qos_t * dw_qos = dds_create_qos();
-    if (ec.is_zero_copy_transfer) {
+    if (ec.use_shared_memory || ec.use_loaned_samples) {
       CycloneDDSIceoryxQOSAdapter qos_adapter(ec.qos);
       qos_adapter.apply(dw_qos);
     } else {
@@ -268,7 +268,7 @@ private:
   )
   {
     dds_qos_t * dw_qos = dds_create_qos();
-    if (ec.is_zero_copy_transfer) {
+    if (ec.use_shared_memory || ec.use_loaned_samples) {
       CycloneDDSIceoryxQOSAdapter qos_adapter(ec.qos);
       qos_adapter.apply(dw_qos);
     } else {

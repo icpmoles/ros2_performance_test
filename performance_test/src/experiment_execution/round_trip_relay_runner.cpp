@@ -34,9 +34,13 @@ RoundTripRelayRunner::RoundTripRelayRunner(const ExperimentConfiguration & ec)
     throw std::invalid_argument(
             "Round-trip relay requires exactly one subscriber.");
   }
-  if (ec.is_zero_copy_transfer) {
+  if (ec.use_shared_memory) {
     throw std::invalid_argument(
-            "Round-trip relay can not use loaned messages (zero copy).");
+            "Round-trip relay can not use shared memory.");
+  }
+  if (ec.use_loaned_samples) {
+    throw std::invalid_argument(
+            "Round-trip relay can not use loaned messages.");
   }
 }
 

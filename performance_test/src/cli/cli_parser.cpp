@@ -144,8 +144,13 @@ CLIParser::CLIParser(int argc, char ** argv)
     TCLAP::ValueArg<uint32_t> waitForMatchedTimeoutArg("", "wait-for-matched-timeout",
       "Maximum time in seconds to wait for matched pubs/subs. Default is 30.", false, 30, "N", cmd);
 
+    TCLAP::SwitchArg sharedMemoryArg("", "shared-memory",
+      "Enable shared-memory transfer. Depending on the plugin implementation, "
+      "this may override some or all runtime flags that you have already set.", cmd, false);
+    TCLAP::SwitchArg loanedSamplesArg("", "loaned-samples",
+      "Use the loaned sample API for publishing messages.", cmd, false);
     TCLAP::SwitchArg zeroCopyArg("", "zero-copy",
-      "Use zero copy transfer.", cmd, false);
+      "An alias for --shared-memory --loaned-samples.", cmd, false);
 
     TCLAP::ValueArg<uint32_t> unboundedMsgSizeArg("", "unbounded-msg-size",
       "The number of bytes to use for an unbounded message type. "
@@ -197,7 +202,12 @@ CLIParser::CLIParser(int argc, char ** argv)
     experiment_configuration.check_memory = checkMemoryArg.getValue();
     experiment_configuration.rt_config = rt_config;
     experiment_configuration.with_security = withSecurityArg.getValue();
-    experiment_configuration.is_zero_copy_transfer = zeroCopyArg.getValue();
+    experiment_configuration.use_shared_memory = sharedMemoryArg.getValue();
+    experiment_configuration.use_loaned_samples = loanedSamplesArg.getValue();
+    if (zeroCopyArg.getValue()) {
+      experiment_configuration.use_shared_memory = true;
+      experiment_configuration.use_loaned_samples = true;
+    }
     experiment_configuration.prevent_cpu_idle = preventCpuIdleArg.getValue();
     experiment_configuration.roundtrip_mode =
       round_trip_mode_from_string(roundTripModeArg.getValue());

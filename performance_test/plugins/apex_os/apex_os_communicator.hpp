@@ -58,7 +58,7 @@ public:
 
 private:
   void execute_impl() override {
-    if (m_ec.is_zero_copy_transfer) {
+    if (m_ec.use_loaned_samples) {
       if (!m_publisher->can_loan_messages()) {
         throw std::runtime_error(
             "RMW implementation does not support zero copy!");

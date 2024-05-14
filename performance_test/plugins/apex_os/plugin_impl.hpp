@@ -21,7 +21,6 @@
 #include <map>
 #include <string>
 
-#include <cyclone_dds_vendor/dds.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rmw/rmw.h>
 #include <settings/inspect.hpp>
@@ -77,13 +76,6 @@ public:
   {
     std::map<std::string, std::string> m;
     m["rmw_implementation"] = rmw_get_implementation_identifier();
-#ifdef DDSCXX_HAS_SHM
-    bool shm = apex::settings::inspect::get_or_default<bool>(
-        apex::settings::repository::get(), "domain/shared_memory/enable", false);
-#else
-    bool shm = false;
-#endif
-    m["is_shared_memory_transfer"] = shm ? "true" : "false";
     return m;
   }
 

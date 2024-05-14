@@ -124,7 +124,7 @@ public:
       throw std::invalid_argument(
               "Intra-thread execution requires at least one subscriber.");
     }
-    if (!ec.is_zero_copy_transfer) {
+    if (!ec.use_loaned_samples) {
       throw std::invalid_argument(
               "Intra-thread execution only works with loaned messages (zero copy).");
     }
