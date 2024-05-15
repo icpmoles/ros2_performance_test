@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 2.2.0 (2024/05/15)
+
 ### Changed
 - Plugins are now responsible for enabling shared memory transfer, so `runner` and
   `commander` will no longer set the related runtime flags (e.g. `CYCLONEDDS_URI`)

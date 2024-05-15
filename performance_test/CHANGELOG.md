@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 2.2.0 (2024/05/15)
+
 ### Added
 - performance_test can be built with ROS 2 Iron and Jazzy
 ### Changed
