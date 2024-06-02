@@ -211,10 +211,11 @@ build_fastrtps_library:
 
     - cd ../../
     - git clone https://github.com/eProsima/Fast-DDS.git -b v2.6.0
+    - cd Fast-DDS
     - cp ${CI_PROJECT_DIR}/patches/fast-dds-gcc-13.patch .
     - git apply fast-dds-gcc-13.patch
-    - mkdir Fast-DDS/build
-    - cd Fast-DDS/build
+    - mkdir build
+    - cd build
     - cmake .. -DCMAKE_INSTALL_PREFIX=/opt/Fast-DDS -DCMAKE_PREFIX_PATH=/opt/Fast-DDS
     - cmake --build . --target install
     - tar cfz opt-fastdds-v1.2.1.tar.gz /opt/Fast-DDS
