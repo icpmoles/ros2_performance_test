@@ -508,6 +508,7 @@ build_fastrtps:
   script:
     - source /opt/ros/rolling/setup.bash
     - apt-get update
+    - apt install -y openjdk-11-jdk
 
     - rosdep update
     - rosdep install --from-paths performance_test --ignore-src -y
