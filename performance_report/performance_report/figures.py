@@ -67,7 +67,7 @@ def generateFigure(figConfig, datasets: 'list[DatasetConfig]'):
         df = dataset.dataframe
 
         # filter dataframe based on specified ranges
-        if(len(dataset.experiments) > 1):
+        if (len(dataset.experiments) > 1):
             # if multiple experiments in dataset
             filtered_results = []
             for experiment in dataset.experiments:
