@@ -193,7 +193,6 @@ build_fastrtps_library:
   script:
     - apt-get update
     - apt-get install -y default-jdk cmake g++ python3-pip wget git libasio-dev libtinyxml2-dev libssl-dev libp11-dev libengine-pkcs11-openssl
-    - rosdep update
     - apt remove -y ros-rolling-fastrtps
     - mkdir -p Fast-DDS
     - cd Fast-DDS
@@ -212,7 +211,7 @@ build_fastrtps_library:
 
     - cd ../../
     - git clone https://github.com/eProsima/Fast-DDS.git -b v2.6.0
-    - cp ${CI_PROJECT_DIR}/patches/fast-dds-gcc-13.patch
+    - cp ${CI_PROJECT_DIR}/patches/fast-dds-gcc-13.patch .
     - git apply fast-dds-gcc-13.patch
     - mkdir Fast-DDS/build
     - cd Fast-DDS/build
