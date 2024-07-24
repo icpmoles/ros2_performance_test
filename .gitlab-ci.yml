@@ -235,31 +235,6 @@ build_fastrtps_library:
   variables:
     CMAKE_ARGS_ENABLE_MSGS: '-DENABLE_MSGS_STRUCT=OFF -DENABLE_MSGS_POINT_CLOUD=OFF'
 
-build_cross_image:
-  stage: build
-  image: docker
-  services:
-    - docker:dind
-  extends:
-    - .build_with_only_array_msgs
-  script:
-    - '
-      docker build
-          --build-arg PERFORMANCE_TEST_DOCKER_ARCH=arm64v8
-          --build-arg PERFORMANCE_TEST_TARGET_ARCH=aarch64
-          -t performance_test_cross
-          -f tools/Dockerimage.crossbuild
-          .
-      '
-    - '
-      docker run -t -v `pwd`:`pwd` -w `pwd`
-          --rm performance_test_cross
-          sh -c "colcon build --merge-install --cmake-args
-              -DCMAKE_TOOLCHAIN_FILE=`pwd`/tools/toolchain.cmake
-              -DBUILD_TESTING=OFF
-              ${CMAKE_ARGS_ENABLE_MSGS}"
-      '
-
 .build_rclcpp:
   stage: build
   image: osrf/ros:rolling-desktop
