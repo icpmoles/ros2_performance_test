@@ -900,9 +900,9 @@ test_plotter:
 
 test_security_fast_dds:
   stage: test
-  image: osrf/ros:rolling-desktop
+  image: osrf/ros:iron-desktop
   needs:
-    - build_rclcpp_rolling
+    - build_rclcpp_iron
   variables:
     ROS_DOMAIN_ID: 40
   script:
@@ -929,14 +929,14 @@ test_security_fast_dds:
 
 test_security_cyclone_dds:
   stage: test
-  image: osrf/ros:rolling-desktop
+  image: osrf/ros:iron-desktop
   needs:
-    - build_rclcpp_rolling
+    - build_rclcpp_iron
   variables:
     ROS_DOMAIN_ID: 41
   script:
     - apt-get update
-    - apt-get install -y ros-rolling-rmw-cyclonedds-cpp
+    - apt-get install -y ros-iron-rmw-cyclonedds-cpp
     - rosdep update
     - rosdep install --from-paths performance_test --ignore-src -y
     - tar -xzf opt.tar.gz -C /
