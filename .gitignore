@@ -12,8 +12,8 @@ cmake-build-*
 performance_test/libs
 
 # Jupyter environments and checkpoints
-performance_test/helper_scripts/.ipynb_checkpoints
-performance_test/helper_scripts/performance_test_plotter_env
+venv
+plotter/.ipynb_checkpoints
 
 __pycache__
 
