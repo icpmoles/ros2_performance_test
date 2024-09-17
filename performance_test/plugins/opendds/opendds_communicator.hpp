@@ -253,7 +253,8 @@ private:
   mutable DDS::DomainParticipant_ptr m_opendds_participant;
 };
 
-class OpenDDSResources {
+class OpenDDSResources
+{
 public:
   template<class Topic>
   static DDS::Topic_ptr find_or_create_topic(

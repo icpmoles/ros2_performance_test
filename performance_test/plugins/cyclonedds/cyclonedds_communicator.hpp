@@ -123,9 +123,9 @@ public:
   CycloneDDSResourceManager(CycloneDDSResourceManager const &) = delete;
   CycloneDDSResourceManager(CycloneDDSResourceManager &&) = delete;
   CycloneDDSResourceManager & operator=(CycloneDDSResourceManager const &) = delete;
-  CycloneDDSResourceManager &operator=(CycloneDDSResourceManager &&) = delete;
+  CycloneDDSResourceManager & operator=(CycloneDDSResourceManager &&) = delete;
 
-  dds_entity_t cyclonedds_participant(const ExperimentConfiguration &ec) const
+  dds_entity_t cyclonedds_participant(const ExperimentConfiguration & ec) const
   {
     std::lock_guard<std::mutex> lock(m_global_mutex);
     if (!m_cyclonedds_participant) {

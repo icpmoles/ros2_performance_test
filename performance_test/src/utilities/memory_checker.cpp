@@ -85,8 +85,8 @@ void MemoryChecker::assert_memory_tools_is_working()
 {
   bool saw_malloc = false;
   auto on_malloc_cb = [&saw_malloc]() {
-    saw_malloc = true;
-  };
+      saw_malloc = true;
+    };
   osrf_testing_tools_cpp::memory_tools::on_malloc(on_malloc_cb);
   OSRF_TESTING_TOOLS_CPP_SCOPE_EXIT(osrf_testing_tools_cpp::memory_tools::on_malloc(nullptr));
   {

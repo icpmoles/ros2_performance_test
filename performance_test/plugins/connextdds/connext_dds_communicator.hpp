@@ -86,7 +86,8 @@ private:
 };
 
 template<class Topic>
-class RTIDDSTopicManager {
+class RTIDDSTopicManager
+{
 public:
   static DDSTopic * register_topic(
     DDSDomainParticipant * m_participant,

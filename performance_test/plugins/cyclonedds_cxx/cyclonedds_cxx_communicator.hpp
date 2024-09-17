@@ -93,11 +93,11 @@ public:
         config.enable_shm = true;
       }
       m_cyclonedds_cxx_participant = dds::domain::DomainParticipant(
-          ec.dds_domain_id,
-          dds::domain::qos::DomainParticipantQos(),
-          nullptr,
-          dds::core::status::StatusMask::none(),
-          config
+        ec.dds_domain_id,
+        dds::domain::qos::DomainParticipantQos(),
+        nullptr,
+        dds::core::status::StatusMask::none(),
+        config
       );
     }
     return m_cyclonedds_cxx_participant;
@@ -111,7 +111,8 @@ private:
 };
 
 template<class Msg>
-class CycloneDDSCXXPublisher : public Publisher {
+class CycloneDDSCXXPublisher : public Publisher
+{
 public:
   using DataType = typename Msg::CycloneDDSCXXType;
 
@@ -174,7 +175,8 @@ private:
 };
 
 template<class Msg>
-class CycloneDDSCXXSubscriber : public Subscriber {
+class CycloneDDSCXXSubscriber : public Subscriber
+{
 public:
   using DataType = typename Msg::CycloneDDSCXXType;
 

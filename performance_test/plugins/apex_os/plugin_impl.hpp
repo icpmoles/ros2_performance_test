@@ -50,21 +50,22 @@ public:
       });
   }
 
-  void register_custom_runners(RunnerRegistry & runner_registry) override {
+  void register_custom_runners(RunnerRegistry & runner_registry) override
+  {
     runner_registry.register_runner(
       "APEX_SINGLE_EXECUTOR",
-      [](const ExperimentConfiguration & ec)->std::unique_ptr<Runner> {
-          return std::make_unique<ApexOsSingleExecutorRunner>(ec);
+      [](const ExperimentConfiguration & ec) -> std::unique_ptr<Runner> {
+        return std::make_unique<ApexOsSingleExecutorRunner>(ec);
       });
     runner_registry.register_runner(
       "APEX_EXECUTOR_PER_COMMUNICATOR",
-      [](const ExperimentConfiguration & ec)->std::unique_ptr<Runner> {
-          return std::make_unique<ApexOsExecutorPerCommunicatorRunner>(ec);
+      [](const ExperimentConfiguration & ec) -> std::unique_ptr<Runner> {
+        return std::make_unique<ApexOsExecutorPerCommunicatorRunner>(ec);
       });
     runner_registry.register_runner(
       "APEX_CHAIN",
-      [](const ExperimentConfiguration & ec)->std::unique_ptr<Runner> {
-          return std::make_unique<ApexOsSingleExecutorChainRunner>(ec);
+      [](const ExperimentConfiguration & ec) -> std::unique_ptr<Runner> {
+        return std::make_unique<ApexOsSingleExecutorChainRunner>(ec);
       });
   }
 
@@ -127,7 +128,7 @@ private:
     using apex::settings::construct::entry;
     using apex::settings::construct::make_dictionary;
     dictionary d{entry(
-      "domain", make_dictionary(entry("shared_memory", make_dictionary(entry("enable", true)))))};
+        "domain", make_dictionary(entry("shared_memory", make_dictionary(entry("enable", true)))))};
     apex::settings::repository::set(d);
   }
 };

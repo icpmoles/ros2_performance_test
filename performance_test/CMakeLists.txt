@@ -557,7 +557,6 @@ if(BUILD_TESTING)
 
     find_package(ament_cmake_uncrustify REQUIRED)
     ament_uncrustify(
-        CONFIG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../ament_code_style.cfg"
         ${sources})
 
     find_package(ament_cmake_lint_cmake REQUIRED)
