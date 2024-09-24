@@ -2,6 +2,8 @@
 
 ## X.Y.Z (YYYY/MM/DD)
 
+## 2.3.0 (2024/09/24)
+
 ### Removed
 - Moved `apex_performance_plotter` to its own package [here](../plotter)
 
