@@ -25,8 +25,9 @@
 #include "performance_test/experiment_configuration/experiment_configuration.hpp"
 #include "performance_test/experiment_execution/runner.hpp"
 
-#include <executor/executor_factory.hpp>
-#include <executor/executor_runner.hpp>
+#include <executor2/executor_factory.hpp>
+#include <executor2/executor_runner.hpp>
+#include <timer_service/clock_timer_service.hpp>
 
 namespace performance_test
 {
@@ -60,6 +61,7 @@ public:
 protected:
   std::vector<std::shared_ptr<ApexOsPublisherEntity>> m_pubs;
   std::vector<std::shared_ptr<ApexOsSubscriberEntity>> m_subs;
+  apex::timer_service::steady_clock_timer_service m_timer_srv;
 };
 
 class ApexOsSingleExecutorRunner : public ApexOsRunner
@@ -74,7 +76,8 @@ protected:
   virtual void run_pubs_and_subs()
   {
     for (auto & pub : m_pubs) {
-      m_executor->add(std::move(pub->get_publisher_item()), m_ec.period_ns());
+      m_executor->add_periodic(std::move(pub->get_publisher_item()),
+        m_timer_srv, m_ec.period_ns());
     }
     for (auto & sub : m_subs) {
       m_executor->add(std::move(sub->get_subscriber_item()));
@@ -98,12 +101,14 @@ protected:
   {
     for (auto & sub : m_subs) {
       m_executors.emplace_back(apex::executor::executor_factory::create());
-      m_executors.back()->add(std::move(sub->get_subscriber_item()), m_ec.period_ns());
+      m_executors.back()->add_periodic(std::move(sub->get_subscriber_item()),
+        m_timer_srv, m_ec.period_ns());
       m_runners.emplace_back(*(m_executors.back()));
     }
     for (auto & pub : m_pubs) {
       m_executors.emplace_back(apex::executor::executor_factory::create());
-      m_executors.back()->add(std::move(pub->get_publisher_item()), m_ec.period_ns());
+      m_executors.back()->add_periodic(std::move(pub->get_publisher_item()),
+        m_timer_srv, m_ec.period_ns());
       m_runners.emplace_back(*(m_executors.back()));
     }
   }
@@ -150,7 +155,7 @@ protected:
     for (auto & sub : m_subs) {
       chain_of_nodes.push_back(sub->get_subscriber_item());
     }
-    m_executor->add(chain_of_nodes, m_ec.period_ns());
+    m_executor->add_periodic(chain_of_nodes, m_timer_srv, m_ec.period_ns());
     m_runner.issue();
   }
 

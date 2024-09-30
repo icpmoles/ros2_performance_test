@@ -21,9 +21,8 @@
 #ifndef PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_COMMUNICATOR_HPP_
 #define PERFORMANCE_TEST__PLUGINS__APEX_OS__APEX_OS_COMMUNICATOR_HPP_
 
-#include <apexcpp/node_state.hpp>
 #include <cpputils/optional.hpp>
-#include <executor/executable_item.hpp>
+#include <executor2/executable_item.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 #include "rclcpp_common/ros2_qos_adapter.hpp"
@@ -38,9 +37,9 @@ class PublisherItem : public apex::executor::executable_item
 {
 public:
   PublisherItem(
-    rclcpp::Node & node, apex::NodeState & node_state,
+    rclcpp::Node & node,
     PublisherStats & stats, const ExperimentConfiguration & ec)
-  : apex::executor::executable_item(node, node_state),
+  : apex::executor::executable_item(node),
     m_ec(ec),
     m_stats(stats),
     m_publisher(node.create_publisher<MsgType>(
@@ -59,7 +58,7 @@ public:
   }
 
 private:
-  void execute_impl() override
+  bool execute_impl() override
   {
     if (m_ec.use_loaned_samples) {
       if (!m_publisher->can_loan_messages()) {
@@ -81,6 +80,7 @@ private:
       m_publisher->publish(m_data);
       m_stats.on_message_sent();
     }
+    return true;
   }
 
   MsgType m_data;
@@ -96,9 +96,9 @@ class SubscriberItem : public apex::executor::executable_item
 {
 public:
   SubscriberItem(
-    rclcpp::Node & node, apex::NodeState & node_state,
+    rclcpp::Node & node,
     SubscriberStats & stats, const ExperimentConfiguration & ec)
-  : apex::executor::executable_item(node, node_state),
+  : apex::executor::executable_item(node),
     m_ec(ec),
     m_stats(stats),
     m_subscription(node.template create_polling_subscription<MsgType>(
@@ -131,7 +131,7 @@ public:
   }
 
 private:
-  void execute_impl() override
+  bool execute_impl() override
   {
     const auto loaned_msg = m_subscription->take();
     const auto received_time = now_int64_t();
@@ -140,6 +140,7 @@ private:
         callback(msg.data(), received_time);
       }
     }
+    return true;
   }
 
   template<class T>
@@ -192,9 +193,8 @@ class ApexOsPublisher : public ApexOsPublisherEntity
 public:
   ApexOsPublisher(PublisherStats & stats, const ExperimentConfiguration & ec)
   : m_node("apex_os_publisher_node"),
-    m_node_state(&m_node, std::chrono::seconds::max()),
     m_publisher_item(std::make_shared<PublisherItem<MsgType>>(
-        m_node, m_node_state, stats, ec)) {}
+        m_node, stats, ec)) {}
 
   std::shared_ptr<apex::executor::executable_item>
   get_publisher_item() override
@@ -209,7 +209,6 @@ public:
 
 private:
   rclcpp::Node m_node;
-  apex::NodeState m_node_state;
   std::shared_ptr<PublisherItem<MsgType>> m_publisher_item;
 };
 
@@ -219,9 +218,8 @@ class ApexOsSubscriber : public ApexOsSubscriberEntity
 public:
   ApexOsSubscriber(SubscriberStats & stats, const ExperimentConfiguration & ec)
   : m_node("apex_os_subscriber_node"),
-    m_node_state(&m_node, std::chrono::seconds::max()),
     m_subscriber_item(std::make_shared<SubscriberItem<MsgType>>(
-        m_node, m_node_state, stats, ec)) {}
+        m_node, stats, ec)) {}
 
   std::shared_ptr<apex::executor::executable_item>
   get_subscriber_item() override
@@ -236,7 +234,6 @@ public:
 
 private:
   rclcpp::Node m_node;
-  apex::NodeState m_node_state;
   std::shared_ptr<SubscriberItem<MsgType>> m_subscriber_item;
 };
 }  // namespace performance_test
