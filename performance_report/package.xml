@@ -4,7 +4,7 @@
   <name>performance_report</name>
   <version>2.3.0</version>
   <description>Apex.AI performance_test runner, plotter, and reporter</description>
-  <maintainer email="opensource@apex.ai">Apex AI, Inc.</maintainer>
+  <maintainer email="opensource@apex.ai">Apex.AI, Inc.</maintainer>
   <license>Apache 2.0</license>
 
   <exec_depend>performance_test</exec_depend>

@@ -5,7 +5,7 @@
   <name>performance_test</name>
   <version>2.3.0</version>
   <description>Tool to test performance of ROS 2 and DDS data layers and communication.</description>
-  <maintainer email="opensource@apex.ai">Apex AI, Inc.</maintainer>
+  <maintainer email="opensource@apex.ai">Apex.AI, Inc.</maintainer>
   <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
