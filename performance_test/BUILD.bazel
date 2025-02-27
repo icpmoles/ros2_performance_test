@@ -32,3 +32,78 @@ filegroup(
     srcs = ["src/main.cpp"],
     visibility = ["//visibility:public"],
 )
+
+filegroup(
+    name = "idl_messages_array",
+    srcs = [
+        "msg/Array32.idl",
+        "msg/Array64.idl",
+        "msg/Array128.idl",
+        "msg/Array256.idl",
+        "msg/Array512.idl",
+        "msg/Array1k.idl",
+        "msg/Array4k.idl",
+        "msg/Array16k.idl",
+        "msg/Array32k.idl",
+        "msg/Array60k.idl",
+        "msg/Array64k.idl",
+        "msg/Array256k.idl",
+        "msg/Array1m.idl",
+        "msg/Array2m.idl",
+        "msg/Array4m.idl",
+        "msg/Array8m.idl",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "idl_messages_struct",
+    srcs = [
+        "msg/Struct16.idl",
+        "msg/Struct256.idl",
+        "msg/Struct4k.idl",
+        "msg/Struct32k.idl",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "idl_messages_point_cloud",
+    srcs = [
+        "msg/FixedTime.idl",
+        "msg/FixedHeader.idl",
+        "msg/FixedPointField.idl",
+        "msg/PointCloud512k.idl",
+        "msg/PointCloud1m.idl",
+        "msg/PointCloud2m.idl",
+        "msg/PointCloud4m.idl",
+        "msg/PointCloud8m.idl",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "idl_messages_bounded_sequence",
+    srcs = [
+        "msg/BoundedSequence1k.idl",
+        "msg/BoundedSequence4k.idl",
+        "msg/BoundedSequence16k.idl",
+        "msg/BoundedSequence32k.idl",
+        "msg/BoundedSequence64k.idl",
+        "msg/BoundedSequence256k.idl",
+        "msg/BoundedSequence1m.idl",
+        "msg/BoundedSequence2m.idl",
+        "msg/BoundedSequence4m.idl",
+        "msg/BoundedSequence8m.idl",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "idl_messages_unbounded_sequence",
+    srcs = [
+        "msg/UnboundedSequence.idl",
+        "msg/UnboundedString.idl",
+    ],
+    visibility = ["//visibility:public"],
+)
