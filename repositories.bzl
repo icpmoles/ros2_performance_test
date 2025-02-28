@@ -50,3 +50,13 @@ def load_repositories():
         strip_prefix = "rules_python-0.27.1",
         url = "https://github.com/bazelbuild/rules_python/archive/refs/tags/0.27.1.tar.gz",
     )
+
+    PLATFORMS_VERSION = "0.0.10"
+    http_archive(
+        name = "platforms",
+        urls = [
+            "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/{version}/platforms-{version}.tar.gz".format(version = PLATFORMS_VERSION),
+            "https://github.com/bazelbuild/platforms/releases/download/{version}/platforms-{version}.tar.gz".format(version = PLATFORMS_VERSION),
+        ],
+        sha256 = "218efe8ee736d26a3572663b374a253c012b716d8af0c07e842e82f238a0a7ee",
+    )

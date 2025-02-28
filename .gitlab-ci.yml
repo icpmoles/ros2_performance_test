@@ -530,7 +530,7 @@ build_ros1:
 build_demo_plugin:
   stage: build
   image:
-    name: gcr.io/bazel-public/bazel:latest
+    name: gcr.io/bazel-public/bazel:7.4.1
     entrypoint: [""]
   script:
     - bazel build //performance_test --//:plugin_implementation=//performance_test/plugins/demo:demo_plugin
