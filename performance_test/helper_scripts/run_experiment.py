@@ -297,7 +297,7 @@ parser.add_argument(
     help='perfomance_test communication middlewares to use it')
 parser.add_argument(
     '--rclcpp-middleware',
-    help='ROS2 middleware, to set when the ROS2 rclcpp API is ' +
+    help='ROS 2 middleware, to set when the ROS 2 rclcpp API is ' +
          'used as middleware')
 parser.add_argument(
     '-d',

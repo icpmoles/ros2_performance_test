@@ -1,13 +1,13 @@
 # Using Performance Test with security enabled
 
-ROS2 security can restrict what nodes can publish and subscribe, or even what topics
+ROS 2 security can restrict what nodes can publish and subscribe, or even what topics
 a node can publish or subscribe to.
-For an overview of ROS2 security, see [the SROS package](https://github.com/ros2/sros2)
+For an overview of ROS 2 security, see [the SROS package](https://github.com/ros2/sros2)
 on github.
 
 ## Performance Test Security Demo
 
-Performance Test provides a helper script to quickly set up ROS2 security.
+Performance Test provides a helper script to quickly set up ROS 2 security.
 First, you should be able to build and run `performance_test` using the steps in
 the README.md.
 

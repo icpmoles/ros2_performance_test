@@ -26,8 +26,8 @@ function(set_compile_options target)
     else()
         target_compile_options(${target} PRIVATE  -Wall
                 -Wextra
-                #-Wshadow             # causes issues with ROS2 headers
-                #-Wnon-virtual-dtor   # causes issues with ROS2 headers
+                #-Wshadow             # causes issues with ROS 2 headers
+                #-Wnon-virtual-dtor   # causes issues with ROS 2 headers
                 -pedantic
                 -Wcast-align
                 -Wunused

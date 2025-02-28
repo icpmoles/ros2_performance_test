@@ -253,7 +253,7 @@
 
 ### Added
 - New Apex.OS Polling Subscription plugin
-- Compatibility with ROS2 Humble
+- Compatibility with ROS 2 Humble
 
 ## 1.0.0 (2022/05/12)
 
@@ -265,7 +265,7 @@
     - `--reliability <RELIABLE|BEST_EFFORT>`
     - `--durability <TRANSIENT_LOCAL|VOLATILE>`
     - `--history <KEEP_LAST|KEEP_ALL>`
-- `master` branch is compatible with many ROS2 distributions:
+- `master` branch is compatible with many ROS 2 distributions:
     - dashing
     - eloquent
     - foxy
@@ -277,6 +277,6 @@
     - `--transient`
     - `--keep-last`
 ### Removed
-- The branches for specific ROS2 distributions have been deleted
+- The branches for specific ROS 2 distributions have been deleted
 ### Fixed
-- CI jobs and Dockerfiles are decoupled from the middleware bundled with the ROS2 distribution
+- CI jobs and Dockerfiles are decoupled from the middleware bundled with the ROS 2 distribution

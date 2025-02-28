@@ -41,8 +41,8 @@ public:
 
   std::shared_ptr<rclcpp::Node> rclcpp_node(const ExperimentConfiguration & ec) const
   {
-    /* Temporarely commented out until ROS2 waitsets are available. As of now every
-    * ROS2 thread needs a node in the current architecture.
+    /* Temporarely commented out until ROS 2 waitsets are available. As of now every
+    * ROS 2 thread needs a node in the current architecture.
     */
 
     // std::lock_guard<std::mutex> lock(m_global_mutex);

@@ -87,7 +87,7 @@ else()
 endif()
 
 
-# ROS2 rclcpp plugins
+# ROS 2 rclcpp plugins
 if(PERFORMANCE_TEST_RCLCPP_ENABLED)
   find_package(rclcpp REQUIRED)
   find_package(rmw REQUIRED)

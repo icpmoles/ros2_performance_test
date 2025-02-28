@@ -1,6 +1,6 @@
 ## performance_test
 
-The [performance_test package](performance_test) provides a benchmarking tool for comparing the performance of communication middleware implementations. Its most common use case is measuring the message transfer latency between ROS2 or DDS publishers and subscribers.
+The [performance_test package](performance_test) provides a benchmarking tool for comparing the performance of communication middleware implementations. Its most common use case is measuring the message transfer latency between ROS 2 or DDS publishers and subscribers.
 
 ## performance_report
 

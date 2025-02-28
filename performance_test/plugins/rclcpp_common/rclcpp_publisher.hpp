@@ -77,7 +77,7 @@ public:
     init_msg(borrowed_message.get(), timestamp_provider, sample_id);
     m_publisher->publish(std::move(borrowed_message));
     #else
-    throw std::runtime_error("ROS2 distribution does not support zero copy!");
+    throw std::runtime_error("ROS 2 distribution does not support zero copy!");
     #endif
   }
 
