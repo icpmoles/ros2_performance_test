@@ -22,6 +22,7 @@ from performance_report.qos import DURABILITY, HISTORY, RELIABILITY
 
 
 class ExperimentConfig:
+
     def __init__(
         self,
         com_mean: str = 'rclcpp-single-threaded-executor',
@@ -205,6 +206,7 @@ class ExperimentConfig:
 
 
 class LineConfig:
+
     def __init__(
         self,
         style: str = 'solid',
@@ -217,6 +219,7 @@ class LineConfig:
 
 
 class MarkerConfig:
+
     def __init__(
         self,
         shape: str = 'dot',
@@ -229,6 +232,7 @@ class MarkerConfig:
 
 
 class ThemeConfig:
+
     def __init__(
         self,
         color: str = '#0000ff',
@@ -249,6 +253,7 @@ class ThemeConfig:
 
 
 class DatasetConfig:
+
     def __init__(
         self,
         name: str = 'default_dataset',
@@ -265,6 +270,7 @@ class DatasetConfig:
 
 
 class FileContents:
+
     def __init__(self, header: dict, dataframe: pd.DataFrame) -> None:
         self.header = header
         self.dataframe = dataframe
