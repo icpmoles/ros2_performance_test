@@ -264,6 +264,12 @@ build_rclcpp_rolling:
   extends:
     - .build_rclcpp
 
+# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
+build_rclcpp_kilted:
+  extends:
+    - .build_rclcpp
+  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+
 build_rclcpp_jazzy:
   extends:
     - .build_rclcpp
@@ -634,6 +640,17 @@ smoke_test_rclcpp_ste_rolling:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
     ROS_DOMAIN_ID: 10
 
+# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
+smoke_test_rclcpp_ste_kilted:
+  extends:
+    - .smoke_test
+  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+  needs:
+    - build_rclcpp_kilted
+  variables:
+    COMMUNICATION_MEAN: rclcpp-single-threaded-executor
+    ROS_DOMAIN_ID: 11
+
 smoke_test_rclcpp_ste_jazzy:
   extends:
     - .smoke_test
@@ -642,7 +659,7 @@ smoke_test_rclcpp_ste_jazzy:
     - build_rclcpp_jazzy
   variables:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
-    ROS_DOMAIN_ID: 11
+    ROS_DOMAIN_ID: 12
 
 smoke_test_rclcpp_ste_iron:
   extends:
@@ -652,7 +669,7 @@ smoke_test_rclcpp_ste_iron:
     - build_rclcpp_iron
   variables:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
-    ROS_DOMAIN_ID: 12
+    ROS_DOMAIN_ID: 13
 
 smoke_test_rclcpp_ste_humble:
   extends:
@@ -662,7 +679,7 @@ smoke_test_rclcpp_ste_humble:
     - build_rclcpp_humble
   variables:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
-    ROS_DOMAIN_ID: 13
+    ROS_DOMAIN_ID: 14
 
 smoke_test_rclcpp_ste_galactic:
   extends:
@@ -672,7 +689,7 @@ smoke_test_rclcpp_ste_galactic:
     - build_rclcpp_galactic
   variables:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
-    ROS_DOMAIN_ID: 14
+    ROS_DOMAIN_ID: 15
 
 smoke_test_rclcpp_ste_foxy:
   extends:
@@ -682,7 +699,7 @@ smoke_test_rclcpp_ste_foxy:
     - build_rclcpp_foxy
   variables:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
-    ROS_DOMAIN_ID: 15
+    ROS_DOMAIN_ID: 16
 
 smoke_test_rclcpp_ste_eloquent:
   extends:
@@ -692,7 +709,7 @@ smoke_test_rclcpp_ste_eloquent:
     - build_rclcpp_eloquent
   variables:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
-    ROS_DOMAIN_ID: 16
+    ROS_DOMAIN_ID: 17
 
 smoke_test_rclcpp_ste_dashing:
   extends:
@@ -702,7 +719,7 @@ smoke_test_rclcpp_ste_dashing:
     - build_rclcpp_dashing
   variables:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
-    ROS_DOMAIN_ID: 17
+    ROS_DOMAIN_ID: 18
 
 smoke_test_rclcpp_sste_rolling:
   extends:
@@ -713,6 +730,17 @@ smoke_test_rclcpp_sste_rolling:
     COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
     ROS_DOMAIN_ID: 20
 
+# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
+smoke_test_rclcpp_sste_kilted:
+  extends:
+    - .smoke_test
+  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+  needs:
+    - build_rclcpp_kilted
+  variables:
+    COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
+    ROS_DOMAIN_ID: 21
+
 smoke_test_rclcpp_sste_jazzy:
   extends:
     - .smoke_test
@@ -721,7 +749,7 @@ smoke_test_rclcpp_sste_jazzy:
     - build_rclcpp_jazzy
   variables:
     COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
-    ROS_DOMAIN_ID: 21
+    ROS_DOMAIN_ID: 22
 
 smoke_test_rclcpp_sste_iron:
   extends:
@@ -731,7 +759,7 @@ smoke_test_rclcpp_sste_iron:
     - build_rclcpp_iron
   variables:
     COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
-    ROS_DOMAIN_ID: 22
+    ROS_DOMAIN_ID: 23
 
 smoke_test_rclcpp_sste_humble:
   extends:
@@ -741,7 +769,7 @@ smoke_test_rclcpp_sste_humble:
     - build_rclcpp_humble
   variables:
     COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
-    ROS_DOMAIN_ID: 23
+    ROS_DOMAIN_ID: 24
 
 smoke_test_rclcpp_sste_galactic:
   extends:
@@ -751,7 +779,7 @@ smoke_test_rclcpp_sste_galactic:
     - build_rclcpp_galactic
   variables:
     COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
-    ROS_DOMAIN_ID: 24
+    ROS_DOMAIN_ID: 25
 
 smoke_test_rclcpp_waitset_rolling:
   extends:
@@ -762,6 +790,17 @@ smoke_test_rclcpp_waitset_rolling:
     COMMUNICATION_MEAN: rclcpp-waitset
     ROS_DOMAIN_ID: 30
 
+# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
+smoke_test_rclcpp_waitset_kilted:
+  extends:
+    - .smoke_test
+  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+  needs:
+    - build_rclcpp_kilted
+  variables:
+    COMMUNICATION_MEAN: rclcpp-waitset
+    ROS_DOMAIN_ID: 31
+
 smoke_test_rclcpp_waitset_jazzy:
   extends:
     - .smoke_test
@@ -770,7 +809,7 @@ smoke_test_rclcpp_waitset_jazzy:
     - build_rclcpp_jazzy
   variables:
     COMMUNICATION_MEAN: rclcpp-waitset
-    ROS_DOMAIN_ID: 31
+    ROS_DOMAIN_ID: 32
 
 smoke_test_rclcpp_waitset_iron:
   extends:
@@ -780,7 +819,7 @@ smoke_test_rclcpp_waitset_iron:
     - build_rclcpp_iron
   variables:
     COMMUNICATION_MEAN: rclcpp-waitset
-    ROS_DOMAIN_ID: 32
+    ROS_DOMAIN_ID: 33
 
 smoke_test_rclcpp_waitset_humble:
   extends:
@@ -790,7 +829,7 @@ smoke_test_rclcpp_waitset_humble:
     - build_rclcpp_humble
   variables:
     COMMUNICATION_MEAN: rclcpp-waitset
-    ROS_DOMAIN_ID: 33
+    ROS_DOMAIN_ID: 34
 
 smoke_test_rclcpp_waitset_galactic:
   extends:
@@ -800,7 +839,7 @@ smoke_test_rclcpp_waitset_galactic:
     - build_rclcpp_galactic
   variables:
     COMMUNICATION_MEAN: rclcpp-waitset
-    ROS_DOMAIN_ID: 34
+    ROS_DOMAIN_ID: 35
 
 smoke_test_rclcpp_waitset_foxy:
   extends:
@@ -810,7 +849,7 @@ smoke_test_rclcpp_waitset_foxy:
     - build_rclcpp_foxy
   variables:
     COMMUNICATION_MEAN: rclcpp-waitset
-    ROS_DOMAIN_ID: 35
+    ROS_DOMAIN_ID: 36
 
 smoke_test_fastrtps:
   extends:
