@@ -609,7 +609,6 @@ test_performance_report:
   stage: test
   image: osrf/ros:rolling-desktop
   script:
-    - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B63CF8FDE49746E98FA01DDAD19BAB3CBF125EA
     - apt-get update
     - rosdep update --include-eol-distros
     - rosdep install --from-paths performance_test --ignore-src -y
