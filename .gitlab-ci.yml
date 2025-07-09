@@ -264,11 +264,10 @@ build_rclcpp_rolling:
   extends:
     - .build_rclcpp
 
-# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
 build_rclcpp_kilted:
   extends:
     - .build_rclcpp
-  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+  image: osrf/ros:kilted-desktop
 
 build_rclcpp_jazzy:
   extends:
@@ -640,11 +639,10 @@ smoke_test_rclcpp_ste_rolling:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
     ROS_DOMAIN_ID: 10
 
-# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
 smoke_test_rclcpp_ste_kilted:
   extends:
     - .smoke_test
-  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+  image: osrf/ros:kilted-desktop
   needs:
     - build_rclcpp_kilted
   variables:
@@ -730,11 +728,10 @@ smoke_test_rclcpp_sste_rolling:
     COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
     ROS_DOMAIN_ID: 20
 
-# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
 smoke_test_rclcpp_sste_kilted:
   extends:
     - .smoke_test
-  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+  image: osrf/ros:kilted-desktop
   needs:
     - build_rclcpp_kilted
   variables:
@@ -790,11 +787,10 @@ smoke_test_rclcpp_waitset_rolling:
     COMMUNICATION_MEAN: rclcpp-waitset
     ROS_DOMAIN_ID: 30
 
-# TODO(christophebedard): switch to osrf/ros:kilted-desktop once it's available
 smoke_test_rclcpp_waitset_kilted:
   extends:
     - .smoke_test
-  image: ghcr.io/sloretz/ros-testing:kilted-desktop
+  image: osrf/ros:kilted-desktop
   needs:
     - build_rclcpp_kilted
   variables:
