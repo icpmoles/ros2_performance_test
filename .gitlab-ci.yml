@@ -718,15 +718,6 @@ smoke_test_rclcpp_ste_dashing:
     COMMUNICATION_MEAN: rclcpp-single-threaded-executor
     ROS_DOMAIN_ID: 18
 
-smoke_test_rclcpp_sste_rolling:
-  extends:
-    - .smoke_test
-  needs:
-    - build_rclcpp_rolling
-  variables:
-    COMMUNICATION_MEAN: rclcpp-static-single-threaded-executor
-    ROS_DOMAIN_ID: 20
-
 smoke_test_rclcpp_sste_kilted:
   extends:
     - .smoke_test
