@@ -1,5 +1,5 @@
 #
-name: Create and publish a Docker image
+name: Create and publish a Docker image of RCLCPP
 
 # Configures this workflow to run every time a change is pushed to the branch called `release`.
 on:
@@ -47,6 +47,7 @@ jobs:
         with:
           context: .
           push: true
+          file: dockerfiles/Dockerfile.rclcpp
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       
