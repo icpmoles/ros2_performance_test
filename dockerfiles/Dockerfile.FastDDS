@@ -2,17 +2,20 @@
 # docker run -it performance_test_fast_dds bash
 # /opt/performance_test/lib/performance_test/perf_test -c FastRTPS --msg Array1k --print-to-console
 
-ARG BASE_IMAGE=osrf/ros:rolling-desktop
+ARG BASE_IMAGE=osrf/ros:jazzy-desktop
 FROM $BASE_IMAGE
 
-ARG ROS_DISTRO=rolling
-ARG FAST_DDS_VERSION=v2.6.2
+ARG ROS_DISTRO=jazzy
+ARG FAST_DDS_VERSION=2.14.x
 
 SHELL ["/bin/bash", "-c"]
 
+# ros-$ROS_DISTRO-foonathan-memory-vendor ros-$ROS_DISTRO-gtest-vendor ros-$ROS_DISTRO-gmock-vendor   ros-$ROS_DISTRO-ament-cmake-gtest
 RUN apt-get update && \
-    apt remove -y ros-$ROS_DISTRO-fastrtps && \
-    apt-get install -y default-jdk cmake g++ python3-pip wget git libasio-dev libtinyxml2-dev libssl-dev libp11-dev libengine-pkcs11-openssl
+    apt remove -y ros-$ROS_DISTRO-fastrtps  && \
+    apt-get install -y default-jdk cmake g++ tree python3-pip wget git libasio-dev libtinyxml2-dev libssl-dev libp11-dev libengine-pkcs11-openssl
+
+# rm -rf foonathan_memory_vendor && \
 
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     mkdir -p Fast-DDS_ws/src && \
@@ -29,8 +32,14 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
         -DSECURITY=ON
       
 ADD . /perf_test_ws/src/performance_test
+# RUN tree /perf_test_ws/src/performance_test/
 
 RUN chmod +x /perf_test_ws/src/performance_test/performance_test/bin/fastrtpsgen
+
+#      --packages-skip foonathan_memory_vendor  \
+# RUN tree /opt/Fast-DDS/
+#     PATH="/perf_test_ws/src/performance_test/performance_test/bin/fastrtpsgen:$PATH" && \
+
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     source /opt/Fast-DDS/setup.bash && \
     cd /perf_test_ws && \

@@ -4,10 +4,10 @@
 # /opt/performance_test/lib/performance_test/perf_test -c rclcpp-static-single-threaded-executor --msg Array1k --print-to-console
 # /opt/performance_test/lib/performance_test/perf_test -c rclcpp-waitset --msg Array1k --print-to-console
 
-ARG BASE_IMAGE=osrf/ros:rolling-desktop
+ARG BASE_IMAGE=osrf/ros:jazzy-desktop
 FROM $BASE_IMAGE
 
-ARG ROS_DISTRO=rolling
+ARG ROS_DISTRO=jazzy
 
 SHELL ["/bin/bash", "-c"]
 
@@ -32,5 +32,5 @@ RUN echo "source /root/setup.bash" >> /root/.bashrc
 
 # Install dependencies for running performance_report
 RUN apt-get update && \
-    apt-get install -y python3-pip && \
-    python3 -m pip install -U bokeh selenium pandas 
+    apt-get install -y python3-pydata-sphinx-theme python3-selenium python3-pandas
+#    python3 -m pip install -U bokeh selenium pandas

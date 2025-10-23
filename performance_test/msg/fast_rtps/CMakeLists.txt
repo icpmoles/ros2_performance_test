@@ -27,7 +27,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/objs/${RTIME_TARG
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/objs/${RTIME_TARGET_NAME})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/objs/${RTIME_TARGET_NAME})
 
-find_program(FASTRTPS_BIN "fastrtpsgen")
+find_program(FASTRTPS_BIN "fastrtpsgen" "/perf_test_ws/src/performance_test/performance_test/bin/")
 if(NOT FASTRTPS_BIN)
   message(WARNING "Could not find program 'fastrtpsgen' in path. Trying to use bundled version")
   find_program(FASTRTPS_BIN "fastrtpsgen" PATHS "${PROJECT_SOURCE_DIR}/bin")
